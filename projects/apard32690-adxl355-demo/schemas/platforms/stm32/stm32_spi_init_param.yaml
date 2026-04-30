@@ -1,0 +1,24 @@
+# schemas/platforms/stm32/stm32_spi_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "stm32_spi.h/stm32_spi_init_param"
+title: "stm32_spi_init_param"
+description: "Structure holding the initialization parameters for STM32 platform specific SPI parameters"
+
+# TODO: Placeholder - populate from drivers/platform/stm32/stm32_spi.h
+type: object
+properties:
+  chip_select_port:
+    type: uint32_t
+    description: "Chip select port"
+
+  alternate:
+    type: uint32_t
+    description: "Chip select alternate function"
+
+  irq_num:
+    type: uint32_t
+    description: "IRQ number"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "drivers/platform/stm32/stm32_spi.h"

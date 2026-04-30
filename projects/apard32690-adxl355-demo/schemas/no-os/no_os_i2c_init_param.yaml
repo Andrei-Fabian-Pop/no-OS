@@ -1,0 +1,35 @@
+# schemas/no-os/no_os_i2c_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_i2c.h/no_os_i2c_init_param"
+title: "no_os_i2c_init_param"
+description: "Structure holding the parameters for I2C initialization"
+
+type: object
+properties:
+  device_id:
+    type: uint32_t
+    description: "Device ID"
+
+  max_speed_hz:
+    type: uint32_t
+    description: "I2C maximum transfer speed supported"
+
+  slave_address:
+    type: uint8_t
+    description: "Slave address"
+
+  platform_ops:
+    $ref: "no_os_i2c_platform_ops.yaml"
+    description: "I2C platform specific functions"
+
+  extra:
+    type: platform_extra
+    description: "I2C extra parameters (platform specific)"
+    oneOf:
+      - $ref: "../platforms/maxim/max_i2c_init_param.yaml"
+      - $ref: "../platforms/stm32/stm32_i2c_init_param.yaml"
+      - $ref: "../platforms/xilinx/xil_i2c_init_param.yaml"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "include/no_os_i2c.h"

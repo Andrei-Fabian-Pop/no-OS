@@ -1,0 +1,16 @@
+# schemas/platforms/stm32/stm32_i2c_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "stm32_i2c.h/stm32_i2c_init_param"
+title: "stm32_i2c_init_param"
+description: "Structure holding the initialization parameters for STM32 platform specific I2C parameters"
+
+# TODO: Placeholder - populate from drivers/platform/stm32/stm32_i2c.h
+type: object
+properties:
+  i2c_timing:
+    type: uint32_t
+    description: "I2C Timing"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "drivers/platform/stm32/stm32_i2c.h"

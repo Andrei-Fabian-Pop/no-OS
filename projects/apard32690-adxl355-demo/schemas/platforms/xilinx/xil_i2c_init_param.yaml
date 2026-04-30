@@ -1,0 +1,17 @@
+# schemas/platforms/xilinx/xil_i2c_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "xilinx_i2c.h/xil_i2c_init_param"
+title: "xil_i2c_init_param"
+description: "Structure holding the initialization parameters for Xilinx platform specific I2C parameters"
+
+# TODO: Placeholder - populate from drivers/platform/xilinx/xilinx_i2c.h
+type: object
+properties:
+  type:
+    type: string
+    enum: [IIC_PL, IIC_PS]
+    description: "Xilinx I2C type"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "drivers/platform/xilinx/xilinx_i2c.h"

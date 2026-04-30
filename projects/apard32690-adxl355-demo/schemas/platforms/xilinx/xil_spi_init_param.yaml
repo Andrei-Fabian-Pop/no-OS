@@ -1,0 +1,21 @@
+# schemas/platforms/xilinx/xil_spi_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "xilinx_spi.h/xil_spi_init_param"
+title: "xil_spi_init_param"
+description: "Structure holding the initialization parameters for Xilinx platform specific SPI parameters"
+
+# TODO: Placeholder - populate from drivers/platform/xilinx/xilinx_spi.h
+type: object
+properties:
+  type:
+    type: string
+    enum: [SPI_PL, SPI_PS, SPI_ENGINE]
+    description: "Xilinx SPI type"
+
+  flags:
+    type: uint32_t
+    description: "SPI flags"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "drivers/platform/xilinx/xilinx_spi.h"
