@@ -1,0 +1,99 @@
+# schemas/devices/adi,adxl355.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "idk"
+title: "ADXL355 no-OS Driver Configuration"
+description: "Configuration schema for ADXL355 accelerometer in no-OS projects"
+
+type: object
+required:
+  - comm_init
+  - comm_type
+  - dev_type
+
+properties:
+  comm_type:
+    type: string
+    enum: [ADXL355_SPI_COMM, ADXL355_I2C_COMM]
+    description: "Communication interface type"
+    default: "ADXL355_SPI_COMM"
+
+  dev_type:
+    type: string
+    enum: [ID_ADXL355, ID_ADXL357, ID_ADXL359]
+    description: "Device variant"
+    default: "ID_ADXL355"
+
+  comm_init:
+    type: object
+    properties:
+      allOf:
+        - if:
+            properties:
+              comm_type:
+                const: ADXL355_SPI_COMM
+          then:
+            required:
+              - no_os_spi_init_param
+        - if:
+            properties:
+              comm_type:
+                const: ADXL355_I2C_COMM
+          then:
+            required:
+              - no_os_i2c_init_param
+
+      no_os_spi_init_param:
+        # NOTE: Currently i have not found a way to check which of these props are mandatory
+        type: object
+        properties:
+          uint32_t:
+            type: uint32_t
+
+          max_speed_hz:
+            type: uint32_t
+
+          chip_select:
+            type: uint8_t
+
+          # NOTE: These are also included from another file, i added them here expanded for showcase
+          mode:
+            type: string # not really string, it should be printed as an enum
+            enum: [NO_OS_SPI_MODE_0, NO_OS_SPI_MODE_1, NO_OS_SPI_MODE_2, NO_OS_SPI_MODE_3]
+
+          # NOTE: These are also included from another file, i added them here expanded for showcase
+          bit_order:
+            type: string # these enums are not defined here, we could add them to the includes thing
+            enum: [NO_OS_SPI_BIT_ORDER_MSB_FIRST, NO_OS_SPI_BIT_ORDER_LSB_FIRST]
+
+          # NOTE: These are also included from another file, i added them here expanded for showcase
+          lanes:
+            type: string
+            enum: [NO_OS_SPI_SINGLE_LANE, NO_OS_SPI_DUAL_LANE, NO_OS_SPI_QUAD_LANE, NO_OS_SPI_OCTO_LANE]
+
+          platform_delays:
+            # COMMENT 1: or no_os_spi.yaml once we have a yaml describing the no_os_spi.h header
+            # this includes no_os_platform_spi_delays from no_os_spi.h
+            # This is the JSON schema way of doing imports. If we go for custom meta-schema (which we should)
+            # then we could also add something more human readable (since ppl will write these) like:
+            #   include: "no_os_platform_spi_delays"
+            #   from: "no_os_spi.h"
+            $id: "no_os_spi.h/no_os_platform_spi_delays"
+
+          extra:
+            type: voidptr # this is the any that should include the device specific stuff
+            $id: "spi_extra_init_params" # this should be a dif file where the all possible platforms/carriers extras are defined
+
+          parent:
+            # see COMMENT 1
+            $id: "no_os_spi.h/no_os_spi_desc"
+
+      no_os_i2c_init_param:
+        # TODO: Add I2C init param definition (same style as the spi ones)
+        type: object
+
+# Mapping to no-OS source files
+x-noos-sources:
+  driver_header: "drivers/accel/adxl355/adxl355.h"
+  driver_source: "drivers/accel/adxl355/adxl355.c"
+  iio_header: "drivers/accel/adxl355/iio_adxl355.h"
+  iio_source: "drivers/accel/adxl355/iio_adxl355.c"
