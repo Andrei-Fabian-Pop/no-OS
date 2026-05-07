@@ -1,0 +1,17 @@
+# schemas/no-os/enums/no_os_uart_stop.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_uart.h/no_os_uart_stop"
+title: "no_os_uart_stop"
+description: "UART number of stop bits options"
+
+type: string
+enum:
+  - NO_OS_UART_STOP_1_BIT
+  - NO_OS_UART_STOP_2_BIT
+
+x-enum-descriptions:
+  NO_OS_UART_STOP_1_BIT: "One stop bit"
+  NO_OS_UART_STOP_2_BIT: "Two stop bits"
+
+x-noos-sources:
+  header: "include/no_os_uart.h"

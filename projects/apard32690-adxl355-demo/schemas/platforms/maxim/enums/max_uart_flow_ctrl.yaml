@@ -1,0 +1,21 @@
+# schemas/platforms/maxim/enums/max_uart_flow_ctrl.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "maxim_uart.h/max_uart_flow_ctrl"
+title: "max_uart_flow_ctrl"
+description: "Maxim UART flow control options"
+
+type: string
+enum:
+  - MAX_UART_FLOW_DIS
+  - UART_FLOW_LOW
+  - UART_FLOW_HIGH
+  - UART_FLOW_EN
+
+x-enum-descriptions:
+  MAX_UART_FLOW_DIS: "Flow control disabled"
+  UART_FLOW_LOW: "Flow control low"
+  UART_FLOW_HIGH: "Flow control high"
+  UART_FLOW_EN: "Flow control enabled"
+
+x-noos-sources:
+  header: "drivers/platform/maxim/common/maxim_uart.h"

@@ -1,8 +1,8 @@
-# schemas/platforms/maxim/max_spi_init_param.yaml
+# schemas/platforms/maxim/max32690/max_spi_init_param.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "maxim_spi.h/max_spi_init_param"
 title: "max_spi_init_param"
-description: "Structure holding the initialization parameters for Maxim platform specific SPI parameters"
+description: "Structure holding the initialization parameters for Maxim MAX32690 platform specific SPI parameters"
 
 type: object
 properties:
@@ -11,19 +11,15 @@ properties:
     description: "Number of slaves"
 
   polarity:
-    # NOTE: This is actually a dif struct, idk if we should mirror everything or if just
-    # adding it in place is enough. uuu, decisions decisions...
-    type: string
-    enum: [SPI_SS_POL_LOW, SPI_SS_POL_HIGH]
+    $ref: "../enums/spi_ss_polarity.yaml"
     description: "Slave select polarity"
 
   vssel:
-    type: string
-    enum: [MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_VSSEL_VDDIOH]
+    $ref: "../enums/mxc_gpio_vssel.yaml"
     description: "GPIO voltage select"
 
   dma_param:
-    $ref: "../../no-os/no_os_dma_init_param.yaml"
+    $ref: "../../../no-os/no_os_dma_init_param.yaml"
     description: "DMA Initialization Parameters"
 
   dma_rx_priority:

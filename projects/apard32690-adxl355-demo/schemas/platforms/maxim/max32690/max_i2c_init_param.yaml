@@ -1,14 +1,13 @@
-# schemas/platforms/maxim/max_i2c_init_param.yaml
+# schemas/platforms/maxim/max32690/max_i2c_init_param.yaml
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "maxim_i2c.h/max_i2c_init_param"
 title: "max_i2c_init_param"
-description: "Structure holding the initialization parameters for Maxim platform specific I2C parameters"
+description: "Structure holding the initialization parameters for Maxim MAX32690 platform specific I2C parameters"
 
 type: object
 properties:
   vssel:
-    type: string
-    enum: [MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_VSSEL_VDDIOH]
+    $ref: "../enums/mxc_gpio_vssel.yaml"
     description: "GPIO voltage select"
 
 # Mapping to no-OS source files

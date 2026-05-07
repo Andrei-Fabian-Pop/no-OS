@@ -1,0 +1,23 @@
+# schemas/no-os/types/no_os_spi_platform_ops.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_spi.h/no_os_spi_platform_ops"
+title: "no_os_spi_platform_ops"
+description: "Structure holding SPI function pointers that point to the platform specific functions"
+
+type: const struct no_os_spi_platform_ops*
+x-const-ref: true
+x-user-modifiable: false
+
+x-platform-values:
+  maxim:
+    symbol: max_spi_ops
+    header: "maxim_spi.h"
+  stm32:
+    symbol: stm32_spi_ops
+    header: "stm32_spi.h"
+  xilinx:
+    symbol: xil_spi_ops
+    header: "xilinx_spi.h"
+
+x-noos-sources:
+  header: "include/no_os_spi.h"

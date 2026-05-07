@@ -1,0 +1,23 @@
+# schemas/no-os/enums/no_os_uart_size.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_uart.h/no_os_uart_size"
+title: "no_os_uart_size"
+description: "UART character size (number of data bits) options"
+
+type: string
+enum:
+  - NO_OS_UART_CS_5
+  - NO_OS_UART_CS_6
+  - NO_OS_UART_CS_7
+  - NO_OS_UART_CS_8
+  - NO_OS_UART_CS_9
+
+x-enum-descriptions:
+  NO_OS_UART_CS_5: "5 data bits"
+  NO_OS_UART_CS_6: "6 data bits"
+  NO_OS_UART_CS_7: "7 data bits"
+  NO_OS_UART_CS_8: "8 data bits"
+  NO_OS_UART_CS_9: "9 data bits"
+
+x-noos-sources:
+  header: "include/no_os_uart.h"

@@ -1,0 +1,23 @@
+# schemas/no-os/enums/no_os_uart_parity.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_uart.h/no_os_uart_parity"
+title: "no_os_uart_parity"
+description: "UART parity options"
+
+type: string
+enum:
+  - NO_OS_UART_PAR_NO
+  - NO_OS_UART_PAR_MARK
+  - NO_OS_UART_PAR_SPACE
+  - NO_OS_UART_PAR_ODD
+  - NO_OS_UART_PAR_EVEN
+
+x-enum-descriptions:
+  NO_OS_UART_PAR_NO: "No parity"
+  NO_OS_UART_PAR_MARK: "Mark parity"
+  NO_OS_UART_PAR_SPACE: "Space parity"
+  NO_OS_UART_PAR_ODD: "Odd parity"
+  NO_OS_UART_PAR_EVEN: "Even parity"
+
+x-noos-sources:
+  header: "include/no_os_uart.h"

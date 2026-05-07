@@ -19,16 +19,17 @@ properties:
     description: "Slave address"
 
   platform_ops:
-    $ref: "no_os_i2c_platform_ops.yaml"
+    $ref: "types/no_os_i2c_platform_ops.yaml"
     description: "I2C platform specific functions"
 
   extra:
     type: platform_extra
     description: "I2C extra parameters (platform specific)"
+    x-requires-platform-selection: true
     oneOf:
-      - $ref: "../platforms/maxim/max_i2c_init_param.yaml"
-      - $ref: "../platforms/stm32/stm32_i2c_init_param.yaml"
-      - $ref: "../platforms/xilinx/xil_i2c_init_param.yaml"
+      - $ref: "../platforms/maxim/*/max_i2c_init_param.yaml"
+      - $ref: "../platforms/stm32/*/stm32_i2c_init_param.yaml"
+      - $ref: "../platforms/xilinx/*/xil_i2c_init_param.yaml"
 
 # Mapping to no-OS source files
 x-noos-sources:

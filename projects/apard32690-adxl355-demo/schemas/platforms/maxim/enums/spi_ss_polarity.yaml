@@ -1,0 +1,17 @@
+# schemas/platforms/maxim/enums/spi_ss_polarity.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "maxim_spi.h/spi_ss_polarity"
+title: "spi_ss_polarity"
+description: "Maxim SPI slave select polarity options"
+
+type: string
+enum:
+  - SPI_SS_POL_LOW
+  - SPI_SS_POL_HIGH
+
+x-enum-descriptions:
+  SPI_SS_POL_LOW: "Active low slave select"
+  SPI_SS_POL_HIGH: "Active high slave select"
+
+x-noos-sources:
+  header: "drivers/platform/maxim/common/maxim_spi.h"

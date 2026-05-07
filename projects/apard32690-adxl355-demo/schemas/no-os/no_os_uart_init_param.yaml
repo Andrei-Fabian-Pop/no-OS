@@ -1,0 +1,52 @@
+# schemas/no-os/no_os_uart_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_uart.h/no_os_uart_init_param"
+title: "no_os_uart_init_param"
+description: "Structure holding the parameters for UART initialization"
+
+type: object
+properties:
+  device_id:
+    type: uint8_t
+    description: "UART Device ID"
+
+  irq_id:
+    type: uint32_t
+    description: "UART Interrupt ID"
+
+  asynchronous_rx:
+    type: bool
+    description: "If set, the reception is interrupt driven"
+
+  baud_rate:
+    type: uint32_t
+    description: "UART Baud Rate"
+
+  size:
+    $ref: "enums/no_os_uart_size.yaml"
+    description: "UART character size (number of data bits)"
+
+  parity:
+    $ref: "enums/no_os_uart_parity.yaml"
+    description: "UART parity"
+
+  stop:
+    $ref: "enums/no_os_uart_stop.yaml"
+    description: "UART number of stop bits"
+
+  platform_ops:
+    $ref: "types/no_os_uart_platform_ops.yaml"
+    description: "UART platform specific functions"
+
+  extra:
+    type: platform_extra
+    description: "UART extra parameters (platform specific)"
+    x-requires-platform-selection: true
+    oneOf:
+      - $ref: "../platforms/maxim/max32690/max_uart_init_param.yaml"
+      - $ref: "../platforms/stm32/stm32_uart_init_param.yaml"
+      - $ref: "../platforms/xilinx/xil_uart_init_param.yaml"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "include/no_os_uart.h"

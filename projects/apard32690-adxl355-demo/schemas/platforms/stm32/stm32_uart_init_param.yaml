@@ -1,0 +1,20 @@
+# schemas/platforms/stm32/stm32_uart_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "stm32_uart.h/stm32_uart_init_param"
+title: "stm32_uart_init_param"
+description: "Specific initialization parameters for STM32 UART"
+
+type: object
+properties:
+  huart:
+    type: UART_HandleTypeDef*
+    description: "UART instance handle"
+    x-external-type: true
+
+  timeout:
+    type: uint32_t
+    description: "UART transaction timeout (HAL_IncTick() units)"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "drivers/platform/stm32/stm32_uart.h"

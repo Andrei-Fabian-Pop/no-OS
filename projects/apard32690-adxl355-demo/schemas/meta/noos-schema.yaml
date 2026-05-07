@@ -1,0 +1,175 @@
+# schemas/meta/noos-schema.yaml
+# Meta-schema defining custom types and rules for no-OS driver configuration schemas
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "noos-schema"
+title: "no-OS Schema Meta-Schema"
+description: |
+  Meta-schema for no-OS driver configuration schemas.
+  Extends JSON Schema with C-specific types and platform abstraction patterns.
+
+# =============================================================================
+# Custom Types
+# =============================================================================
+# These types extend the standard JSON Schema "type" keyword to support
+# C language types used in no-OS driver structs.
+
+$defs:
+  # ---------------------------------------------------------------------------
+  # C Integer Types
+  # ---------------------------------------------------------------------------
+  # Maps to standard C integer types. Code generators should emit the
+  # corresponding C type in generated structs.
+
+  uint8_t:
+    description: "Unsigned 8-bit integer (0 to 255)"
+    type: integer
+    minimum: 0
+    maximum: 255
+
+  uint16_t:
+    description: "Unsigned 16-bit integer (0 to 65535)"
+    type: integer
+    minimum: 0
+    maximum: 65_535
+
+  uint32_t:
+    description: "Unsigned 32-bit integer (0 to 4294967295)"
+    type: integer
+    minimum: 0
+    maximum: 4_294_967_295
+
+  uint64_t:
+    description: "Unsigned 64-bit integer"
+    type: integer
+    minimum: 0
+    maximum: 18_446_744_073_709_551_615
+    # FIXME: Figure out how to repr a bigint maybe??
+
+  int8_t:
+    description: "Signed 8-bit integer (-128 to 127)"
+    type: integer
+    minimum: -128
+    maximum: 127
+
+  int16_t:
+    description: "Signed 16-bit integer (-32768 to 32767)"
+    type: integer
+    minimum: -32_768
+    maximum: 32_767
+
+  int32_t:
+    description: "Signed 32-bit integer"
+    type: integer
+    minimum: -2_147_483_648
+    maximum: 2_147_483_647
+
+  int64_t:
+    description: "Signed 64-bit integer"
+    type: integer
+    minimum: -9_223_372_036_854_775_808
+    maximum: 9_223_372_036_854_775_807
+
+  # ---------------------------------------------------------------------------
+  # Pointer Types
+  # ---------------------------------------------------------------------------
+
+  voidptr:
+    description: |
+      Void pointer (void*). Represents a generic pointer that can point to any type.
+      In schemas, this typically indicates a field that holds device-specific or
+      platform-specific data whose type is determined at runtime or by context.
+    type: "null"
+    x-c-type: "void*"
+
+  # ---------------------------------------------------------------------------
+  # Platform Abstraction Types
+  # ---------------------------------------------------------------------------
+
+  platform_extra:
+    description: |
+      Platform-specific extra parameters. This type indicates that the field
+      should reference a platform-specific struct (e.g., max_spi_init_param for
+      Maxim, stm32_spi_init_param for STM32, xil_spi_init_param for Xilinx).
+
+      Usage:
+        extra:
+          type: platform_extra
+          oneOf:
+            - $ref: "../platforms/maxim/max_spi_init_param.yaml"
+            - $ref: "../platforms/stm32/stm32_spi_init_param.yaml"
+
+      Code generators should:
+        1. Emit a void* field in the struct
+        2. Generate platform-specific initialization based on build target
+    type: object
+    x-c-type: "void*"
+    x-requires-platform-selection: true
+
+# =============================================================================
+# Custom Keywords
+# =============================================================================
+# Extension keywords for no-OS specific metadata
+
+properties:
+  x-noos-sources:
+    description: |
+      Maps the schema to no-OS source files. Used by tooling to locate
+      the corresponding C headers and source files.
+    type: object
+    properties:
+      header:
+        type: string
+        description: "Path to the header file relative to no-OS root"
+      source:
+        type: string
+        description: "Path to the source file relative to no-OS root"
+      driver_header:
+        type: string
+        description: "Path to driver header file"
+      driver_source:
+        type: string
+        description: "Path to driver source file"
+      iio_header:
+        type: string
+        description: "Path to IIO header file"
+      iio_source:
+        type: string
+        description: "Path to IIO source file"
+
+  x-c-type:
+    description: "Explicit C type override for code generation"
+    type: string
+
+  x-requires-platform-selection:
+    description: "Indicates this field requires platform-specific configuration"
+    type: boolean
+
+# =============================================================================
+# Type Keyword Extension
+# =============================================================================
+# Extends the "type" keyword to accept C types in addition to JSON Schema types
+
+x-extended-types:
+  description: "Valid values for the 'type' keyword in no-OS schemas"
+  enum:
+    # Standard JSON Schema types
+    - string
+    - number
+    - integer
+    - boolean
+    - array
+    - object
+    - "null"
+    # C integer types
+    - uint8_t
+    - uint16_t
+    - uint32_t
+    - uint64_t
+    - int8_t
+    - int16_t
+    - int32_t
+    - int64_t
+    # Pointer types
+    - voidptr
+    # Platform abstraction
+    - platform_extra

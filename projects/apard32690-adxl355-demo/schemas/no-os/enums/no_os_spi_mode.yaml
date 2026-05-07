@@ -1,0 +1,21 @@
+# schemas/no-os/enums/no_os_spi_mode.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_spi.h/no_os_spi_mode"
+title: "no_os_spi_mode"
+description: "SPI mode (clock phase and polarity) options"
+
+type: string
+enum:
+  - NO_OS_SPI_MODE_0
+  - NO_OS_SPI_MODE_1
+  - NO_OS_SPI_MODE_2
+  - NO_OS_SPI_MODE_3
+
+x-enum-descriptions:
+  NO_OS_SPI_MODE_0: "CPOL=0, CPHA=0"
+  NO_OS_SPI_MODE_1: "CPOL=0, CPHA=1"
+  NO_OS_SPI_MODE_2: "CPOL=1, CPHA=0"
+  NO_OS_SPI_MODE_3: "CPOL=1, CPHA=1"
+
+x-noos-sources:
+  header: "include/no_os_spi.h"

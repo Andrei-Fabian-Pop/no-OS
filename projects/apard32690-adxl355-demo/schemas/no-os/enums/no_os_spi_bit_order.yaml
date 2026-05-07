@@ -1,0 +1,17 @@
+# schemas/no-os/enums/no_os_spi_bit_order.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_spi.h/no_os_spi_bit_order"
+title: "no_os_spi_bit_order"
+description: "SPI bit order options"
+
+type: string
+enum:
+  - NO_OS_SPI_BIT_ORDER_MSB_FIRST
+  - NO_OS_SPI_BIT_ORDER_LSB_FIRST
+
+x-enum-descriptions:
+  NO_OS_SPI_BIT_ORDER_MSB_FIRST: "Most significant bit first"
+  NO_OS_SPI_BIT_ORDER_LSB_FIRST: "Least significant bit first"
+
+x-noos-sources:
+  header: "include/no_os_spi.h"

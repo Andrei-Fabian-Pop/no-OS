@@ -1,0 +1,21 @@
+# schemas/no-os/enums/no_os_spi_lanes.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_spi.h/no_os_spi_lanes"
+title: "no_os_spi_lanes"
+description: "SPI number of lanes options"
+
+type: string
+enum:
+  - NO_OS_SPI_SINGLE_LANE
+  - NO_OS_SPI_DUAL_LANE
+  - NO_OS_SPI_QUAD_LANE
+  - NO_OS_SPI_OCTO_LANE
+
+x-enum-descriptions:
+  NO_OS_SPI_SINGLE_LANE: "Single lane (standard SPI)"
+  NO_OS_SPI_DUAL_LANE: "Dual lane"
+  NO_OS_SPI_QUAD_LANE: "Quad lane (QSPI)"
+  NO_OS_SPI_OCTO_LANE: "Octo lane"
+
+x-noos-sources:
+  header: "include/no_os_spi.h"

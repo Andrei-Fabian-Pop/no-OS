@@ -1,0 +1,24 @@
+# schemas/platforms/xilinx/xil_uart_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "xilinx_uart.h/xil_uart_init_param"
+title: "xil_uart_init_param"
+description: "Structure holding the initialization parameters for Xilinx platform specific UART parameters"
+
+type: object
+properties:
+  type:
+    type: string
+    enum: [UART_PL, UART_PS]
+    description: "Xilinx architecture (Programmable Logic or Processing System)"
+
+  irq_id:
+    type: uint32_t
+    description: "Interrupt Request ID"
+
+  irq_desc:
+    $ref: "../../no-os/no_os_irq_ctrl_desc.yaml"
+    description: "Interrupt Request Descriptor"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "drivers/platform/xilinx/xilinx_uart.h"

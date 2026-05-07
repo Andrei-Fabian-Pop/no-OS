@@ -19,23 +19,20 @@ properties:
     description: "SPI chip select"
 
   mode:
-    type: string
-    enum: [NO_OS_SPI_MODE_0, NO_OS_SPI_MODE_1, NO_OS_SPI_MODE_2, NO_OS_SPI_MODE_3]
+    $ref: "enums/no_os_spi_mode.yaml"
     description: "SPI mode (clock phase and polarity)"
 
   bit_order:
-    type: string
-    enum: [NO_OS_SPI_BIT_ORDER_MSB_FIRST, NO_OS_SPI_BIT_ORDER_LSB_FIRST]
+    $ref: "enums/no_os_spi_bit_order.yaml"
     description: "SPI bit order (MSB/LSB)"
 
   lanes:
-    type: string
-    enum: [NO_OS_SPI_SINGLE_LANE, NO_OS_SPI_DUAL_LANE, NO_OS_SPI_QUAD_LANE, NO_OS_SPI_OCTO_LANE]
+    $ref: "enums/no_os_spi_lanes.yaml"
     description: "SPI number of lanes"
 
   platform_ops:
-    $ref: "no_os_spi_platform_ops.yaml"
-    description: "SPI bus platform ops"
+    $ref: "types/no_os_spi_platform_ops.yaml"
+    description: "SPI platform specific functions"
 
   platform_delays:
     $ref: "no_os_platform_spi_delays.yaml"
@@ -44,10 +41,11 @@ properties:
   extra:
     type: platform_extra
     description: "SPI extra parameters (platform specific)"
+    x-requires-platform-selection: true
     oneOf:
-      - $ref: "../platforms/maxim/max_spi_init_param.yaml"
-      - $ref: "../platforms/stm32/stm32_spi_init_param.yaml"
-      - $ref: "../platforms/xilinx/xil_spi_init_param.yaml"
+      - $ref: "../platforms/maxim/*/max_spi_init_param.yaml"
+      - $ref: "../platforms/stm32/*/stm32_spi_init_param.yaml"
+      - $ref: "../platforms/xilinx/*/xil_spi_init_param.yaml"
 
   parent:
     $ref: "no_os_spi_desc.yaml"

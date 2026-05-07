@@ -1,0 +1,23 @@
+# schemas/no-os/types/no_os_i2c_platform_ops.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_i2c.h/no_os_i2c_platform_ops"
+title: "no_os_i2c_platform_ops"
+description: "Structure holding I2C function pointers that point to the platform specific functions"
+
+type: const struct no_os_i2c_platform_ops*
+x-const-ref: true
+x-user-modifiable: false
+
+x-platform-values:
+  maxim:
+    symbol: max_i2c_ops
+    header: "maxim_i2c.h"
+  stm32:
+    symbol: stm32_i2c_ops
+    header: "stm32_i2c.h"
+  xilinx:
+    symbol: xil_i2c_ops
+    header: "xilinx_i2c.h"
+
+x-noos-sources:
+  header: "include/no_os_i2c.h"

@@ -1,0 +1,19 @@
+# schemas/platforms/maxim/enums/mxc_gpio_vssel.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "gpio.h/mxc_gpio_vssel_t"
+title: "mxc_gpio_vssel_t"
+description: "Maxim GPIO voltage select options"
+
+type: string
+enum:
+  - MXC_GPIO_VSSEL_VDDIO
+  - MXC_GPIO_VSSEL_VDDIOH
+
+x-enum-descriptions:
+  MXC_GPIO_VSSEL_VDDIO: "Standard voltage (VDDIO)"
+  MXC_GPIO_VSSEL_VDDIOH: "High voltage (VDDIOH)"
+
+x-external-type: true
+x-noos-sources:
+  header: "gpio.h"
+  note: "Defined in Maxim SDK, not no-OS"
