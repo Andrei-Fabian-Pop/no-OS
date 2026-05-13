@@ -1,0 +1,17 @@
+# schemas/no-os/enums/no_os_pwm_polarity.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_pwm.h/no_os_pwm_polarity"
+title: "no_os_pwm_polarity"
+description: "Possible polarities of the PWM signal"
+
+type: string
+enum:
+  - NO_OS_PWM_POLARITY_HIGH
+  - NO_OS_PWM_POLARITY_LOW
+
+x-enum-descriptions:
+  NO_OS_PWM_POLARITY_HIGH: "PWM duty cycle is high, idle low"
+  NO_OS_PWM_POLARITY_LOW: "PWM duty cycle is low, idle high"
+
+x-noos-sources:
+  header: "include/no_os_pwm.h"

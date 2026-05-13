@@ -4,20 +4,50 @@ $id: "stm32_spi.h/stm32_spi_init_param"
 title: "stm32_spi_init_param"
 description: "Structure holding the initialization parameters for STM32 platform specific SPI parameters"
 
-# TODO: Placeholder - populate from drivers/platform/stm32/stm32_spi.h
 type: object
 properties:
   chip_select_port:
     type: uint32_t
     description: "Chip select port"
 
+  get_input_clock:
+    type: unknown
+    description: "Get peripheral source clock function"
+    x-c-type: "uint32_t (*)(void)"
+    x-todo: "Determine if user-implemented or linked to STM32CubeMX generated function"
+    x-default: "NULL"
+
   alternate:
     type: uint32_t
     description: "Chip select alternate function"
 
+  dma_init:
+    $ref: "../../no-os/no_os_dma_init_param.yaml"
+    description: "DMA Initialization Parameters"
+
+  rxdma_ch:
+    $ref: "stm32_dma_channel.yaml"
+    description: "RX DMA Channel Descriptor"
+
+  txdma_ch:
+    $ref: "stm32_dma_channel.yaml"
+    description: "TX DMA Channel Descriptor"
+
   irq_num:
     type: uint32_t
     description: "IRQ number"
+
+  # Conditional fields: only present when HAL_TIM_MODULE_ENABLED is defined
+  # See confluence.html "Known Challenge: Conditional Struct Fields" section
+  pwm_init:
+    $ref: "../../no-os/no_os_pwm_init_param.yaml"
+    description: "CS PWM Initialization Parameters (optional, requires HAL_TIM_MODULE_ENABLED)"
+    x-conditional: "HAL_TIM_MODULE_ENABLED"
+
+  tx_pwm_init:
+    $ref: "../../no-os/no_os_pwm_init_param.yaml"
+    description: "TX PWM Initialization Parameters (optional, requires HAL_TIM_MODULE_ENABLED)"
+    x-conditional: "HAL_TIM_MODULE_ENABLED"
 
 # Mapping to no-OS source files
 x-noos-sources:

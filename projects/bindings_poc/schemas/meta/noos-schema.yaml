@@ -105,6 +105,74 @@ $defs:
     x-c-type: "void*"
     x-requires-platform-selection: true
 
+  # ---------------------------------------------------------------------------
+  # Debugging / Placeholder Types
+  # ---------------------------------------------------------------------------
+
+  unknown:
+    description: |
+      Placeholder for types that don't have a schema solution yet.
+      Used during schema development to mark gaps without blocking progress.
+
+      Code generators should:
+        1. Emit a warning indicating this field needs resolution
+        2. Use the x-c-type override if provided, otherwise default to void*
+        3. Generate a TODO comment in the output
+
+      Usage:
+        some_complex_field:
+          type: unknown
+          x-c-type: "struct some_opaque_type *"
+          x-todo: "Need to investigate this struct's layout"
+    type: "null"
+    x-c-type: "void*"
+    x-requires-resolution: true
+
+  # ---------------------------------------------------------------------------
+  # Callback Types
+  # ---------------------------------------------------------------------------
+
+  callback_func:
+    description: |
+      Function pointer for custom callbacks. The function body cannot be
+      auto-generated as it contains user-specific logic.
+
+      Code generators should:
+        1. Default to NULL if not configured by the user
+        2. Generate a function template (signature + placeholder comment) if enabled
+        3. Link to associated callback_ctx via x-callback-group
+
+      Usage:
+        sg_handler:
+          type: callback_func
+          description: "Custom scatter gather callback"
+          x-callback-group: "sg_callback"
+          x-callback-signature: "void (*)(void *)"
+    type: "null"
+    x-c-type: "void (*)(void *)"
+    x-default: "NULL"
+
+  callback_ctx:
+    description: |
+      Context parameter passed to a callback function. This is typically a
+      void* that holds user data passed to the callback when invoked.
+
+      Must be paired with a callback_func via x-callback-group. Only takes
+      effect if the associated callback is also provided.
+
+      Code generators should:
+        1. Default to NULL if not configured
+        2. Validate that a matching callback_func exists in the same x-callback-group
+
+      Usage:
+        ctx:
+          type: callback_ctx
+          description: "Parameter for the scatter gather callback"
+          x-callback-group: "sg_callback"
+    type: "null"
+    x-c-type: "void*"
+    x-default: "NULL"
+
 # =============================================================================
 # Custom Keywords
 # =============================================================================
@@ -144,6 +212,26 @@ properties:
     description: "Indicates this field requires platform-specific configuration"
     type: boolean
 
+  x-requires-resolution:
+    description: "Indicates this field uses an unknown type that needs to be resolved"
+    type: boolean
+
+  x-todo:
+    description: "Note explaining what needs to be done to resolve an unknown type"
+    type: string
+
+  x-default:
+    description: "Default value for code generation (e.g., NULL for pointers)"
+    type: string
+
+  x-callback-group:
+    description: "Links a callback_func and its callback_ctx together"
+    type: string
+
+  x-callback-signature:
+    description: "The C function signature for a callback_func"
+    type: string
+
 # =============================================================================
 # Type Keyword Extension
 # =============================================================================
@@ -173,3 +261,8 @@ x-extended-types:
     - voidptr
     # Platform abstraction
     - platform_extra
+    # Debugging / Placeholder
+    - unknown
+    # Callback types
+    - callback_func
+    - callback_ctx

@@ -1,0 +1,17 @@
+# schemas/devices/ad5592r/enums/ad559xr_range.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "ad5592r-base.h/ad559xr_range"
+title: "ad559xr_range"
+description: "ADC/DAC voltage range selection"
+
+type: string
+enum:
+  - ZERO_TO_VREF
+  - ZERO_TO_2VREF
+
+x-enum-descriptions:
+  ZERO_TO_VREF: "Output/input range from 0 to Vref"
+  ZERO_TO_2VREF: "Output/input range from 0 to 2*Vref"
+
+x-noos-sources:
+  header: "drivers/adc-dac/ad5592r/ad5592r-base.h"

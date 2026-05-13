@@ -1,0 +1,36 @@
+# schemas/no-os/no_os_gpio_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_gpio.h/no_os_gpio_init_param"
+title: "no_os_gpio_init_param"
+description: "Structure holding the parameters for GPIO initialization"
+
+type: object
+properties:
+  port:
+    type: int32_t
+    description: "Port number"
+
+  number:
+    type: int32_t
+    description: "GPIO number"
+
+  pull:
+    $ref: "enums/no_os_gpio_pull_up.yaml"
+    description: "Pull up/down resistor configuration"
+
+  platform_ops:
+    $ref: "types/no_os_gpio_platform_ops.yaml"
+    description: "GPIO platform specific functions"
+
+  extra:
+    type: platform_extra
+    description: "GPIO extra parameters (platform specific)"
+    x-requires-platform-selection: true
+    oneOf:
+      - $ref: "../platforms/maxim/*/max_gpio_init_param.yaml"
+      - $ref: "../platforms/stm32/*/stm32_gpio_init_param.yaml"
+      - $ref: "../platforms/xilinx/*/xil_gpio_init_param.yaml"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "include/no_os_gpio.h"

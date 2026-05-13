@@ -1,0 +1,23 @@
+# schemas/no-os/enums/no_os_gpio_pull_up.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_gpio.h/no_os_gpio_pull_up"
+title: "no_os_gpio_pull_up"
+description: "Enum that holds the possible pull up/pull down resistor configuration"
+
+type: string
+enum:
+  - NO_OS_PULL_NONE
+  - NO_OS_PULL_UP
+  - NO_OS_PULL_DOWN
+  - NO_OS_PULL_UP_WEAK
+  - NO_OS_PULL_DOWN_WEAK
+
+x-enum-descriptions:
+  NO_OS_PULL_NONE: "No pull up or pull down"
+  NO_OS_PULL_UP: "Strong pull up"
+  NO_OS_PULL_DOWN: "Strong pull down"
+  NO_OS_PULL_UP_WEAK: "Weak pull up"
+  NO_OS_PULL_DOWN_WEAK: "Weak pull down"
+
+x-noos-sources:
+  header: "include/no_os_gpio.h"

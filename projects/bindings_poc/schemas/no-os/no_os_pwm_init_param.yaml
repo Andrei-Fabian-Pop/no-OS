@@ -1,0 +1,57 @@
+# schemas/no-os/no_os_pwm_init_param.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "no_os_pwm.h/no_os_pwm_init_param"
+title: "no_os_pwm_init_param"
+description: "Structure containing the init parameters needed by the PWM generator"
+
+type: object
+properties:
+  id:
+    type: uint32_t
+    description: "PWM id (e.g., pin number, timer_id)"
+
+  period_ns:
+    type: uint32_t
+    description: "PWM generator period in nanoseconds"
+
+  duty_cycle_ns:
+    type: uint32_t
+    description: "PWM generator duty cycle in nanoseconds"
+
+  phase_ns:
+    type: uint32_t
+    description: "PWM generator phase in nanoseconds"
+
+  polarity:
+    $ref: "enums/no_os_pwm_polarity.yaml"
+    description: "PWM generator polarity"
+
+  pwm_gpio:
+    $ref: "no_os_gpio_init_param.yaml"
+    description: "PWM GPIO pin init param"
+
+  irq_id:
+    type: uint32_t
+    description: "IRQ ID"
+
+  pwm_callback:
+    type: callback_func
+    description: "PWM callback function"
+    x-callback-group: "pwm_callback"
+    x-callback-signature: "void (*)(void *)"
+    x-default: "NULL"
+
+  platform_ops:
+    $ref: "types/no_os_pwm_platform_ops.yaml"
+    description: "PWM platform specific functions"
+
+  extra:
+    type: platform_extra
+    description: "PWM extra parameters (device specific)"
+    x-requires-platform-selection: true
+    oneOf:
+      - $ref: "../platforms/stm32/stm32_pwm_init_param.yaml"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "include/no_os_pwm.h"

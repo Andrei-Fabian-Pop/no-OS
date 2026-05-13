@@ -1,0 +1,105 @@
+# schemas/devices/ad5592r/adi,ad5592r.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "adi,ad5592r.yaml"
+title: "AD5592R no-OS Driver Configuration"
+description: |
+  Configuration schema for AD5592R 8-channel, 12-bit configurable ADC/DAC with GPIO.
+  Each channel can be independently configured as ADC, DAC, GPIO, or unused.
+
+type: object
+required:
+  - channel_modes
+
+properties:
+  int_ref:
+    type: boolean
+    default: true
+
+  external_vref:
+    type: uint32_t
+    minimum: 1000
+    maximum: 5500
+
+  spi_init:
+    $ref: "../../no-os/no_os_spi_init_param.yaml"
+    description: "SPI initialization parameters (for AD5592R)"
+
+  i2c_init:
+    $ref: "../../no-os/no_os_i2c_init_param.yaml"
+    description: "I2C initialization parameters (for AD5593R variant)"
+
+  ss_init:
+    $ref: "../../no-os/no_os_gpio_init_param.yaml"
+    description: "Slave select GPIO initialization parameters"
+
+  channel_modes:
+    type: array
+    description: "Mode configuration for each of the 8 channels"
+    minItems: 8
+    maxItems: 8
+    items:
+      $ref: "enums/ad5592r_channel_mode.yaml"
+    default:
+      - CH_MODE_UNUSED
+      - CH_MODE_UNUSED
+      - CH_MODE_UNUSED
+      - CH_MODE_UNUSED
+      - CH_MODE_UNUSED
+      - CH_MODE_UNUSED
+      - CH_MODE_UNUSED
+      - CH_MODE_UNUSED
+
+  channel_offstate:
+    type: array
+    description: "Off-state configuration for each of the 8 channels"
+    minItems: 8
+    maxItems: 8
+    items:
+      $ref: "enums/ad5592r_channel_offstate.yaml"
+    default:
+      - CH_OFFSTATE_PULLDOWN
+      - CH_OFFSTATE_PULLDOWN
+      - CH_OFFSTATE_PULLDOWN
+      - CH_OFFSTATE_PULLDOWN
+      - CH_OFFSTATE_PULLDOWN
+      - CH_OFFSTATE_PULLDOWN
+      - CH_OFFSTATE_PULLDOWN
+      - CH_OFFSTATE_PULLDOWN
+
+  adc_range:
+    $ref: "enums/ad559xr_range.yaml"
+    description: "ADC input voltage range"
+    default: "ZERO_TO_VREF"
+
+  dac_range:
+    $ref: "enums/ad559xr_range.yaml"
+    description: "DAC output voltage range"
+    default: "ZERO_TO_VREF"
+
+  adc_buf:
+    type: boolean
+    description: "Enable ADC precharge buffer for improved performance"
+    default: false
+
+  power_down:
+    type: array
+    description: "Power down state for each of the 8 channels (0 = enabled, 1 = powered down)"
+    minItems: 8
+    maxItems: 8
+    items:
+      type: uint8_t
+      minimum: 0
+      maximum: 1
+    default: [0, 0, 0, 0, 0, 0, 0, 0]
+
+# At least one communication interface must be specified
+anyOf:
+  - required: [spi_init]
+  - required: [i2c_init]
+
+# Mapping to no-OS source files
+x-noos-sources:
+  driver_header: "drivers/adc-dac/ad5592r/ad5592r-base.h"
+  driver_source: "drivers/adc-dac/ad5592r/ad5592r-base.c"
+  spi_header: "drivers/adc-dac/ad5592r/ad5592r.h"
+  spi_source: "drivers/adc-dac/ad5592r/ad5592r.c"

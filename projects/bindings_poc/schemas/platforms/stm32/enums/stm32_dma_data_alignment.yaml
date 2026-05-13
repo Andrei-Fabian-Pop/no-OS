@@ -1,0 +1,19 @@
+# schemas/platforms/stm32/enums/stm32_dma_data_alignment.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "stm32_dma.h/stm32_dma_data_alignment"
+title: "stm32_dma_data_alignment"
+description: "DMA Data alignment"
+
+type: string
+enum:
+  - DATA_ALIGN_BYTE
+  - DATA_ALIGN_HALF_WORD
+  - DATA_ALIGN_WORD
+
+x-enum-descriptions:
+  DATA_ALIGN_BYTE: "Byte alignment (8-bit)"
+  DATA_ALIGN_HALF_WORD: "Half word alignment (16-bit)"
+  DATA_ALIGN_WORD: "Word alignment (32-bit)"
+
+x-noos-sources:
+  header: "drivers/platform/stm32/stm32_dma.h"

@@ -1,0 +1,25 @@
+# schemas/devices/ad5592r/enums/ad5592r_channel_mode.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "ad5592r-base.h/ad5592r_channel_mode"
+title: "ad5592r_channel_mode"
+description: "Channel mode configuration for AD5592R"
+
+type: string
+enum:
+  - CH_MODE_UNUSED
+  - CH_MODE_ADC
+  - CH_MODE_DAC
+  - CH_MODE_DAC_AND_ADC
+  - CH_MODE_GPI
+  - CH_MODE_GPO
+
+x-enum-descriptions:
+  CH_MODE_UNUSED: "Channel unused"
+  CH_MODE_ADC: "Channel configured as ADC input"
+  CH_MODE_DAC: "Channel configured as DAC output"
+  CH_MODE_DAC_AND_ADC: "Channel configured as both DAC and ADC"
+  CH_MODE_GPI: "Channel configured as general purpose input"
+  CH_MODE_GPO: "Channel configured as general purpose output"
+
+x-noos-sources:
+  header: "drivers/adc-dac/ad5592r/ad5592r-base.h"

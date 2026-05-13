@@ -1,0 +1,17 @@
+# schemas/platforms/stm32/enums/stm32_dma_mode.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "stm32_dma.h/stm32_dma_mode"
+title: "stm32_dma_mode"
+description: "DMA Data Modes"
+
+type: string
+enum:
+  - DMA_NORMAL_MODE
+  - DMA_CIRCULAR_MODE
+
+x-enum-descriptions:
+  DMA_NORMAL_MODE: "Normal DMA mode - single transfer"
+  DMA_CIRCULAR_MODE: "Circular DMA mode - continuous transfer"
+
+x-noos-sources:
+  header: "drivers/platform/stm32/stm32_dma.h"

@@ -1,0 +1,49 @@
+# schemas/platforms/stm32/stm32_dma_channel.yaml
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "stm32_dma.h/stm32_dma_channel"
+title: "stm32_dma_channel"
+description: "STM32 DMA Channel configuration"
+
+type: object
+properties:
+  hdma:
+    type: unknown
+    description: "DMA Handle (HAL type)"
+    x-c-type: "DMA_HandleTypeDef*"
+    x-todo: "HAL type - managed by STM32CubeMX"
+
+  ch_num:
+    type: uint32_t
+    description: "Channel Number"
+
+  mem_increment:
+    type: boolean
+    description: "Memory address increment enable"
+    default: true
+
+  per_increment:
+    type: boolean
+    description: "Peripheral address increment enable"
+    default: false
+
+  mem_data_alignment:
+    $ref: "enums/stm32_dma_data_alignment.yaml"
+    description: "Memory data alignment"
+
+  per_data_alignment:
+    $ref: "enums/stm32_dma_data_alignment.yaml"
+    description: "Peripheral data alignment"
+
+  dma_mode:
+    $ref: "enums/stm32_dma_mode.yaml"
+    description: "DMA mode"
+
+  trig:
+    type: unknown
+    description: "Trigger configuration"
+    x-c-type: "struct stm32_dma_trigger*"
+    x-todo: "Create stm32_dma_trigger schema"
+
+# Mapping to no-OS source files
+x-noos-sources:
+  header: "drivers/platform/stm32/stm32_dma.h"
