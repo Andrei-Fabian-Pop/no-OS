@@ -28,8 +28,8 @@ properties:
     x-requires-platform-selection: true
     oneOf:
       - $ref: "../platforms/maxim/*/max_gpio_init_param.yaml"
-      - $ref: "../platforms/stm32/*/stm32_gpio_init_param.yaml"
-      - $ref: "../platforms/xilinx/*/xil_gpio_init_param.yaml"
+      - $ref: "../platforms/stm32/stm32_gpio_init_param.yaml"
+      - $ref: "../platforms/xilinx/xil_gpio_init_param.yaml"
 
 # Mapping to no-OS source files
 x-noos-sources:

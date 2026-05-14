@@ -44,8 +44,8 @@ properties:
     x-requires-platform-selection: true
     oneOf:
       - $ref: "../platforms/maxim/*/max_spi_init_param.yaml"
-      - $ref: "../platforms/stm32/*/stm32_spi_init_param.yaml"
-      - $ref: "../platforms/xilinx/*/xil_spi_init_param.yaml"
+      - $ref: "../platforms/stm32/stm32_spi_init_param.yaml"
+      - $ref: "../platforms/xilinx/xil_spi_init_param.yaml"
 
   parent:
     $ref: "no_os_spi_desc.yaml"

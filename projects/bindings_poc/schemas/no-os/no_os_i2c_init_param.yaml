@@ -28,8 +28,8 @@ properties:
     x-requires-platform-selection: true
     oneOf:
       - $ref: "../platforms/maxim/*/max_i2c_init_param.yaml"
-      - $ref: "../platforms/stm32/*/stm32_i2c_init_param.yaml"
-      - $ref: "../platforms/xilinx/*/xil_i2c_init_param.yaml"
+      - $ref: "../platforms/stm32/stm32_i2c_init_param.yaml"
+      - $ref: "../platforms/xilinx/xil_i2c_init_param.yaml"
 
 # Mapping to no-OS source files
 x-noos-sources:
