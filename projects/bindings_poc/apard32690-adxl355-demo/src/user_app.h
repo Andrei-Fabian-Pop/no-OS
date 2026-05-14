@@ -1,10 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for APARD32690 + ADXL355 demo.
- *   @author Auto-generated
- *
- *   WARNING: This file is auto-generated. Do not modify directly.
- *   To add custom application code, edit user_app.c instead.
+ *   @file   user_app.h
+ *   @brief  User application header for APARD32690 + ADXL355 demo.
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -34,51 +30,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "common_data.h"
-#include "adxl355.h"
-#include "no_os_print_log.h"
-#include "user_app.h"
+#ifndef USER_APP_H
+#define USER_APP_H
+
+struct adxl355_dev;
 
 /***************************************************************************//**
- * @brief Main function - initializes UART and ADXL355.
+ * @brief User application code.
  *
- * @return 0 on success, negative error code on failure.
+ * This function is called after all peripherals are initialized.
+ * Add your custom application logic here.
+ *
+ * @param adxl355_dev - Pointer to the initialized ADXL355 device.
 *******************************************************************************/
-int main(void)
-{
-	struct no_os_uart_desc *uart_desc;
-	struct adxl355_dev *adxl355_dev;
-	int ret;
+void user_app(struct adxl355_dev *adxl355_dev);
 
-	/* Initialize UART for debug output */
-	ret = no_os_uart_init(&uart_desc, &uart_ip);
-	if (ret) {
-		return ret;
-	}
-
-	no_os_uart_stdio(uart_desc);
-
-	pr_info("APARD32690 + ADXL355 Demo\n");
-	pr_info("=========================\n");
-
-	/* Assign SPI init params to ADXL355 init params */
-	adxl355_ip.comm_init.spi_init = spi_ip;
-
-	/* Initialize ADXL355 accelerometer */
-	ret = adxl355_init(&adxl355_dev, adxl355_ip);
-	if (ret) {
-		pr_info("ADXL355 init failed: %d\n", ret);
-		goto error_uart;
-	}
-
-	pr_info("ADXL355 initialized successfully\n\n");
-
-	/* Call user application code */
-	user_app(adxl355_dev);
-
-	adxl355_remove(adxl355_dev);
-
-error_uart:
-	no_os_uart_remove(uart_desc);
-	return ret;
-}
+#endif /* USER_APP_H */

@@ -1,7 +1,10 @@
 /***************************************************************************//**
  *   @file   main.c
  *   @brief  Main file for SDP-K1 + AD5592R demo.
- *   @author Demo Project
+ *   @author Auto-generated
+ *
+ *   WARNING: This file is auto-generated. Do not modify directly.
+ *   To add custom application code, edit user_app.c instead.
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -34,6 +37,7 @@
 #include "common_data.h"
 #include "ad5592r.h"
 #include "no_os_print_log.h"
+#include "user_app.h"
 
 /***************************************************************************//**
  * @brief Main function - initializes UART and AD5592R
@@ -67,6 +71,9 @@ int main(void)
 	pr_info("AD5592R initialized successfully\n");
 	pr_info("  Channels 0-3: DAC outputs\n");
 	pr_info("  Channels 4-7: ADC inputs\n\n");
+
+	/* Call user application code */
+	user_app(ad5592r_dev);
 
 	ad5592r_remove(ad5592r_dev);
 

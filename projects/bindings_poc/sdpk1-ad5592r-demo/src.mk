@@ -1,6 +1,8 @@
 SRCS += $(PROJECT)/src/main.c
+SRCS += $(PROJECT)/src/user_app.c
 SRCS += $(PROJECT)/src/common/common_data.c
 
+INCS += $(PROJECT)/src/user_app.h
 INCS += $(PROJECT)/src/common/common_data.h
 
 # AD5592R driver

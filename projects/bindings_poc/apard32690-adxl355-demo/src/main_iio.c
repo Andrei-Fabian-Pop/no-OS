@@ -1,10 +1,7 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for APARD32690 + ADXL355 demo.
- *   @author Auto-generated
- *
- *   WARNING: This file is auto-generated. Do not modify directly.
- *   To add custom application code, edit user_app.c instead.
+ *   @file   main_iio.c
+ *   @brief  Main file for APARD32690 + ADXL355 IIO demo.
+ *   @author Demo Project
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -35,50 +32,83 @@
 *******************************************************************************/
 
 #include "common_data.h"
-#include "adxl355.h"
+#include "iio_adxl355.h"
+#include "iio_app.h"
 #include "no_os_print_log.h"
-#include "user_app.h"
+
+#ifndef DATA_BUFFER_SIZE
+#define DATA_BUFFER_SIZE 400
+#endif
+
+static uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 3 * sizeof(int)];
 
 /***************************************************************************//**
- * @brief Main function - initializes UART and ADXL355.
+ * @brief Main function - initializes ADXL355 with IIO support.
  *
  * @return 0 on success, negative error code on failure.
+ *         If working correctly, will execute continuously via iio_app_run
+ *         and will not return.
 *******************************************************************************/
 int main(void)
 {
-	struct no_os_uart_desc *uart_desc;
-	struct adxl355_dev *adxl355_dev;
 	int ret;
+	struct adxl355_iio_dev *adxl355_iio_desc;
+	struct adxl355_iio_dev_init_param adxl355_iio_ip;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
 
-	/* Initialize UART for debug output */
-	ret = no_os_uart_init(&uart_desc, &uart_ip);
-	if (ret) {
-		return ret;
-	}
+	struct iio_data_buffer accel_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * 3 * sizeof(int)
+	};
 
-	no_os_uart_stdio(uart_desc);
-
-	pr_info("APARD32690 + ADXL355 Demo\n");
-	pr_info("=========================\n");
+	pr_info("APARD32690 + ADXL355 IIO Demo\n");
+	pr_info("=============================\n");
 
 	/* Assign SPI init params to ADXL355 init params */
 	adxl355_ip.comm_init.spi_init = spi_ip;
 
-	/* Initialize ADXL355 accelerometer */
-	ret = adxl355_init(&adxl355_dev, adxl355_ip);
+	/* Initialize ADXL355 IIO device */
+	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
+	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
 	if (ret) {
-		pr_info("ADXL355 init failed: %d\n", ret);
-		goto error_uart;
+		pr_info("ADXL355 IIO init failed: %d\n", ret);
+		return ret;
 	}
 
-	pr_info("ADXL355 initialized successfully\n\n");
+	pr_info("ADXL355 IIO initialized successfully\n");
 
-	/* Call user application code */
-	user_app(adxl355_dev);
+	/* Configure IIO devices array */
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adxl355",
+			.dev = adxl355_iio_desc,
+			.dev_descriptor = adxl355_iio_desc->iio_dev,
+			.read_buff = &accel_buff,
+		}
+	};
 
-	adxl355_remove(adxl355_dev);
+	/* Configure IIO application parameters */
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uart_ip;
 
-error_uart:
-	no_os_uart_remove(uart_desc);
+	/* Initialize IIO application */
+	ret = iio_app_init(&app, app_init_param);
+	if (ret) {
+		pr_info("IIO app init failed: %d\n", ret);
+		goto error_adxl355;
+	}
+
+	pr_info("IIO app initialized, starting IIO server...\n");
+
+	/* Run IIO application (blocks forever handling IIO requests) */
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+
+error_adxl355:
+	adxl355_iio_remove(adxl355_iio_desc);
+
 	return ret;
 }
