@@ -1,0 +1,183 @@
+# Meta-schema: Rules for writing no-OS binding schemas
+# This file describes the structure and constraints for all schema files
+
+version: 1
+
+# =============================================================================
+# Top-level fields (prefixed with $)
+# =============================================================================
+metadata_fields:
+  $id:
+    required: true
+    type: string
+    description: File path relative to schemas_v2 root (e.g., "devices/adi,adxl355.yaml")
+
+  $type:
+    required: true
+    type: string
+    allowed_values: [struct, enum]
+    description: The type of schema being defined
+
+  $name:
+    required: true
+    type: string
+    description: The C identifier name (e.g., "adxl355_init_param", "no_os_spi_mode")
+
+  $description:
+    required: true
+    type: string
+    description: Human-readable description of the struct or enum
+
+  $sources:
+    required: false
+    type: object
+    description: Mapping to no-OS source files
+    fields:
+      header:
+        type: string
+        description: Path to header file relative to no-OS root
+      source:
+        type: string
+        description: Path to source file relative to no-OS root
+
+# =============================================================================
+# Schema types
+# =============================================================================
+schema_types:
+  struct:
+    description: Defines a C struct with properties
+    top_level_fields:
+      - $id
+      - $type
+      - $name
+      - $description
+      - $sources
+    properties:
+      description: All other top-level keys are struct properties
+
+  enum:
+    description: Defines a C enum with named values
+    top_level_fields:
+      - $id
+      - $type
+      - $name
+      - $description
+      - $sources
+      - values
+      - default
+    fields:
+      values:
+        required: true
+        type: object
+        description: Map of enum value names to their descriptions
+      default:
+        required: false
+        type: string
+        description: Default enum value (must be one of the values keys)
+
+# =============================================================================
+# Property definitions (for struct properties)
+# =============================================================================
+property_fields:
+  # One of these is required (mutually exclusive)
+  type:
+    required_unless: include
+    type: string
+    description: The type of this property
+    allowed_values:
+      primitives:
+        - uint8_t
+        - uint16_t
+        - uint32_t
+        - uint64_t
+        - int8_t
+        - int16_t
+        - int32_t
+        - int64_t
+        - bool
+        - size_t
+      special:
+        - enum # Inline enum definition
+        - union # Union type with selector
+        - const_ptr # Constant pointer to another type
+        - platform_extra # Platform-specific void* field
+
+  include:
+    required_unless: type
+    type: string
+    description: Path to another schema file to include (relative to schemas_v2 root)
+
+  # Optional fields
+  required:
+    required: false
+    type: bool
+    default: false
+    description: Whether this property must be configured by the user
+
+  description:
+    required: false
+    type: string
+    description: Human-readable description of the property
+
+  default:
+    required: false
+    type: any
+    description: Default value for the property
+
+# =============================================================================
+# Special type definitions
+# =============================================================================
+special_types:
+  enum:
+    description: Inline enum definition within a struct
+    fields:
+      type:
+        value: enum
+      values:
+        required: true
+        type: list
+        description: List of enum value names
+      default:
+        required: false
+        type: string
+        description: Default enum value
+
+  union:
+    description: Union type where one member is active based on a selector
+    fields:
+      type:
+        value: union
+      selector:
+        required: true
+        type: string
+        description: Name of the property that determines the active member
+      members:
+        required: true
+        type: object
+        description: |
+          Map of selector values to member definitions.
+          Each member is an object with property definitions.
+
+  const_ptr:
+    description: Constant pointer to another type
+    fields:
+      type:
+        value: const_ptr
+      target:
+        required: true
+        type: string
+        description: The type being pointed to
+
+  platform_extra:
+    description: Platform-specific void* field with multiple possible types
+    fields:
+      type:
+        value: platform_extra
+      platforms:
+        required: true
+        type: list
+        description: List of possible platform-specific schemas
+        items:
+          include:
+            type: string
+            description: Path to platform schema file

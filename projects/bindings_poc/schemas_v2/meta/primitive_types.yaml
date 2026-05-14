@@ -1,0 +1,82 @@
+# Primitive C types and their constraints
+# Used for validation and code generation
+
+version: 1
+
+types:
+  uint8_t:
+    description: Unsigned 8-bit integer
+    c_type: uint8_t
+    size_bits: 8
+    signed: false
+    min: 0
+    max: 255
+
+  uint16_t:
+    description: Unsigned 16-bit integer
+    c_type: uint16_t
+    size_bits: 16
+    signed: false
+    min: 0
+    max: 65535
+
+  uint32_t:
+    description: Unsigned 32-bit integer
+    c_type: uint32_t
+    size_bits: 32
+    signed: false
+    min: 0
+    max: 4294967295
+
+  uint64_t:
+    description: Unsigned 64-bit integer
+    c_type: uint64_t
+    size_bits: 64
+    signed: false
+    min: 0
+    max: 18446744073709551615
+
+  int8_t:
+    description: Signed 8-bit integer
+    c_type: int8_t
+    size_bits: 8
+    signed: true
+    min: -128
+    max: 127
+
+  int16_t:
+    description: Signed 16-bit integer
+    c_type: int16_t
+    size_bits: 16
+    signed: true
+    min: -32768
+    max: 32767
+
+  int32_t:
+    description: Signed 32-bit integer
+    c_type: int32_t
+    size_bits: 32
+    signed: true
+    min: -2147483648
+    max: 2147483647
+
+  int64_t:
+    description: Signed 64-bit integer
+    c_type: int64_t
+    size_bits: 64
+    signed: true
+    min: -9223372036854775808
+    max: 9223372036854775807
+
+  bool:
+    description: Boolean value
+    c_type: bool
+    size_bits: 8
+    values: [true, false]
+
+  size_t:
+    description: Size type (platform-dependent)
+    c_type: size_t
+    size_bits: platform_dependent
+    signed: false
+    min: 0

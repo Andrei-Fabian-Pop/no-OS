@@ -1,0 +1,36 @@
+$id: devices/adi,adxl355.yaml
+$type: struct
+$name: adxl355_init_param
+$description: ADXL355 3-axis accelerometer configuration
+$sources:
+  header: drivers/accel/adxl355/adxl355.h
+  source: drivers/accel/adxl355/adxl355.c
+
+comm_type:
+  type: enum
+  required: true
+  values: [ADXL355_SPI_COMM, ADXL355_I2C_COMM]
+  default: ADXL355_SPI_COMM
+  description: Communication interface type (SPI or I2C)
+
+dev_type:
+  type: enum
+  required: true
+  values: [ID_ADXL355, ID_ADXL357, ID_ADXL359]
+  default: ID_ADXL355
+  description: Device variant identifier
+
+comm_init:
+  type: union
+  required: true
+  selector: comm_type
+  description: Communication initialization parameters
+  members:
+    ADXL355_SPI_COMM:
+      spi_init:
+        include: no-os/no_os_spi_init_param.yaml
+        description: SPI initialization parameters
+    ADXL355_I2C_COMM:
+      i2c_init:
+        include: no-os/no_os_i2c_init_param.yaml
+        description: I2C initialization parameters
