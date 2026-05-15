@@ -1,0 +1,74 @@
+{
+	"no-os": {
+		"bindings": [
+			"no_os_dma_init_param",
+			"no_os_gpio_init_param",
+			"no_os_i2c_init_param",
+			"no_os_pwm_init_param",
+			"no_os_spi_init_param",
+			"no_os_uart_init_param"
+		],
+		"enums": [
+			"no_os_gpio_pull_up",
+			"no_os_pwm_polarity",
+			"no_os_spi_bit_order",
+			"no_os_spi_mode",
+			"no_os_uart_parity",
+			"no_os_uart_size",
+			"no_os_uart_stop"
+		],
+		"platform_ops": [
+			"no_os_dma_platform_ops",
+			"no_os_gpio_platform_ops",
+			"no_os_i2c_platform_ops",
+			"no_os_pwm_platform_ops",
+			"no_os_spi_platform_ops",
+			"no_os_uart_platform_ops"
+		]
+	},
+	"devices": [
+		"adi,adxl355": {
+			"config": "adi,adxl355"
+		},
+		"adi,ad5592r": {
+			"config": "adi,adxl355",
+			"enums": [
+				"ad5592r_channel_mode",
+				"ad5592r_channel_offset",
+				"ad5592r_range"
+			]
+		}
+	],
+	"platforms": [
+		"maxim": [
+			"max32690": {
+				"enums": [
+					"max_uart_flow_ctrl",
+					"mxc_gpio_vssel",
+					"spi_ss_polarity"
+				],
+				"config": [
+					"max_gpio_init_param",
+					"max_i2c_init_param",
+					"max_pwm_init_param",
+					"max_spi_init_param",
+					"max_uart_init_param"
+				]
+			}
+		],
+		"stm32": {
+			"enums": [
+				"stm32_dma_data_alignment",
+				"stm32_dma_mode"
+			],
+			"config": [
+				"stm32_dma_channel",
+				"stm32_dma_init_param",
+				"stm32_gpio_init_param",
+				"stm32_pwm_init_param",
+				"stm32_spi_init_param",
+				"stm32_uart_init_param"
+			]
+		}
+	]
+}
