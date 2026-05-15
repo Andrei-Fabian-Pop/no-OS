@@ -17,6 +17,10 @@ vssel:
   include: "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml"
   description: "GPIO voltage select"
 
+dma_param:
+  include: "no-os/no_os_dma_init_param.yaml"
+  description: "DMA initialization parameters"
+
 dma_rx_priority:
   type: uint32_t
   description: "DMA RX priority"
@@ -24,3 +28,40 @@ dma_rx_priority:
 dma_tx_priority:
   type: uint32_t
   description: "DMA TX priority"
+
+override:
+  parent:
+    max_speed_hz:
+      minimum: 0
+      maximum: 1_000_000
+
+    chip_select:
+      maximum: 4
+
+    if:
+      device_id:
+        value: 1
+    then:
+      chip_select:
+        maximum: 3
+
+    ########### OR #########
+
+    switch:
+      on: device_id
+      cases:
+        0:
+          chip_select:
+            maximum: 3
+        1:
+          chip_select:
+            maximum: 4
+        2:
+          chip_select:
+            maximum: 4
+        3:
+          chip_select:
+            maximum: 4
+        _:
+          chip_select:
+            maximum: 4

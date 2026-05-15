@@ -1,0 +1,14 @@
+$id: "no-os/platform_ops/no_os_pwm_platform_ops.yaml"
+$type: platform_ops
+$name: no_os_pwm_platform_ops
+$description: "Structure holding PWM function pointers that point to the platform specific functions"
+$sources:
+  header: "include/no_os_pwm.h"
+
+platforms:
+  maxim:
+    symbol: max_pwm_ops
+    header: "maxim_pwm.h"
+  stm32:
+    symbol: stm32_pwm_ops
+    header: "stm32_pwm.h"

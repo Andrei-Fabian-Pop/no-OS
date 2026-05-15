@@ -1,0 +1,14 @@
+$id: "no-os/platform_ops/no_os_dma_platform_ops.yaml"
+$type: platform_ops
+$name: no_os_dma_platform_ops
+$description: "Structure holding DMA function pointers that point to the platform specific functions"
+$sources:
+  header: "include/no_os_dma.h"
+
+platforms:
+  maxim:
+    symbol: max_dma_ops
+    header: "maxim_dma.h"
+  stm32:
+    symbol: stm32_dma_ops
+    header: "stm32_dma.h"

@@ -18,8 +18,7 @@ slave_address:
   description: "I2C slave device address"
 
 platform_ops:
-  type: const_ptr
-  target: no_os_i2c_platform_ops
+  include: "no-os/platform_ops/no_os_i2c_platform_ops.yaml"
   description: "Platform-specific I2C operations"
 
 extra:

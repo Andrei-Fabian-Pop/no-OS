@@ -1,0 +1,14 @@
+$id: "no-os/platform_ops/no_os_uart_platform_ops.yaml"
+$type: platform_ops
+$name: no_os_uart_platform_ops
+$description: "Structure holding UART function pointers that point to the platform specific functions"
+$sources:
+  header: "include/no_os_uart.h"
+
+platforms:
+  maxim:
+    symbol: max_uart_ops
+    header: "maxim_uart.h"
+  stm32:
+    symbol: stm32_uart_ops
+    header: "stm32_uart.h"

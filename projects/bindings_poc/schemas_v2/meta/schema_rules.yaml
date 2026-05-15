@@ -15,7 +15,7 @@ metadata_fields:
   $type:
     required: true
     type: string
-    allowed_values: [struct, enum]
+    allowed_values: [struct, enum, platform_ops]
     description: The type of schema being defined
 
   $name:
@@ -74,6 +74,28 @@ schema_types:
         required: false
         type: string
         description: Default enum value (must be one of the values keys)
+
+  platform_ops:
+    description: Defines a const pointer to platform-specific operations struct
+    top_level_fields:
+      - $id
+      - $type
+      - $name
+      - $description
+      - $sources
+      - platforms
+    fields:
+      platforms:
+        required: true
+        type: object
+        description: Map of platform names to their symbols and headers
+        properties:
+          symbol:
+            type: string
+            description: The C symbol name (e.g., max_spi_ops)
+          header:
+            type: string
+            description: Header file that declares this symbol
 
 # =============================================================================
 # Property definitions (for struct properties)

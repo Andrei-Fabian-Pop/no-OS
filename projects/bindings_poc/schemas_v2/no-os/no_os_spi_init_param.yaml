@@ -28,9 +28,8 @@ bit_order:
   description: "Bit order (MSB or LSB first)"
 
 platform_ops:
-  type: const_ptr
+  include: "no-os/platform_ops/no_os_spi_platform_ops.yaml"
   required: true
-  target: no_os_spi_platform_ops
   description: "Platform-specific SPI operations"
 
 extra:
@@ -39,3 +38,4 @@ extra:
   description: "Platform-specific initialization parameters"
   platforms:
     - include: "platforms/maxim/max32690/max_spi_init_param.yaml"
+    - include: "platforms/stm32/stm32_spi_init_param.yaml"

@@ -1,0 +1,14 @@
+$id: "no-os/platform_ops/no_os_gpio_platform_ops.yaml"
+$type: platform_ops
+$name: no_os_gpio_platform_ops
+$description: "Structure holding GPIO function pointers that point to the platform specific functions"
+$sources:
+  header: "include/no_os_gpio.h"
+
+platforms:
+  maxim:
+    symbol: max_gpio_ops
+    header: "maxim_gpio.h"
+  stm32:
+    symbol: stm32_gpio_ops
+    header: "stm32_gpio.h"

@@ -1,0 +1,14 @@
+$id: "no-os/platform_ops/no_os_i2c_platform_ops.yaml"
+$type: platform_ops
+$name: no_os_i2c_platform_ops
+$description: "Structure holding I2C function pointers that point to the platform specific functions"
+$sources:
+  header: "include/no_os_i2c.h"
+
+platforms:
+  maxim:
+    symbol: max_i2c_ops
+    header: "maxim_i2c.h"
+  stm32:
+    symbol: stm32_i2c_ops
+    header: "stm32_i2c.h"

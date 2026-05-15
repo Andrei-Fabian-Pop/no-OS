@@ -1,0 +1,14 @@
+$id: "no-os/platform_ops/no_os_spi_platform_ops.yaml"
+$type: platform_ops
+$name: no_os_spi_platform_ops
+$description: "Structure holding SPI function pointers that point to the platform specific functions"
+$sources:
+  header: "include/no_os_spi.h"
+
+platforms:
+  maxim:
+    symbol: max_spi_ops
+    header: "maxim_spi.h"
+  stm32:
+    symbol: stm32_spi_ops
+    header: "stm32_spi.h"

@@ -37,9 +37,8 @@ stop:
   description: "UART number of stop bits"
 
 platform_ops:
-  type: const_ptr
+  include: "no-os/platform_ops/no_os_uart_platform_ops.yaml"
   required: true
-  target: no_os_uart_platform_ops
   description: "Platform-specific UART operations"
 
 extra:
@@ -48,3 +47,4 @@ extra:
   description: "Platform-specific initialization parameters"
   platforms:
     - include: "platforms/maxim/max32690/max_uart_init_param.yaml"
+    - include: "platforms/stm32/stm32_uart_init_param.yaml"
