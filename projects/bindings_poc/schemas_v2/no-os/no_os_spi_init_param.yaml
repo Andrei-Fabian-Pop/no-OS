@@ -1,42 +1,41 @@
-$id: no-os/no_os_spi_init_param.yaml
+$id: "no-os/no_os_spi_init_param.yaml"
 $type: struct
 $name: no_os_spi_init_param
-$description: Structure holding the parameters for SPI initialization
+$description: "Structure holding the parameters for SPI initialization"
 $sources:
-  header: include/no_os_spi.h
+  header: "include/no_os_spi.h"
 
 device_id:
   type: uint32_t
   required: true
-  description: SPI peripheral device ID
+  description: "SPI peripheral device ID"
 
 max_speed_hz:
   type: uint32_t
-  description: Maximum SPI clock frequency in Hz
+  description: "Maximum SPI clock frequency in Hz"
 
 chip_select:
   type: uint8_t
   required: true
-  description: Chip select line number
+  description: "Chip select line number"
 
 mode:
-  include: no-os/enums/no_os_spi_mode.yaml
-  description: SPI mode (clock polarity and phase)
+  include: "no-os/enums/no_os_spi_mode.yaml"
+  description: "SPI mode (clock polarity and phase)"
 
 bit_order:
-  include: no-os/enums/no_os_spi_bit_order.yaml
-  description: Bit order (MSB or LSB first)
+  include: "no-os/enums/no_os_spi_bit_order.yaml"
+  description: "Bit order (MSB or LSB first)"
 
 platform_ops:
   type: const_ptr
   required: true
   target: no_os_spi_platform_ops
-  description: Platform-specific SPI operations
+  description: "Platform-specific SPI operations"
 
 extra:
   type: platform_extra
   required: true
-  description: Platform-specific initialization parameters
+  description: "Platform-specific initialization parameters"
   platforms:
-    - include: platforms/maxim/max32690/max_spi_init_param.yaml
-    - include: platforms/stm32/stm32_spi_init_param.yaml
+    - include: "platforms/maxim/max32690/max_spi_init_param.yaml"

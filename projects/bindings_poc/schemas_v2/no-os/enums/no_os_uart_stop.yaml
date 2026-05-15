@@ -1,0 +1,14 @@
+$id: "no-os/enums/no_os_uart_stop.yaml"
+$type: enum
+$name: no_os_uart_stop
+$description: "UART number of stop bits"
+$sources:
+  header: "include/no_os_uart.h"
+
+values:
+  NO_OS_UART_STOP_1_BIT:
+    description: "1 stop bit"
+  NO_OS_UART_STOP_2_BIT:
+    description: "2 stop bits"
+
+default: NO_OS_UART_STOP_1_BIT

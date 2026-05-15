@@ -1,30 +1,29 @@
-$id: no-os/no_os_i2c_init_param.yaml
+$id: "no-os/no_os_i2c_init_param.yaml"
 $type: struct
 $name: no_os_i2c_init_param
-$description: Structure holding the parameters for I2C initialization
+$description: "Structure holding the parameters for I2C initialization"
 $sources:
-  header: include/no_os_i2c.h
+  header: "include/no_os_i2c.h"
 
 device_id:
   type: uint32_t
-  description: I2C peripheral device ID
+  description: "I2C peripheral device ID"
 
 max_speed_hz:
   type: uint32_t
-  description: Maximum I2C clock frequency in Hz
+  description: "Maximum I2C clock frequency in Hz"
 
 slave_address:
   type: uint8_t
-  description: I2C slave device address
+  description: "I2C slave device address"
 
 platform_ops:
   type: const_ptr
   target: no_os_i2c_platform_ops
-  description: Platform-specific I2C operations
+  description: "Platform-specific I2C operations"
 
 extra:
   type: platform_extra
-  description: Platform-specific initialization parameters
+  description: "Platform-specific initialization parameters"
   platforms:
-    - include: platforms/maxim/max32690/max_i2c_init_param.yaml
-    - include: platforms/stm32/stm32_i2c_init_param.yaml
+    - include: "platforms/maxim/max32690/max_i2c_init_param.yaml"

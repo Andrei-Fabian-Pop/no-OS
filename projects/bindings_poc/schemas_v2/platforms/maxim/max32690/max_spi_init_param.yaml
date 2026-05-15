@@ -1,0 +1,26 @@
+$id: "platforms/maxim/max32690/max_spi_init_param.yaml"
+$type: struct
+$name: max_spi_init_param
+$description: "Maxim MAX32690 platform specific SPI initialization parameters"
+$sources:
+  header: "drivers/platform/maxim/max32690/maxim_spi.h"
+
+num_slaves:
+  type: uint32_t
+  description: "Number of slaves"
+
+polarity:
+  include: "platforms/maxim/max32690/enums/spi_ss_polarity.yaml"
+  description: "Slave select polarity"
+
+vssel:
+  include: "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+dma_rx_priority:
+  type: uint32_t
+  description: "DMA RX priority"
+
+dma_tx_priority:
+  type: uint32_t
+  description: "DMA TX priority"
