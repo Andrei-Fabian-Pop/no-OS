@@ -22,6 +22,7 @@ extra:
   description: "Platform specific data"
   platforms:
     - include: "platforms/stm32/stm32_dma_init_param.yaml"
+    # Note: Maxim DMA uses no platform-specific init param
 
 sg_handler:
   type: callback_func

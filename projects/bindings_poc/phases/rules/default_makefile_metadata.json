@@ -1,0 +1,51 @@
+{
+  "$description": "Default makefile entries always included in a project (not derived from yaml rules)",
+  "srcs": {
+    "project": [
+      "src/main.c",
+      "src/user_app.c",
+      "src/common/common_data.c"
+    ],
+    "no-os-util": [
+      "no_os_util.c",
+      "no_os_alloc.c",
+      "no_os_mutex.c",
+      "no_os_list.c",
+      "no_os_lf256fifo.c"
+    ],
+    "platform": [
+      "maxim_delay.c",
+      "maxim_init.c"
+    ]
+  },
+  "incs": {
+    "project": [
+      "src/user_app.h",
+      "src/common/common_data.h"
+    ],
+    "no-os": [
+      "no_os_delay.h",
+      "no_os_error.h",
+      "no_os_util.h",
+      "no_os_alloc.h",
+      "no_os_mutex.h",
+      "no_os_list.h",
+      "no_os_lf256fifo.h",
+      "no_os_print_log.h",
+      "no_os_units.h",
+      "no_os_init.h"
+    ]
+  },
+  "$prefix_map": {
+    "project": "$(PROJECT)/",
+    "driver": "$(DRIVERS)/",
+    "no-os-api": "$(DRIVERS)/api/",
+    "no-os-util": "$(NO-OS)/util/",
+    "no-os": "$(INCLUDE)/",
+    "platform": "$(PLATFORM_DRIVERS)/",
+    "sdk": null
+  },
+  "$notes": {
+    "sdk": "SDK headers are found via SDK include paths, no prefix needed"
+  }
+}

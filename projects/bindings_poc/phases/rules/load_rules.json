@@ -1,0 +1,31 @@
+{
+  "adi,adxl355": {
+    "init": [
+      "devices/adi,adxl355",
+      "no-os/no_os_spi_init_param",
+      "no-os/no_os_i2c_init_param",
+      "no-os/enums/no_os_spi_mode.yaml",
+      "no-os/enums/no_os_spi_bit_order.yaml",
+      "no-os/platform_ops/no_os_spi_platform_ops.yaml",
+      "platforms/maxim/max32690/max_spi_init_param.yaml",
+      "no-os/platform_ops/no_os_i2c_platform_ops.yaml",
+      "platforms/maxim/max32690/max_i2c_init_param.yaml",
+      "platforms/maxim/max32690/enums/spi_ss_polarity.yaml",
+      "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml",
+      "no-os/no_os_dma_init_param.yaml",
+      "no-os/platform_ops/no_os_dma_platform_ops.yaml"
+    ],
+    "extras": {
+      "uart": [
+        "no-os/no_os_uart_init_param",
+        "no-os/enums/no_os_uart_size.yaml",
+        "no-os/enums/no_os_uart_parity.yaml",
+        "no-os/enums/no_os_uart_stop.yaml",
+        "no-os/platform_ops/no_os_uart_platform_ops.yaml",
+        "platforms/maxim/max32690/max_uart_init_param.yaml",
+        "platforms/maxim/max32690/enums/max_uart_flow_ctrl.yaml",
+        "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml"
+      ]
+    }
+  }
+}

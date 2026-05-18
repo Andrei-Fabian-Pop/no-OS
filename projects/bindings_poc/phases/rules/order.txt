@@ -1,0 +1,23 @@
+# We will use the schemas_v2 for simplicity, the schema (v1) would be almost the same
+
+------------
+
+./catalog.json
+./context.json
+./load_rules.json
+./default_makefile_metadata.json
+./configuration.json
+
+------------
+
+Explanations:
+
+./catalog.json = the totalilty of rule files we have
+
+./context.json = the initial context with minimum information to begin the generation. The user should specify at least the platform and 1 device (the uart from this example is optional in theory)
+
+./load_rules.json = based on ./context.json, select the rules we need to apply
+
+./default_makefile_metadata.json = this is a file with the placeholder information for configuration1.json
+
+./configuration.json = based on the information from load_rules we can expand the configurations into one big initial config containing all the necessary rules for the setup
