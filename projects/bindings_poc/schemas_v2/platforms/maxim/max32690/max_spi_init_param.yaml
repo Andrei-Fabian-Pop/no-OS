@@ -3,7 +3,8 @@ $type: struct
 $name: max_spi_init_param
 $description: "Maxim MAX32690 platform specific SPI initialization parameters"
 $sources:
-  header: "drivers/platform/maxim/max32690/maxim_spi.h"
+  headers:
+    - "drivers/platform/maxim/max32690/maxim_spi.h"
 
 num_slaves:
   type: uint32_t
@@ -29,39 +30,39 @@ dma_tx_priority:
   type: uint32_t
   description: "DMA TX priority"
 
-override:
-  parent:
-    max_speed_hz:
-      minimum: 0
-      maximum: 1_000_000
+$override:
+  $parent:
+    - max_speed_hz:
+        minimum: 0
+        maximum: 1_000_000
 
-    chip_select:
+    - chip_select:
       maximum: 4
 
-    if:
-      device_id:
-        value: 1
-    then:
-      chip_select:
-        maximum: 3
+    - $if:
+        device_id:
+          value: 1
+      $then:
+        chip_select:
+          maximum: 3
 
     ########### OR #########
 
-    switch:
-      on: device_id
-      cases:
-        0:
-          chip_select:
-            maximum: 3
-        1:
-          chip_select:
-            maximum: 4
-        2:
-          chip_select:
-            maximum: 4
-        3:
-          chip_select:
-            maximum: 4
-        _:
-          chip_select:
-            maximum: 4
+    - $switch:
+        $on: device_id
+        $cases:
+          0:
+            chip_select:
+              maximum: 3
+          1:
+            chip_select:
+              maximum: 4
+          2:
+            chip_select:
+              maximum: 4
+          3:
+            chip_select:
+              maximum: 4
+          _:
+            chip_select:
+              maximum: 4

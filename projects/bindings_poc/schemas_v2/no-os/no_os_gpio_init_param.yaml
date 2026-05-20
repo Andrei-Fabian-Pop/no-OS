@@ -3,7 +3,8 @@ $type: struct
 $name: no_os_gpio_init_param
 $description: "Structure holding the parameters for GPIO initialization"
 $sources:
-  header: "include/no_os_gpio.h"
+  headers:
+    - "include/no_os_gpio.h"
 
 port:
   type: int32_t
@@ -19,8 +20,12 @@ pull:
   description: "Pull up/down resistor configuration"
 
 platform_ops:
-  include: "no-os/platform_ops/no_os_gpio_platform_ops.yaml"
+  type: platform_ops
+  target: no_os_gpio_platform_ops
   description: "Platform-specific GPIO operations"
+  platforms:
+    - include: "platforms/maxim/max32690/platform_ops/gpio_ops.yaml"
+    - include: "platforms/stm32/platform_ops/gpio_ops.yaml"
 
 extra:
   type: platform_extra

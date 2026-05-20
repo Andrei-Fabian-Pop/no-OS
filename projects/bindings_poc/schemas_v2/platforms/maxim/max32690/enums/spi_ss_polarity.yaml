@@ -3,7 +3,8 @@ $type: enum
 $name: spi_ss_polarity
 $description: "Maxim MAX32690 SPI slave select polarity options"
 $sources:
-  header: "drivers/platform/maxim/max32690/maxim_spi.h"
+  headers:
+    - "drivers/platform/maxim/max32690/maxim_spi.h"
 
 values:
   SPI_SS_POL_LOW:

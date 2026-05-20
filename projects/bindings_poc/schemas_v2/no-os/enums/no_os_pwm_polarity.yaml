@@ -3,7 +3,8 @@ $type: enum
 $name: no_os_pwm_polarity
 $description: "Possible polarities of the PWM signal"
 $sources:
-  header: "include/no_os_pwm.h"
+  headers:
+    - "include/no_os_pwm.h"
 
 values:
   NO_OS_PWM_POLARITY_HIGH:

@@ -3,7 +3,8 @@ $type: struct
 $name: stm32_pwm_init_param
 $description: "STM32 platform specific PWM initialization parameters"
 $sources:
-  header: "drivers/platform/stm32/stm32_pwm.h"
+  headers:
+    - "drivers/platform/stm32/stm32_pwm.h"
 
 htimer:
   type: ptr

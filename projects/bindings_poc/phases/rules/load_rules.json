@@ -4,27 +4,27 @@
       "devices/adi,adxl355",
       "no-os/no_os_spi_init_param",
       "no-os/no_os_i2c_init_param",
-      "no-os/enums/no_os_spi_mode.yaml",
-      "no-os/enums/no_os_spi_bit_order.yaml",
-      "no-os/platform_ops/no_os_spi_platform_ops.yaml",
-      "platforms/maxim/max32690/max_spi_init_param.yaml",
-      "no-os/platform_ops/no_os_i2c_platform_ops.yaml",
-      "platforms/maxim/max32690/max_i2c_init_param.yaml",
-      "platforms/maxim/max32690/enums/spi_ss_polarity.yaml",
-      "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml",
-      "no-os/no_os_dma_init_param.yaml",
-      "no-os/platform_ops/no_os_dma_platform_ops.yaml"
+      "no-os/enums/no_os_spi_mode",
+      "no-os/enums/no_os_spi_bit_order",
+      "platforms/maxim/max32690/platform_ops/spi_ops",
+      "platforms/maxim/max32690/max_spi_init_param",
+      "platforms/maxim/max32690/platform_ops/i2c_ops",
+      "platforms/maxim/max32690/max_i2c_init_param",
+      "platforms/maxim/max32690/enums/spi_ss_polarity",
+      "platforms/maxim/max32690/enums/mxc_gpio_vssel",
+      "no-os/no_os_dma_init_param",
+      "platforms/maxim/max32690/platform_ops/dma_ops"
     ],
     "extras": {
       "uart": [
         "no-os/no_os_uart_init_param",
-        "no-os/enums/no_os_uart_size.yaml",
-        "no-os/enums/no_os_uart_parity.yaml",
-        "no-os/enums/no_os_uart_stop.yaml",
-        "no-os/platform_ops/no_os_uart_platform_ops.yaml",
-        "platforms/maxim/max32690/max_uart_init_param.yaml",
-        "platforms/maxim/max32690/enums/max_uart_flow_ctrl.yaml",
-        "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml"
+        "no-os/enums/no_os_uart_size",
+        "no-os/enums/no_os_uart_parity",
+        "no-os/enums/no_os_uart_stop",
+        "platforms/maxim/max32690/platform_ops/uart_ops",
+        "platforms/maxim/max32690/max_uart_init_param",
+        "platforms/maxim/max32690/enums/max_uart_flow_ctrl",
+        "platforms/maxim/max32690/enums/mxc_gpio_vssel"
       ]
     }
   }

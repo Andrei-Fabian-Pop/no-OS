@@ -11,22 +11,19 @@ interface MakefileSection {
   [category: string]: string[];
 }
 
-interface MakefileMetadata {
-  $description?: string;
-  $note?: string;
+interface MergedMakefile {
+  $platform: string;
   $prefix_map: PrefixMap;
-  $notes?: { [key: string]: string };
   srcs: MakefileSection;
   incs: MakefileSection;
 }
 
 interface Configuration {
   configuration: unknown;
-  makefile: MakefileMetadata;
+  makefile: MergedMakefile;
 }
 
 interface CliArgs {
-  metadata: string;
   configuration: string;
   output: string | null;
 }
@@ -38,10 +35,7 @@ function parseArgs(args: string[]): CliArgs | null {
     const arg = args[i];
     const nextArg = args[i + 1];
 
-    if (arg === "--metadata" && nextArg) {
-      result.metadata = nextArg;
-      i++;
-    } else if (arg === "--configuration" && nextArg) {
+    if (arg === "--configuration" && nextArg) {
       result.configuration = nextArg;
       i++;
     } else if (arg === "--output" && nextArg) {
@@ -52,7 +46,7 @@ function parseArgs(args: string[]): CliArgs | null {
     }
   }
 
-  if (!result.metadata || !result.configuration) {
+  if (!result.configuration) {
     return null;
   }
 
@@ -60,39 +54,24 @@ function parseArgs(args: string[]): CliArgs | null {
 }
 
 function printUsage() {
-  console.log("Usage: metadata2makefile.ts --metadata <file> --configuration <file> [--output <file>]");
+  console.log(
+    "Usage: metadata2makefile.ts --configuration <file> [--output <file>]"
+  );
   console.log("");
   console.log("Options:");
-  console.log("  --metadata       Path to default_makefile_metadata.json");
-  console.log("  --configuration  Path to the configuration file");
+  console.log("  --configuration  Path to the configuration file (with merged makefile data)");
   console.log("  --output         Output file (default: stdout)");
   console.log("  --help, -h       Show this help");
   console.log("");
   console.log("Example:");
   console.log("  npx ts-node metadata2makefile.ts \\");
-  console.log("    --metadata ../rules/default_makefile_metadata.json \\");
-  console.log("    --configuration ../rules/configuration1.json \\");
+  console.log("    --configuration ../rules/configuration.json \\");
   console.log("    --output src.mk");
 }
 
 function loadJson<T>(filePath: string): T {
   const content = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(content) as T;
-}
-
-function mergeArrays(a: string[] = [], b: string[] = []): string[] {
-  return [...new Set([...a, ...b])];
-}
-
-function mergeMakefileSections(
-  defaults: MakefileSection,
-  config: MakefileSection
-): MakefileSection {
-  const result: MakefileSection = { ...defaults };
-  for (const [category, files] of Object.entries(config)) {
-    result[category] = mergeArrays(result[category], files);
-  }
-  return result;
 }
 
 function generateMakefileLines(
@@ -139,36 +118,26 @@ function generateMakefileLines(
   return lines;
 }
 
-function generateSrcMk(
-  config: Configuration,
-  defaults: MakefileMetadata
-): string {
-  const prefixMap = defaults.$prefix_map;
+function generateSrcMk(config: Configuration): string {
+  const makefile = config.makefile;
+  const prefixMap = makefile.$prefix_map;
 
   if (!prefixMap) {
-    throw new Error("Metadata file missing $prefix_map");
+    throw new Error("Configuration makefile missing $prefix_map");
   }
-
-  const mergedSrcs = mergeMakefileSections(
-    defaults.srcs || {},
-    config.makefile.srcs || {}
-  );
-  const mergedIncs = mergeMakefileSections(
-    defaults.incs || {},
-    config.makefile.incs || {}
-  );
 
   const lines: string[] = [];
 
-  lines.push("# Auto-generated src.mk from metadata");
+  lines.push("# Auto-generated src.mk from configuration");
+  lines.push(`# Platform: ${makefile.$platform}`);
   lines.push("# Do not edit manually");
   lines.push("");
 
   lines.push("# Sources");
-  lines.push(...generateMakefileLines(mergedSrcs, prefixMap, "SRCS"));
+  lines.push(...generateMakefileLines(makefile.srcs || {}, prefixMap, "SRCS"));
 
   lines.push("# Includes");
-  lines.push(...generateMakefileLines(mergedIncs, prefixMap, "INCS"));
+  lines.push(...generateMakefileLines(makefile.incs || {}, prefixMap, "INCS"));
 
   return lines.join("\n");
 }
@@ -181,21 +150,14 @@ function main() {
     process.exit(1);
   }
 
-  const metadataPath = path.resolve(args.metadata);
   const configPath = path.resolve(args.configuration);
   const outputPath = args.output ? path.resolve(args.output) : null;
-
-  if (!fs.existsSync(metadataPath)) {
-    console.error(`Error: Metadata file not found: ${metadataPath}`);
-    process.exit(1);
-  }
 
   if (!fs.existsSync(configPath)) {
     console.error(`Error: Configuration file not found: ${configPath}`);
     process.exit(1);
   }
 
-  const defaults = loadJson<MakefileMetadata>(metadataPath);
   const config = loadJson<Configuration>(configPath);
 
   if (!config.makefile) {
@@ -203,7 +165,7 @@ function main() {
     process.exit(1);
   }
 
-  const srcMk = generateSrcMk(config, defaults);
+  const srcMk = generateSrcMk(config);
 
   if (outputPath) {
     fs.writeFileSync(outputPath, srcMk);

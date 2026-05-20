@@ -3,8 +3,10 @@ $type: struct
 $name: adxl355_init_param
 $description: "ADXL355 3-axis accelerometer configuration"
 $sources:
-  header: "drivers/accel/adxl355/adxl355.h"
-  source: "drivers/accel/adxl355/adxl355.c"
+  headers:
+    - "drivers/accel/adxl355/adxl355.h"
+  sources:
+    - "drivers/accel/adxl355/adxl355.c"
 
 comm_type:
   type: enum

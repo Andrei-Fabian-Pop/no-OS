@@ -12,10 +12,6 @@
       "no_os_mutex.c",
       "no_os_list.c",
       "no_os_lf256fifo.c"
-    ],
-    "platform": [
-      "maxim_delay.c",
-      "maxim_init.c"
     ]
   },
   "incs": {
@@ -35,6 +31,25 @@
       "no_os_units.h",
       "no_os_init.h"
     ]
+  },
+  "platforms": {
+    "maxim": {
+      "srcs": {
+        "platform": [
+          "maxim_delay.c",
+          "maxim_init.c"
+        ]
+      },
+      "incs": {}
+    },
+    "stm32": {
+      "srcs": {
+        "platform": [
+          "stm32_delay.c"
+        ]
+      },
+      "incs": {}
+    }
   },
   "$prefix_map": {
     "project": "$(PROJECT)/",

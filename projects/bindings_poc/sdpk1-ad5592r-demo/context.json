@@ -1,0 +1,13 @@
+{
+  "platform": {
+    "target": "stm32",
+    "vendor": "stm32",
+    "prefix": "stm32"
+  },
+  "devices": [
+    {
+      "name": "adi,ad5592r"
+    }
+  ],
+  "extra_init": ["uart"]
+}

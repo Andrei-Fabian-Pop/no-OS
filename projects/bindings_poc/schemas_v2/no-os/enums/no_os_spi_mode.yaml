@@ -3,7 +3,8 @@ $type: enum
 $name: no_os_spi_mode
 $description: "SPI mode (clock polarity and phase)"
 $sources:
-  header: "include/no_os_spi.h"
+  headers:
+    - "include/no_os_spi.h"
 
 values:
   NO_OS_SPI_MODE_0:

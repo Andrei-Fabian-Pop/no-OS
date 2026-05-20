@@ -3,7 +3,8 @@ $type: struct
 $name: max_i2c_init_param
 $description: "Maxim MAX32690 platform specific I2C initialization parameters"
 $sources:
-  header: "drivers/platform/maxim/max32690/maxim_i2c.h"
+  headers:
+    - "drivers/platform/maxim/max32690/maxim_i2c.h"
 
 vssel:
   include: "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml"

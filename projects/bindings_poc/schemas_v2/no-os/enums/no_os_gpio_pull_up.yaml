@@ -3,7 +3,8 @@ $type: enum
 $name: no_os_gpio_pull_up
 $description: "GPIO pull up/pull down resistor configuration"
 $sources:
-  header: "include/no_os_gpio.h"
+  headers:
+    - "include/no_os_gpio.h"
 
 values:
   NO_OS_PULL_NONE:

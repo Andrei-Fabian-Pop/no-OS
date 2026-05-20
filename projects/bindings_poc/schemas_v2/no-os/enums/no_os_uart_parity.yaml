@@ -3,7 +3,8 @@ $type: enum
 $name: no_os_uart_parity
 $description: "UART parity configuration"
 $sources:
-  header: "include/no_os_uart.h"
+  headers:
+    - "include/no_os_uart.h"
 
 values:
   NO_OS_UART_PAR_NO:

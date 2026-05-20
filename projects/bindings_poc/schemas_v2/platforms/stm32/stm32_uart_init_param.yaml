@@ -3,7 +3,8 @@ $type: struct
 $name: stm32_uart_init_param
 $description: "STM32 platform specific UART initialization parameters"
 $sources:
-  header: "drivers/platform/stm32/stm32_uart.h"
+  headers:
+    - "drivers/platform/stm32/stm32_uart.h"
 
 huart:
   type: external_ptr

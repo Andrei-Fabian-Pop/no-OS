@@ -3,7 +3,8 @@ $type: struct
 $name: max_gpio_init_param
 $description: "Maxim MAX32690 platform specific GPIO initialization parameters"
 $sources:
-  header: "drivers/platform/maxim/max32690/maxim_gpio.h"
+  headers:
+    - "drivers/platform/maxim/max32690/maxim_gpio.h"
 
 vssel:
   include: "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml"

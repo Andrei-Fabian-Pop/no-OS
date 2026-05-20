@@ -1,9 +1,10 @@
-$id: "devices/ad5592r/enums/ad5592r_channel_offstate.yaml"
+$id: "devices/ad5592r-enums/ad5592r_channel_offstate.yaml"
 $type: enum
 $name: ad5592r_channel_offstate
 $description: "Channel off-state configuration for AD5592R"
 $sources:
-  header: "drivers/adc-dac/ad5592r/ad5592r-base.h"
+  headers:
+    - "drivers/adc-dac/ad5592r/ad5592r-base.h"
 
 values:
   CH_OFFSTATE_PULLDOWN:

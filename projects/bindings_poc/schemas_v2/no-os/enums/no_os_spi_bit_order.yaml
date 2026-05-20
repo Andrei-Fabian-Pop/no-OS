@@ -3,7 +3,8 @@ $type: enum
 $name: no_os_spi_bit_order
 $description: "SPI bit order configuration"
 $sources:
-  header: "include/no_os_spi.h"
+  headers:
+    - "include/no_os_spi.h"
 
 values:
   NO_OS_SPI_BIT_ORDER_MSB_FIRST:

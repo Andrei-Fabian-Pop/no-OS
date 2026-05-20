@@ -3,7 +3,8 @@ $type: enum
 $name: no_os_uart_stop
 $description: "UART number of stop bits"
 $sources:
-  header: "include/no_os_uart.h"
+  headers:
+    - "include/no_os_uart.h"
 
 values:
   NO_OS_UART_STOP_1_BIT:

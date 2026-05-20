@@ -3,7 +3,8 @@ $type: struct
 $name: no_os_pwm_init_param
 $description: "Structure containing the init parameters needed by the PWM generator"
 $sources:
-  header: "include/no_os_pwm.h"
+  headers:
+    - "include/no_os_pwm.h"
 
 id:
   type: uint32_t
@@ -40,8 +41,12 @@ pwm_callback:
   description: "PWM callback function"
 
 platform_ops:
-  include: "no-os/platform_ops/no_os_pwm_platform_ops.yaml"
+  type: platform_ops
+  target: no_os_pwm_platform_ops
   description: "PWM platform specific functions"
+  platforms:
+    - include: "platforms/maxim/max32690/platform_ops/pwm_ops.yaml"
+    - include: "platforms/stm32/platform_ops/pwm_ops.yaml"
 
 extra:
   type: platform_extra

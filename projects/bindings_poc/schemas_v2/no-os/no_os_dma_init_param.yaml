@@ -3,7 +3,11 @@ $type: struct
 $name: no_os_dma_init_param
 $description: "Initialization parameter for the DMA controller"
 $sources:
-  header: "include/no_os_dma.h"
+  headers:
+    - "include/no_os_dma.h"
+    - "include/no_os_irq.h"
+  sources:
+    - "drivers/api/no_os_irq.c"
 
 id:
   type: uint32_t
@@ -14,15 +18,18 @@ num_ch:
   description: "The number of channels associated with the controller"
 
 platform_ops:
-  include: "no-os/platform_ops/no_os_dma_platform_ops.yaml"
+  type: platform_ops
+  target: no_os_dma_platform_ops
   description: "Platform specific DMA functions"
+  platforms:
+    - include: "platforms/maxim/max32690/platform_ops/dma_ops.yaml"
+    - include: "platforms/stm32/platform_ops/dma_ops.yaml"
 
 extra:
   type: platform_extra
   description: "Platform specific data"
   platforms:
     - include: "platforms/stm32/stm32_dma_init_param.yaml"
-    # Note: Maxim DMA uses no platform-specific init param
 
 sg_handler:
   type: callback_func

@@ -1,0 +1,14 @@
+{
+  "name": "rules2configuration",
+  "version": "1.0.0",
+  "description": "Expand yaml rules to full configuration",
+  "scripts": {
+    "start": "ts-node rules2configuration.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0",
+    "yaml": "^2.3.0"
+  }
+}

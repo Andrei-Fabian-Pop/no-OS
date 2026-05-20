@@ -75,27 +75,44 @@ schema_types:
         type: string
         description: Default enum value (must be one of the values keys)
 
-  platform_ops:
-    description: Defines a const pointer to platform-specific operations struct
+  platform_ops_impl:
+    description: Defines a platform-specific implementation of operations struct
     top_level_fields:
       - $id
       - $type
       - $name
-      - $description
+      - symbol
       - $sources
-      - platforms
     fields:
-      platforms:
+      symbol:
+        required: true
+        type: string
+        description: The C symbol name (e.g., max_spi_ops)
+      $sources:
         required: true
         type: object
-        description: Map of platform names to their symbols and headers
+        description: Platform-specific headers and sources
         properties:
-          symbol:
-            type: string
-            description: The C symbol name (e.g., max_spi_ops)
-          header:
-            type: string
-            description: Header file that declares this symbol
+          headers:
+            type: array
+            items: string
+            description: Header files for this platform (no-OS platform drivers)
+          sources:
+            type: array
+            items: string
+            description: Source files for this platform (no-OS platform drivers)
+          sdk:
+            type: object
+            description: SDK dependencies (vendor SDK headers/sources)
+            properties:
+              headers:
+                type: array
+                items: string
+                description: SDK header files required by this platform
+              sources:
+                type: array
+                items: string
+                description: SDK source files required by this platform
 
 # =============================================================================
 # Property definitions (for struct properties)
@@ -203,3 +220,111 @@ special_types:
           include:
             type: string
             description: Path to platform schema file
+
+  platform_ops:
+    description: Platform-specific operations const pointer with multiple implementations
+    fields:
+      type:
+        value: platform_ops
+      target:
+        required: true
+        type: string
+        description: The C type name of the operations struct (e.g., no_os_spi_platform_ops)
+      platforms:
+        required: true
+        type: list
+        description: List of platform-specific operation implementations
+        items:
+          include:
+            type: string
+            description: Path to platform_ops_impl schema file
+
+# =============================================================================
+# Override definitions (for platform-specific constraint overrides)
+# =============================================================================
+# Platform-specific structs (e.g., max_spi_init_param) can override constraints
+# on properties defined in their parent struct (e.g., no_os_spi_init_param).
+# This allows platform-specific validation rules without modifying the base schema.
+#
+# Example: max_spi_init_param is used as the "extra" field of no_os_spi_init_param.
+# It can override constraints on no_os_spi_init_param properties like max_speed_hz.
+
+override_fields:
+  $override:
+    required: false
+    type: object
+    description: |
+      Platform-specific overrides for parent struct properties.
+      Used when this struct is the "extra" field of a parent init_param struct.
+    fields:
+      $parent:
+        type: object
+        description: |
+          Contains overrides for properties in the parent struct.
+          Keys are property names from the parent, values are constraint objects.
+
+  # Constraint fields that can be applied to properties
+  constraints:
+    minimum:
+      type: number
+      description: Minimum allowed value for numeric properties
+    maximum:
+      type: number
+      description: Maximum allowed value for numeric properties
+    allowed_values:
+      type: list
+      description: Restrict property to specific values
+    pattern:
+      type: string
+      description: Regex pattern for string validation
+
+  # Conditional overrides - if/then syntax
+  conditional_if_then:
+    description: |
+      Apply overrides conditionally based on another property's value.
+      Placed inside $parent alongside property overrides.
+    syntax:
+      if:
+        type: object
+        description: "Condition: { property_name: { value: expected_value } }"
+      then:
+        type: object
+        description: "Overrides to apply when condition is true"
+    example: |
+      if:
+        device_id:
+          value: 1
+      then:
+        chip_select:
+          maximum: 3
+
+  # Conditional overrides - switch/case syntax (alternative to if/then)
+  conditional_switch:
+    description: |
+      Apply different overrides based on a selector property's value.
+      More readable than multiple if/then blocks for multi-value conditions.
+    syntax:
+      $switch:
+        type: object
+        fields:
+          $on:
+            type: string
+            description: The property name to switch on
+          $cases:
+            type: object
+            description: |
+              Map of selector values to override objects.
+              Use "_" (underscore) as the default/fallback case.
+    example: |
+      $switch:
+        $on: device_id
+        $cases:
+          0:
+            chip_select:
+              maximum: 3
+          1:
+            chip_select:
+              maximum: 4
+          _:
+            chip_select:
+              maximum: 4

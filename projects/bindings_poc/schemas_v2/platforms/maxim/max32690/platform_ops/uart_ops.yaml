@@ -1,0 +1,15 @@
+$id: "platforms/maxim/max32690/platform_ops/uart_ops.yaml"
+$type: platform_ops_impl
+$name: max_uart_ops
+symbol: max_uart_ops
+$sources:
+  headers:
+    - "maxim_uart.h"
+    - "maxim_uart_stdio.h"
+  sources:
+    - "maxim_uart.c"
+    - "maxim_uart_stdio.c"
+  sdk:
+    headers:
+      - "uart.h"
+      - "gpio.h"

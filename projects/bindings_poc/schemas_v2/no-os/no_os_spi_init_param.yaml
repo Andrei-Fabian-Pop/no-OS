@@ -3,7 +3,8 @@ $type: struct
 $name: no_os_spi_init_param
 $description: "Structure holding the parameters for SPI initialization"
 $sources:
-  header: "include/no_os_spi.h"
+  headers:
+    - "include/no_os_spi.h"
 
 device_id:
   type: uint32_t
@@ -28,9 +29,13 @@ bit_order:
   description: "Bit order (MSB or LSB first)"
 
 platform_ops:
-  include: "no-os/platform_ops/no_os_spi_platform_ops.yaml"
+  type: platform_ops
+  target: no_os_spi_platform_ops
   required: true
   description: "Platform-specific SPI operations"
+  platforms:
+    - include: "platforms/maxim/max32690/platform_ops/spi_ops.yaml"
+    - include: "platforms/stm32/platform_ops/spi_ops.yaml"
 
 extra:
   type: platform_extra

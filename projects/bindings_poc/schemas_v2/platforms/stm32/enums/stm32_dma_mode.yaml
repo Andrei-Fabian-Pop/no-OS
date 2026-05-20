@@ -3,7 +3,8 @@ $type: enum
 $name: stm32_dma_mode
 $description: "DMA data modes"
 $sources:
-  header: "drivers/platform/stm32/stm32_dma.h"
+  headers:
+    - "drivers/platform/stm32/stm32_dma.h"
 
 values:
   DMA_NORMAL_MODE:

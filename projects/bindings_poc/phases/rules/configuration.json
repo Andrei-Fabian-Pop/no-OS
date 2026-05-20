@@ -60,7 +60,8 @@
         "$resolved": {
           "platform": "maxim",
           "symbol": "max_uart_ops",
-          "header": "maxim_uart.h"
+          "headers": ["maxim_uart.h", "maxim_uart_stdio.h"],
+          "sources": ["maxim_uart.c", "maxim_uart_stdio.c"]
         }
       },
       "extra": {
@@ -83,10 +84,7 @@
           "$type": "enum",
           "$enum_type": "mxc_gpio_vssel_t",
           "$description": "GPIO voltage select",
-          "$values": [
-            "MXC_GPIO_VSSEL_VDDIO",
-            "MXC_GPIO_VSSEL_VDDIOH"
-          ],
+          "$values": ["MXC_GPIO_VSSEL_VDDIO", "MXC_GPIO_VSSEL_VDDIOH"],
           "$default": "MXC_GPIO_VSSEL_VDDIO"
         }
       }
@@ -160,7 +158,8 @@
                 "$resolved": {
                   "platform": "maxim",
                   "symbol": "max_spi_ops",
-                  "header": "maxim_spi.h"
+                  "headers": ["maxim_spi.h"],
+                  "sources": ["maxim_spi.c"]
                 }
               },
               "extra": {
@@ -204,7 +203,8 @@
                     "$resolved": {
                       "platform": "maxim",
                       "symbol": "max_dma_ops",
-                      "header": "maxim_dma.h"
+                      "headers": ["../common/maxim_dma.h"],
+                      "sources": ["../common/maxim_dma.c"]
                     }
                   },
                   "extra": {
@@ -259,7 +259,8 @@
                 "$resolved": {
                   "platform": "maxim",
                   "symbol": "max_i2c_ops",
-                  "header": "maxim_i2c.h"
+                  "headers": ["maxim_i2c.h"],
+                  "sources": ["maxim_i2c.c"]
                 }
               },
               "extra": {
@@ -283,9 +284,7 @@
   "makefile": {
     "$note": "Only yaml-derived entries. Merge with default_makefile_metadata.json for complete makefile.",
     "srcs": {
-      "driver": [
-        "accel/adxl355/adxl355.c"
-      ],
+      "driver": ["accel/adxl355/adxl355.c"],
       "no-os-api": [
         "no_os_uart.c",
         "no_os_spi.c",
@@ -305,9 +304,7 @@
       ]
     },
     "incs": {
-      "driver": [
-        "accel/adxl355/adxl355.h"
-      ],
+      "driver": ["accel/adxl355/adxl355.h"],
       "no-os": [
         "no_os_uart.h",
         "no_os_spi.h",
@@ -325,9 +322,7 @@
         "maxim_irq.h",
         "../common/maxim_dma.h"
       ],
-      "sdk": [
-        "gpio.h"
-      ]
+      "sdk": ["gpio.h"]
     }
   }
 }

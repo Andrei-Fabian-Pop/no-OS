@@ -3,7 +3,8 @@ $type: struct
 $name: no_os_uart_init_param
 $description: "Structure holding the parameters for UART initialization"
 $sources:
-  header: "include/no_os_uart.h"
+  headers:
+    - "include/no_os_uart.h"
 
 device_id:
   type: uint8_t
@@ -37,9 +38,13 @@ stop:
   description: "UART number of stop bits"
 
 platform_ops:
-  include: "no-os/platform_ops/no_os_uart_platform_ops.yaml"
+  type: platform_ops
+  target: no_os_uart_platform_ops
   required: true
   description: "Platform-specific UART operations"
+  platforms:
+    - include: "platforms/maxim/max32690/platform_ops/uart_ops.yaml"
+    - include: "platforms/stm32/platform_ops/uart_ops.yaml"
 
 extra:
   type: platform_extra
