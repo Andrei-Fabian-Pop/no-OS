@@ -19,9 +19,9 @@ SRCS += $(NO-OS)/util/no_os_util.c \
 SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 	$(PLATFORM_DRIVERS)/stm32_spi.c \
 	$(PLATFORM_DRIVERS)/stm32_dma.c \
-	$(PLATFORM_DRIVERS)/stm32_gpio.c \
 	$(PLATFORM_DRIVERS)/stm32_pwm.c \
-	$(PLATFORM_DRIVERS)/stm32_i2c.c \
+	$(PLATFORM_DRIVERS)/stm32_gpio.c \
+	$(PLATFORM_DRIVERS)/stm32_irq.c \
 	$(PLATFORM_DRIVERS)/stm32_uart.c
 
 # driver
@@ -30,11 +30,10 @@ SRCS += $(DRIVERS)/adc-dac/ad5592r/ad5592r-base.c \
 
 # no-os-api
 SRCS += $(DRIVERS)/api/no_os_spi.c \
-	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_dma.c \
-	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/api/no_os_pwm.c \
-	$(DRIVERS)/api/no_os_i2c.c \
+	$(DRIVERS)/api/no_os_gpio.c \
+	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_uart.c
 
 # Includes
@@ -55,10 +54,9 @@ INCS += $(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_init.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_dma.h \
-	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_pwm.h \
 	$(INCLUDE)/no_os_gpio.h \
-	$(INCLUDE)/no_os_i2c.h \
+	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_uart.h
 
 # driver
@@ -68,8 +66,8 @@ INCS += $(DRIVERS)/adc-dac/ad5592r/ad5592r-base.h \
 # platform
 INCS += $(PLATFORM_DRIVERS)/stm32_spi.h \
 	$(PLATFORM_DRIVERS)/stm32_dma.h \
-	$(PLATFORM_DRIVERS)/stm32_gpio.h \
 	$(PLATFORM_DRIVERS)/stm32_pwm.h \
-	$(PLATFORM_DRIVERS)/stm32_i2c.h \
+	$(PLATFORM_DRIVERS)/stm32_gpio.h \
+	$(PLATFORM_DRIVERS)/stm32_irq.h \
 	$(PLATFORM_DRIVERS)/stm32_uart.h
 

@@ -79,11 +79,6 @@ interface MakefileSection {
   [category: string]: string[];
 }
 
-interface MakefileEntries {
-  srcs: MakefileSection;
-  incs: MakefileSection;
-}
-
 interface PlatformDefaults {
   srcs: MakefileSection;
   incs: MakefileSection;
@@ -275,33 +270,12 @@ class SchemaExpander {
   private schemasDir: string;
   private platform: string;
   private level: number;
-  private makefile: MakefileEntries = {
-    srcs: {},
-    incs: {},
-  };
   private loadedSchemas: Map<string, YamlSchema> = new Map();
 
   constructor(schemasDir: string, platform: string, level: number = 1) {
     this.schemasDir = schemasDir;
     this.platform = platform;
     this.level = level;
-  }
-
-  getMakefile(): MakefileEntries {
-    return this.makefile;
-  }
-
-  private addMakefileEntry(
-    type: "srcs" | "incs",
-    category: string,
-    file: string
-  ) {
-    if (!this.makefile[type][category]) {
-      this.makefile[type][category] = [];
-    }
-    if (!this.makefile[type][category].includes(file)) {
-      this.makefile[type][category].push(file);
-    }
   }
 
   private loadSchema(schemaPath: string): YamlSchema {
@@ -321,40 +295,17 @@ class SchemaExpander {
     return this.expandStructSchema(schema);
   }
 
-  private addToMakefileFromSource(sourcePath: string) {
-    // Determine category based on path
-    if (sourcePath.startsWith("include/")) {
-      this.addMakefileEntry("incs", "no-os", sourcePath.replace("include/", ""));
-    } else if (sourcePath.startsWith("drivers/api/")) {
-      // API driver sources (e.g., no_os_irq.c)
-      const isHeader = sourcePath.endsWith(".h");
-      const relativePath = sourcePath.replace("drivers/api/", "");
-      this.addMakefileEntry(isHeader ? "incs" : "srcs", "no-os-api", relativePath);
-    } else if (sourcePath.startsWith("drivers/accel/") || sourcePath.startsWith("drivers/adc-dac/")) {
-      const isHeader = sourcePath.endsWith(".h");
-      const category = "driver";
-      // Keep path relative to DRIVERS
-      const relativePath = sourcePath.replace("drivers/", "");
-      this.addMakefileEntry(isHeader ? "incs" : "srcs", category, relativePath);
-    } else if (sourcePath.startsWith("drivers/platform/")) {
-      // Platform driver source - extract just filename for now
-      const isHeader = sourcePath.endsWith(".h");
-      const filename = path.basename(sourcePath);
-      this.addMakefileEntry(isHeader ? "incs" : "srcs", "platform", filename);
-    }
-  }
-
   private expandStructSchema(schema: YamlSchema): ExpandedProperty {
     const result: ExpandedProperty = {};
 
-    // Collect sources from schema (applies to all struct expansions)
+    // Embed $sources in the output (for source collection based on configured values)
     if (schema.$sources) {
-      for (const h of schema.$sources.headers || []) {
-        this.addToMakefileFromSource(h);
-      }
-      for (const s of schema.$sources.sources || []) {
-        this.addToMakefileFromSource(s);
-      }
+      result.$sources = schema.$sources;
+    }
+
+    // Embed $override rules in the output (for UI constraint enforcement)
+    if (schema.$override) {
+      result.$override = schema.$override;
     }
 
     // Get all property keys (exclude $ prefixed metadata)
@@ -452,6 +403,7 @@ class SchemaExpander {
         $values: prop.values,
         $default: prop.default,
         $description: prop.description,
+        value: null,
       };
     }
 
@@ -473,12 +425,14 @@ class SchemaExpander {
         $signature: prop.signature,
         $default: prop.default,
         $description: prop.description,
+        value: null,
       };
     }
 
     // Primitive type
     const result: ExpandedProperty = {
       $type: type,
+      value: null,
     };
     if (prop.required) result.$required = prop.required;
     if (prop.default !== undefined) result.$default = prop.default;
@@ -491,13 +445,6 @@ class SchemaExpander {
     schema: YamlSchema,
     description?: string
   ): ExpandedProperty {
-    // Collect headers if present
-    if (schema.$sources?.headers) {
-      for (const h of schema.$sources.headers) {
-        this.addToMakefileFromSource(h);
-      }
-    }
-
     let values: string[];
     if (Array.isArray(schema.values)) {
       values = schema.values;
@@ -507,13 +454,21 @@ class SchemaExpander {
       values = [];
     }
 
-    return {
+    const result: ExpandedProperty = {
       $type: "enum",
       $enum_type: schema.$name,
       $description: description || schema.$description,
       $values: values,
       $default: schema.default,
+      value: null,
     };
+
+    // Embed $sources if present
+    if (schema.$sources) {
+      result.$sources = schema.$sources;
+    }
+
+    return result;
   }
 
   private expandPlatformOps(prop: Record<string, unknown>): ExpandedProperty {
@@ -527,6 +482,7 @@ class SchemaExpander {
         $description: prop.description,
         $note: "No platform implementations defined",
         $resolved: null,
+        value: null,
       };
     }
 
@@ -542,46 +498,83 @@ class SchemaExpander {
         $description: prop.description,
         $note: `No platform implementation for ${this.platform}`,
         $resolved: null,
+        value: null,
       };
     }
 
     const platformInclude = matchingPlatform.include;
     const platformSchema = this.loadSchema(platformInclude);
 
-    // Add the no-os API source based on target name
+    // API source is embedded in $sources for collection based on configured values
     const apiSource = target.replace("_platform_ops", "") + ".c";
-    this.addMakefileEntry("srcs", "no-os-api", apiSource);
+    const apiHeader = target.replace("_platform_ops", "") + ".h";
 
-    return this.expandPlatformOpsImpl(platformSchema, prop.description as string | undefined, target);
+    return this.expandPlatformOpsImpl(platformSchema, prop.description as string | undefined, target, apiSource, apiHeader);
   }
 
   private expandPlatformOpsImpl(
     schema: YamlSchema,
     description?: string,
-    target?: string
+    target?: string,
+    apiSource?: string,
+    apiHeader?: string
   ): ExpandedProperty {
     // Extract sources from the platform_ops_impl schema
     const sources = schema.$sources as {
       headers?: string[];
       sources?: string[];
+      api?: { headers?: string[]; sources?: string[] };
+      platform?: { headers?: string[]; sources?: string[] };
       sdk?: { headers?: string[]; sources?: string[] };
     } | undefined;
 
+    // Build $sources object with all source information
+    const embeddedSources: {
+      headers: string[];
+      sources: string[];
+      api?: { headers: string[]; sources: string[] };
+      platform?: { headers: string[]; sources: string[] };
+      sdk?: { headers?: string[]; sources?: string[] };
+    } = {
+      headers: [],
+      sources: [],
+    };
+
+    // Add default API sources (no_os_xxx.c/h) based on target name
+    const apiHeaders: string[] = apiHeader ? [apiHeader] : [];
+    const apiSources: string[] = apiSource ? [apiSource] : [];
+
+    // Merge with explicit API sources from schema if present
+    if (sources?.api) {
+      apiHeaders.push(...(sources.api.headers || []));
+      apiSources.push(...(sources.api.sources || []));
+    }
+
+    if (apiHeaders.length > 0 || apiSources.length > 0) {
+      embeddedSources.api = {
+        headers: apiHeaders,
+        sources: apiSources,
+      };
+    }
+
+    // Add platform driver sources
     if (sources) {
-      for (const h of sources.headers || []) {
-        this.addMakefileEntry("incs", "platform", h);
+      const platformHeaders = [...(sources.headers || [])];
+      const platformSources = [...(sources.sources || [])];
+
+      // Merge with explicit platform sources from schema if present
+      if (sources.platform) {
+        platformHeaders.push(...(sources.platform.headers || []));
+        platformSources.push(...(sources.platform.sources || []));
       }
-      for (const s of sources.sources || []) {
-        this.addMakefileEntry("srcs", "platform", s);
-      }
-      // Handle SDK dependencies
+
+      embeddedSources.platform = {
+        headers: platformHeaders,
+        sources: platformSources,
+      };
+
       if (sources.sdk) {
-        for (const h of sources.sdk.headers || []) {
-          this.addMakefileEntry("incs", "sdk", h);
-        }
-        for (const s of sources.sdk.sources || []) {
-          this.addMakefileEntry("srcs", "sdk", s);
-        }
+        embeddedSources.sdk = sources.sdk;
       }
     }
 
@@ -589,13 +582,12 @@ class SchemaExpander {
       $type: "platform_ops",
       $target: target || schema.$name,
       $description: description || `Platform operations: ${schema.$name}`,
+      $sources: embeddedSources,
       $resolved: {
         platform: this.platform,
         symbol: schema.symbol as string,
-        headers: sources?.headers || [],
-        sources: sources?.sources || [],
-        sdk: sources?.sdk || null,
       },
+      value: null,
     };
   }
 
@@ -829,8 +821,7 @@ function main() {
     }
   }
 
-  // Merge makefile entries with defaults
-  const expandedMakefile = expander.getMakefile();
+  // Build makefile section with only defaults (sources are now embedded in configuration)
   const platformDefaults = defaults.platforms?.[platform];
 
   const mergedMakefile = {
@@ -838,13 +829,11 @@ function main() {
     $prefix_map: defaults.$prefix_map,
     srcs: mergeMakefileSections(
       defaults.srcs || {},
-      platformDefaults?.srcs || {},
-      expandedMakefile.srcs
+      platformDefaults?.srcs || {}
     ),
     incs: mergeMakefileSections(
       defaults.incs || {},
-      platformDefaults?.incs || {},
-      expandedMakefile.incs
+      platformDefaults?.incs || {}
     ),
   };
 

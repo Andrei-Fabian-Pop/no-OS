@@ -7,6 +7,12 @@ $sources:
     - "drivers/accel/adxl355/adxl355.h"
   sources:
     - "drivers/accel/adxl355/adxl355.c"
+  api:
+    headers:
+      - "no_os_i2c.h"
+    sources:
+      - "no_os_i2c.c"
+  $note: "Driver references I2C functions regardless of comm_type selection"
 
 comm_type:
   type: enum

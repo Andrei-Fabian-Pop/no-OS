@@ -66,20 +66,19 @@ power_down:
   description: "Power down state for each of the 8 channels (0 = enabled, 1 = powered down)"
 
 $override:
-  - if:
+  - $if:
       spi_init:
         value: $any
-    then:
+    $then:
       i2c_init:
         disabled: true
 
-  - if:
+  - $if:
       i2c_init:
         value: $any
-    then:
+    $then:
       spi_init:
         disabled: true
 
-  ####### OR ######
   - $mutex: [spi_init, i2c_init]
   - $mutex: [ss_init, i2c_init]

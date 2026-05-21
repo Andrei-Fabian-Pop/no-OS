@@ -1,0 +1,13 @@
+{
+  "platform": {
+    "target": "maxim",
+    "vendor": "maxim",
+    "prefix": "maxim"
+  },
+  "devices": [
+    {
+      "name": "adi,adxl355"
+    }
+  ],
+  "extra_init": ["uart"]
+}

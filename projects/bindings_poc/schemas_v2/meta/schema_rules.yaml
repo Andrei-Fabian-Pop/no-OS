@@ -31,14 +31,58 @@ metadata_fields:
   $sources:
     required: false
     type: object
-    description: Mapping to no-OS source files
+    description: |
+      Source files required by this schema. Used by metadata2makefile to include
+      only the sources needed by configured features. Sources are only included
+      when the field has a value set (value != null).
     fields:
-      header:
+      headers:
+        type: array
+        items: string
+        description: Header files relative to no-OS root (e.g., "include/no_os_spi.h")
+      sources:
+        type: array
+        items: string
+        description: Source files relative to no-OS root (e.g., "drivers/api/no_os_spi.c")
+      api:
+        type: object
+        description: API layer sources (no_os_*.c/h files)
+        properties:
+          headers:
+            type: array
+            items: string
+            description: API header files (e.g., "no_os_dma.h")
+          sources:
+            type: array
+            items: string
+            description: API source files (e.g., "no_os_dma.c")
+      platform:
+        type: object
+        description: Platform driver sources (maxim_*.c/h, stm32_*.c/h files)
+        properties:
+          headers:
+            type: array
+            items: string
+            description: Platform header files (e.g., "maxim_dma.h")
+          sources:
+            type: array
+            items: string
+            description: Platform source files (e.g., "maxim_dma.c")
+      sdk:
+        type: object
+        description: Vendor SDK dependencies
+        properties:
+          headers:
+            type: array
+            items: string
+            description: SDK header files (e.g., "spi.h", "dma.h")
+          sources:
+            type: array
+            items: string
+            description: SDK source files
+      $note:
         type: string
-        description: Path to header file relative to no-OS root
-      source:
-        type: string
-        description: Path to source file relative to no-OS root
+        description: Optional documentation about why these sources are needed
 
 # =============================================================================
 # Schema types
@@ -161,7 +205,12 @@ property_fields:
   default:
     required: false
     type: any
-    description: Default value for the property
+    description: |
+      Default value for the property. When a default is specified, the field
+      contributes its $sources to the makefile even without an explicit value set.
+
+  # Note: In configuration output, properties also have a "value" field
+  # See configuration_fields section for details.
 
 # =============================================================================
 # Special type definitions
@@ -240,81 +289,107 @@ special_types:
             description: Path to platform_ops_impl schema file
 
 # =============================================================================
-# Override definitions (for platform-specific constraint overrides)
+# Override definitions (for constraint overrides and mutual exclusion)
 # =============================================================================
-# Platform-specific structs (e.g., max_spi_init_param) can override constraints
-# on properties defined in their parent struct (e.g., no_os_spi_init_param).
-# This allows platform-specific validation rules without modifying the base schema.
-#
-# Example: max_spi_init_param is used as the "extra" field of no_os_spi_init_param.
-# It can override constraints on no_os_spi_init_param properties like max_speed_hz.
+# Schemas can define constraints on their properties or relationships between
+# properties using the $override field. This supports conditional constraints,
+# mutual exclusion, and parent property overrides.
 
 override_fields:
   $override:
     required: false
-    type: object
+    type: array
     description: |
-      Platform-specific overrides for parent struct properties.
-      Used when this struct is the "extra" field of a parent init_param struct.
-    fields:
-      $parent:
-        type: object
-        description: |
-          Contains overrides for properties in the parent struct.
-          Keys are property names from the parent, values are constraint objects.
+      List of constraint rules applied to this schema's properties.
+      Each array item can be one of the following types:
+        - $if/$then: Conditional constraint
+        - $mutex: Mutual exclusion between properties
+        - $parent: Overrides for parent struct properties
+    items:
+      oneOf:
+        - $ref: "#/override_types/conditional_if_then"
+        - $ref: "#/override_types/mutex"
+        - $ref: "#/override_types/switch"
+    example: |
+      $override:
+        - $if:
+            spi_init:
+              value: $any
+          $then:
+            i2c_init:
+              disabled: true
 
-  # Constraint fields that can be applied to properties
-  constraints:
-    minimum:
-      type: number
-      description: Minimum allowed value for numeric properties
-    maximum:
-      type: number
-      description: Maximum allowed value for numeric properties
-    allowed_values:
-      type: list
-      description: Restrict property to specific values
-    pattern:
-      type: string
-      description: Regex pattern for string validation
+        - $mutex: [spi_init, i2c_init]
 
+override_types:
   # Conditional overrides - if/then syntax
   conditional_if_then:
     description: |
-      Apply overrides conditionally based on another property's value.
-      Placed inside $parent alongside property overrides.
+      Apply constraints conditionally based on another property's value.
+      When the condition is true, apply the constraints in $then.
     syntax:
-      if:
+      $if:
         type: object
-        description: "Condition: { property_name: { value: expected_value } }"
-      then:
+        description: |
+          Condition object. Keys are property names, values are match criteria.
+          Special value "$any" matches any non-null value.
+        example:
+          spi_init:
+            value: $any
+      $then:
         type: object
-        description: "Overrides to apply when condition is true"
+        description: |
+          Constraints to apply when condition is true.
+          Keys are property names, values are constraint objects.
+        example:
+          i2c_init:
+            disabled: true
     example: |
-      if:
-        device_id:
-          value: 1
-      then:
-        chip_select:
-          maximum: 3
+      # If spi_init has any value set, disable i2c_init
+      - $if:
+          spi_init:
+            value: $any
+        $then:
+          i2c_init:
+            disabled: true
 
-  # Conditional overrides - switch/case syntax (alternative to if/then)
-  conditional_switch:
+      # If device_id is 1, restrict chip_select to max 3
+      - $if:
+          device_id:
+            value: 1
+        $then:
+          chip_select:
+            maximum: 3
+
+  # Mutual exclusion constraint
+  mutex:
     description: |
-      Apply different overrides based on a selector property's value.
+      Declares that only one of the listed properties can have a value set.
+      This is a shorthand for multiple $if/$then rules.
+    syntax:
+      $mutex:
+        type: array
+        items: string
+        description: List of property names that are mutually exclusive
+    example: |
+      # Only one of spi_init, i2c_init, or uart_init can be configured
+      - $mutex: [spi_init, i2c_init, uart_init]
+
+  # Conditional overrides - switch/case syntax
+  switch:
+    description: |
+      Apply different constraints based on a selector property's value.
       More readable than multiple if/then blocks for multi-value conditions.
     syntax:
       $switch:
-        type: object
-        fields:
-          $on:
-            type: string
-            description: The property name to switch on
-          $cases:
-            type: object
-            description: |
-              Map of selector values to override objects.
-              Use "_" (underscore) as the default/fallback case.
+        $on:
+          type: string
+          description: The property name to switch on
+        $cases:
+          type: object
+          description: |
+            Map of selector values to constraint objects.
+            Use "_" (underscore) as the default/fallback case.
     example: |
       $switch:
         $on: device_id
@@ -328,3 +403,114 @@ override_fields:
           _:
             chip_select:
               maximum: 4
+
+  # Parent property overrides (for platform extra structs)
+  parent:
+    description: |
+      Override constraints on parent struct properties.
+      Used when this struct is the "extra" field of a parent init_param struct.
+    syntax:
+      $parent:
+        type: object
+        description: |
+          Contains overrides for properties in the parent struct.
+          Keys are property names from the parent, values are constraint objects.
+    example: |
+      # In max_spi_init_param, override parent no_os_spi_init_param constraints
+      $override:
+        $parent:
+          max_speed_hz:
+            maximum: 48000000
+
+# Constraint actions that can be applied in $then or $cases
+constraint_actions:
+  disabled:
+    type: boolean
+    description: |
+      When true, the property cannot be configured (must remain null).
+      Used for mutual exclusion or conditional feature disabling.
+  required:
+    type: boolean
+    description: When true, the property must have a value set.
+  minimum:
+    type: number
+    description: Minimum allowed value for numeric properties.
+  maximum:
+    type: number
+    description: Maximum allowed value for numeric properties.
+  allowed_values:
+    type: array
+    description: Restrict property to specific values from the list.
+
+# Special match values used in $if conditions
+special_match_values:
+  $any:
+    description: |
+      Matches any non-null value. Use in $if conditions to check if a property
+      has been configured without caring about the specific value.
+    example: |
+      $if:
+        spi_init:
+          value: $any  # Matches if spi_init has any value set
+
+# =============================================================================
+# Configuration output fields
+# =============================================================================
+# When schemas are expanded to configuration.json, additional fields are added
+# to support runtime configuration.
+
+configuration_fields:
+  value:
+    type: any
+    description: |
+      The user-configured value for this property. Set to null by default.
+      Only fields with value != null contribute their $sources to the makefile.
+      This enables minimal builds based on actual configuration.
+    example: |
+      "device_id": {
+        "$type": "uint32_t",
+        "value": null,  // Not configured - sources not included
+        "$required": true
+      }
+      "device_id": {
+        "$type": "uint32_t",
+        "value": 0,  // Configured - sources included
+        "$required": true
+      }
+
+# =============================================================================
+# Naming conventions
+# =============================================================================
+naming_conventions:
+  instruction_fields:
+    description: |
+      All fields that are schema instructions (not user-configurable data)
+      must be prefixed with $. This distinguishes metadata from actual
+      struct properties.
+    examples:
+      - $id
+      - $type
+      - $name
+      - $description
+      - $sources
+      - $default
+      - $required
+      - $override
+      - $members
+      - $selector
+      - $struct_type
+      - $enum_type
+    counter_examples:
+      - type      # Use $type
+      - default   # Use $default for instructions, 'default' only in enum values
+      - required  # Use $required
+
+  property_names:
+    description: |
+      Property names (struct fields) should match the C identifier exactly.
+      Do not prefix with $ unless it's an instruction field.
+    examples:
+      - device_id
+      - max_speed_hz
+      - platform_ops
+      - extra

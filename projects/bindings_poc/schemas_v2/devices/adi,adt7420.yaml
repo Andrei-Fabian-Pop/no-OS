@@ -1,0 +1,36 @@
+$id: "devices/adi,adt7420.yaml"
+$type: struct
+$name: adt7420_init_param
+$description: "ADT7420/ADT7320 Temperature Sensor"
+$sources:
+  headers:
+    - "drivers/temperature/adt7420/adt7420.h"
+  sources:
+    - "drivers/temperature/adt7420/adt7420.c"
+
+active_device:
+  type: enum
+  required: true
+  values: [ID_ADT7420, ID_ADT7320]
+  default: ID_ADT7420
+  description: "Device type (ADT7420=I2C, ADT7320=SPI)"
+
+resolution_setting:
+  type: uint8_t
+  default: 1
+  description: "Resolution setting (0=13-bit, 1=16-bit)"
+
+interface_init:
+  type: union
+  required: true
+  selector: active_device
+  description: "Communication interface parameters"
+  members:
+    ID_ADT7420:
+      i2c_init:
+        include: "no-os/no_os_i2c_init_param.yaml"
+        description: "I2C initialization parameters"
+    ID_ADT7320:
+      spi_init:
+        include: "no-os/no_os_spi_init_param.yaml"
+        description: "SPI initialization parameters"

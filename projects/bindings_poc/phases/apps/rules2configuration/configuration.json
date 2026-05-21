@@ -1,0 +1,1664 @@
+{
+  "configuration": {
+    "adi,ad5592r": {
+      "$sources": {
+        "headers": [
+          "drivers/adc-dac/ad5592r/ad5592r-base.h",
+          "drivers/adc-dac/ad5592r/ad5592r.h"
+        ],
+        "sources": [
+          "drivers/adc-dac/ad5592r/ad5592r-base.c",
+          "drivers/adc-dac/ad5592r/ad5592r.c"
+        ]
+      },
+      "int_ref": {
+        "$type": "bool",
+        "value": true,
+        "$default": true,
+        "$description": "Use internal reference"
+      },
+      "external_vref": {
+        "$type": "uint32_t",
+        "value": null,
+        "$description": "External reference voltage in mV (valid only if int_ref = false)"
+      },
+      "spi_init": {
+        "$type": "struct",
+        "$struct_type": "no_os_spi_init_param",
+        "$description": "SPI initialization parameters (for AD5592R)",
+        "$sources": {
+          "headers": [
+            "include/no_os_spi.h"
+          ]
+        },
+        "device_id": {
+          "$type": "uint32_t",
+          "value": 1,
+          "$required": true,
+          "$description": "SPI peripheral device ID"
+        },
+        "max_speed_hz": {
+          "$type": "uint32_t",
+          "value": 1000000,
+          "$description": "Maximum SPI clock frequency in Hz"
+        },
+        "chip_select": {
+          "$type": "uint8_t",
+          "value": 0,
+          "$required": true,
+          "$description": "Chip select line number"
+        },
+        "mode": {
+          "$type": "enum",
+          "$enum_type": "no_os_spi_mode",
+          "$description": "SPI mode (clock polarity and phase)",
+          "$values": [
+            "NO_OS_SPI_MODE_0",
+            "NO_OS_SPI_MODE_1",
+            "NO_OS_SPI_MODE_2",
+            "NO_OS_SPI_MODE_3"
+          ],
+          "$default": "NO_OS_SPI_MODE_0",
+          "value": "NO_OS_SPI_MODE_0",
+          "$sources": {
+            "headers": [
+              "include/no_os_spi.h"
+            ]
+          }
+        },
+        "bit_order": {
+          "$type": "enum",
+          "$enum_type": "no_os_spi_bit_order",
+          "$description": "Bit order (MSB or LSB first)",
+          "$values": [
+            "NO_OS_SPI_BIT_ORDER_MSB_FIRST",
+            "NO_OS_SPI_BIT_ORDER_LSB_FIRST"
+          ],
+          "$default": "NO_OS_SPI_BIT_ORDER_MSB_FIRST",
+          "value": "NO_OS_SPI_BIT_ORDER_MSB_FIRST",
+          "$sources": {
+            "headers": [
+              "include/no_os_spi.h"
+            ]
+          }
+        },
+        "platform_ops": {
+          "$type": "platform_ops",
+          "$target": "no_os_spi_platform_ops",
+          "$description": "Platform-specific SPI operations",
+          "$sources": {
+            "headers": [],
+            "sources": [],
+            "api": {
+              "headers": [
+                "no_os_spi.h"
+              ],
+              "sources": [
+                "no_os_spi.c"
+              ]
+            },
+            "platform": {
+              "headers": [
+                "stm32_spi.h"
+              ],
+              "sources": [
+                "stm32_spi.c"
+              ]
+            }
+          },
+          "$resolved": {
+            "platform": "stm32",
+            "symbol": "stm32_spi_ops"
+          },
+          "value": "stm32_spi_ops"
+        },
+        "extra": {
+          "$type": "platform_extra",
+          "$struct_type": "stm32_spi_init_param",
+          "$description": "Platform-specific initialization parameters",
+          "$sources": {
+            "headers": [
+              "drivers/platform/stm32/stm32_spi.h"
+            ]
+          },
+          "chip_select_port": {
+            "$type": "uint32_t",
+            "value": 0,
+            "$description": "Chip select port"
+          },
+          "get_input_clock": {
+            "$type": "func_ptr",
+            "value": "NULL",
+            "$description": "Get peripheral source clock function"
+          },
+          "alternate": {
+            "$type": "uint32_t",
+            "value": null,
+            "$description": "Chip select alternate function"
+          },
+          "irq_num": {
+            "$type": "uint32_t",
+            "value": null,
+            "$description": "IRQ number"
+          },
+          "dma_init": {
+            "$type": "struct",
+            "$struct_type": "no_os_dma_init_param",
+            "$description": "DMA initialization parameters",
+            "$sources": {
+              "headers": [
+                "include/no_os_dma.h",
+                "include/no_os_irq.h"
+              ],
+              "sources": [
+                "drivers/api/no_os_irq.c"
+              ]
+            },
+            "id": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "Unique id of a DMA controller"
+            },
+            "num_ch": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "The number of channels associated with the controller"
+            },
+            "platform_ops": {
+              "$type": "platform_ops",
+              "$target": "no_os_dma_platform_ops",
+              "$description": "Platform specific DMA functions",
+              "$sources": {
+                "headers": [],
+                "sources": [],
+                "api": {
+                  "headers": [
+                    "no_os_dma.h"
+                  ],
+                  "sources": [
+                    "no_os_dma.c"
+                  ]
+                },
+                "platform": {
+                  "headers": [
+                    "stm32_dma.h"
+                  ],
+                  "sources": [
+                    "stm32_dma.c"
+                  ]
+                }
+              },
+              "$resolved": {
+                "platform": "stm32",
+                "symbol": "stm32_dma_ops"
+              },
+              "value": null
+            },
+            "extra": {
+              "$type": "platform_extra",
+              "$struct_type": "stm32_dma_init_param",
+              "$description": "Platform specific data",
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_dma.h"
+                ]
+              },
+              "chn": {
+                "$type": "ptr",
+                "value": null,
+                "$description": "DMA channel descriptor"
+              }
+            },
+            "sg_handler": {
+              "$type": "callback_func",
+              "$signature": "void (*)(void *)",
+              "$default": "NULL",
+              "$description": "Optional custom scatter gather callback",
+              "value": null
+            },
+            "ctx": {
+              "$type": "callback_ctx",
+              "$default": "NULL",
+              "$description": "Optional custom parameter for the scatter gather callback",
+              "value": null
+            }
+          },
+          "rxdma_ch": {
+            "$type": "struct",
+            "$struct_type": "stm32_dma_channel",
+            "$description": "RX DMA channel descriptor",
+            "$sources": {
+              "headers": [
+                "drivers/platform/stm32/stm32_dma.h"
+              ]
+            },
+            "hdma": {
+              "$type": "external_ptr",
+              "value": null,
+              "$description": "DMA handle (HAL type, managed by STM32CubeMX)"
+            },
+            "ch_num": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "Channel number"
+            },
+            "mem_increment": {
+              "$type": "bool",
+              "value": null,
+              "$default": true,
+              "$description": "Memory address increment enable"
+            },
+            "per_increment": {
+              "$type": "bool",
+              "value": null,
+              "$default": false,
+              "$description": "Peripheral address increment enable"
+            },
+            "mem_data_alignment": {
+              "$type": "enum",
+              "$enum_type": "stm32_dma_data_alignment",
+              "$description": "Memory data alignment",
+              "$values": [
+                "DATA_ALIGN_BYTE",
+                "DATA_ALIGN_HALF_WORD",
+                "DATA_ALIGN_WORD"
+              ],
+              "$default": "DATA_ALIGN_BYTE",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_dma.h"
+                ]
+              }
+            },
+            "per_data_alignment": {
+              "$type": "enum",
+              "$enum_type": "stm32_dma_data_alignment",
+              "$description": "Peripheral data alignment",
+              "$values": [
+                "DATA_ALIGN_BYTE",
+                "DATA_ALIGN_HALF_WORD",
+                "DATA_ALIGN_WORD"
+              ],
+              "$default": "DATA_ALIGN_BYTE",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_dma.h"
+                ]
+              }
+            },
+            "dma_mode": {
+              "$type": "enum",
+              "$enum_type": "stm32_dma_mode",
+              "$description": "DMA mode",
+              "$values": [
+                "DMA_NORMAL_MODE",
+                "DMA_CIRCULAR_MODE"
+              ],
+              "$default": "DMA_NORMAL_MODE",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_dma.h"
+                ]
+              }
+            }
+          },
+          "txdma_ch": {
+            "$type": "struct",
+            "$struct_type": "stm32_dma_channel",
+            "$description": "TX DMA channel descriptor",
+            "$sources": {
+              "headers": [
+                "drivers/platform/stm32/stm32_dma.h"
+              ]
+            },
+            "hdma": {
+              "$type": "external_ptr",
+              "value": null,
+              "$description": "DMA handle (HAL type, managed by STM32CubeMX)"
+            },
+            "ch_num": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "Channel number"
+            },
+            "mem_increment": {
+              "$type": "bool",
+              "value": null,
+              "$default": true,
+              "$description": "Memory address increment enable"
+            },
+            "per_increment": {
+              "$type": "bool",
+              "value": null,
+              "$default": false,
+              "$description": "Peripheral address increment enable"
+            },
+            "mem_data_alignment": {
+              "$type": "enum",
+              "$enum_type": "stm32_dma_data_alignment",
+              "$description": "Memory data alignment",
+              "$values": [
+                "DATA_ALIGN_BYTE",
+                "DATA_ALIGN_HALF_WORD",
+                "DATA_ALIGN_WORD"
+              ],
+              "$default": "DATA_ALIGN_BYTE",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_dma.h"
+                ]
+              }
+            },
+            "per_data_alignment": {
+              "$type": "enum",
+              "$enum_type": "stm32_dma_data_alignment",
+              "$description": "Peripheral data alignment",
+              "$values": [
+                "DATA_ALIGN_BYTE",
+                "DATA_ALIGN_HALF_WORD",
+                "DATA_ALIGN_WORD"
+              ],
+              "$default": "DATA_ALIGN_BYTE",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_dma.h"
+                ]
+              }
+            },
+            "dma_mode": {
+              "$type": "enum",
+              "$enum_type": "stm32_dma_mode",
+              "$description": "DMA mode",
+              "$values": [
+                "DMA_NORMAL_MODE",
+                "DMA_CIRCULAR_MODE"
+              ],
+              "$default": "DMA_NORMAL_MODE",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_dma.h"
+                ]
+              }
+            }
+          },
+          "pwm_init": {
+            "$type": "struct",
+            "$struct_type": "no_os_pwm_init_param",
+            "$description": "CS PWM initialization parameters (optional, requires HAL_TIM_MODULE_ENABLED)",
+            "$sources": {
+              "headers": [
+                "include/no_os_pwm.h"
+              ]
+            },
+            "id": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM id (e.g., pin number, timer_id)"
+            },
+            "period_ns": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM generator period in nanoseconds"
+            },
+            "duty_cycle_ns": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM generator duty cycle in nanoseconds"
+            },
+            "phase_ns": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM generator phase in nanoseconds"
+            },
+            "polarity": {
+              "$type": "enum",
+              "$enum_type": "no_os_pwm_polarity",
+              "$description": "PWM generator polarity",
+              "$values": [
+                "NO_OS_PWM_POLARITY_HIGH",
+                "NO_OS_PWM_POLARITY_LOW"
+              ],
+              "$default": "NO_OS_PWM_POLARITY_HIGH",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "include/no_os_pwm.h"
+                ]
+              }
+            },
+            "pwm_gpio": {
+              "$type": "struct",
+              "$struct_type": "no_os_gpio_init_param",
+              "$description": "PWM GPIO pin init param",
+              "$sources": {
+                "headers": [
+                  "include/no_os_gpio.h"
+                ]
+              },
+              "port": {
+                "$type": "int32_t",
+                "value": null,
+                "$description": "Port number"
+              },
+              "number": {
+                "$type": "int32_t",
+                "value": null,
+                "$required": true,
+                "$description": "GPIO number"
+              },
+              "pull": {
+                "$type": "enum",
+                "$enum_type": "no_os_gpio_pull_up",
+                "$description": "Pull up/down resistor configuration",
+                "$values": [
+                  "NO_OS_PULL_NONE",
+                  "NO_OS_PULL_UP",
+                  "NO_OS_PULL_DOWN",
+                  "NO_OS_PULL_UP_WEAK",
+                  "NO_OS_PULL_DOWN_WEAK"
+                ],
+                "$default": "NO_OS_PULL_NONE",
+                "value": null,
+                "$sources": {
+                  "headers": [
+                    "include/no_os_gpio.h"
+                  ]
+                }
+              },
+              "platform_ops": {
+                "$type": "platform_ops",
+                "$target": "no_os_gpio_platform_ops",
+                "$description": "Platform-specific GPIO operations",
+                "$sources": {
+                  "headers": [],
+                  "sources": [],
+                  "api": {
+                    "headers": [
+                      "no_os_gpio.h"
+                    ],
+                    "sources": [
+                      "no_os_gpio.c"
+                    ]
+                  },
+                  "platform": {
+                    "headers": [
+                      "stm32_gpio.h"
+                    ],
+                    "sources": [
+                      "stm32_gpio.c"
+                    ]
+                  }
+                },
+                "$resolved": {
+                  "platform": "stm32",
+                  "symbol": "stm32_gpio_ops"
+                },
+                "value": null
+              },
+              "extra": {
+                "$type": "platform_extra",
+                "$struct_type": "stm32_gpio_init_param",
+                "$description": "Platform-specific initialization parameters",
+                "$sources": {
+                  "headers": [
+                    "drivers/platform/stm32/stm32_gpio.h"
+                  ]
+                },
+                "mode": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "GPIO output mode"
+                },
+                "speed": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "GPIO speed grade"
+                },
+                "alternate": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "GPIO alternate functionality"
+                }
+              }
+            },
+            "irq_id": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "IRQ ID"
+            },
+            "pwm_callback": {
+              "$type": "callback_func",
+              "$signature": "void (*)(void *)",
+              "$default": "NULL",
+              "$description": "PWM callback function",
+              "value": null
+            },
+            "platform_ops": {
+              "$type": "platform_ops",
+              "$target": "no_os_pwm_platform_ops",
+              "$description": "PWM platform specific functions",
+              "$sources": {
+                "headers": [],
+                "sources": [],
+                "api": {
+                  "headers": [
+                    "no_os_pwm.h"
+                  ],
+                  "sources": [
+                    "no_os_pwm.c"
+                  ]
+                },
+                "platform": {
+                  "headers": [
+                    "stm32_pwm.h"
+                  ],
+                  "sources": [
+                    "stm32_pwm.c"
+                  ]
+                }
+              },
+              "$resolved": {
+                "platform": "stm32",
+                "symbol": "stm32_pwm_ops"
+              },
+              "value": null
+            },
+            "extra": {
+              "$type": "platform_extra",
+              "$struct_type": "stm32_pwm_init_param",
+              "$description": "PWM extra parameters (platform specific)",
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_pwm.h"
+                ]
+              },
+              "htimer": {
+                "$type": "ptr",
+                "value": null,
+                "$description": "PWM timer handle"
+              },
+              "pwm_timer": {
+                "$type": "enum",
+                "$values": [
+                  "TIMER1",
+                  "TIMER2",
+                  "TIMER3",
+                  "TIMER4",
+                  "TIMER5",
+                  "TIMER6",
+                  "TIMER7",
+                  "TIMER8"
+                ],
+                "$description": "Type of timer used for PWM",
+                "value": null
+              },
+              "prescaler": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "Timer prescaler (0 to 0xFFFF)"
+              },
+              "timer_autoreload": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Timer autoreload enable"
+              },
+              "mode": {
+                "$type": "enum",
+                "$values": [
+                  "TIM_OC_TOGGLE",
+                  "TIM_OC_PWM1",
+                  "TIM_OC_PWM2"
+                ],
+                "$description": "Timer output compare mode",
+                "value": null
+              },
+              "timer_chn": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "PWM timer channel"
+              },
+              "complementary_channel": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Use complementary channel"
+              },
+              "get_timer_clock": {
+                "$type": "func_ptr",
+                "value": null,
+                "$description": "Get timer source clock function"
+              },
+              "clock_divider": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "Timer clock divider"
+              },
+              "dma_enable": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Enable DMA for PWM"
+              },
+              "dma": {
+                "$type": "struct",
+                "$struct_type": "no_os_dma_init_param",
+                "$description": "DMA initialization parameters",
+                "$sources": {
+                  "headers": [
+                    "include/no_os_dma.h",
+                    "include/no_os_irq.h"
+                  ],
+                  "sources": [
+                    "drivers/api/no_os_irq.c"
+                  ]
+                },
+                "id": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "Unique id of a DMA controller"
+                },
+                "num_ch": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "The number of channels associated with the controller"
+                },
+                "platform_ops": {
+                  "$type": "platform_ops",
+                  "$target": "no_os_dma_platform_ops",
+                  "$description": "Platform specific DMA functions",
+                  "$sources": {
+                    "headers": [],
+                    "sources": [],
+                    "api": {
+                      "headers": [
+                        "no_os_dma.h"
+                      ],
+                      "sources": [
+                        "no_os_dma.c"
+                      ]
+                    },
+                    "platform": {
+                      "headers": [
+                        "stm32_dma.h"
+                      ],
+                      "sources": [
+                        "stm32_dma.c"
+                      ]
+                    }
+                  },
+                  "$resolved": {
+                    "platform": "stm32",
+                    "symbol": "stm32_dma_ops"
+                  },
+                  "value": null
+                },
+                "extra": {
+                  "$type": "platform_extra",
+                  "$struct_type": "stm32_dma_init_param",
+                  "$description": "Platform specific data",
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  },
+                  "chn": {
+                    "$type": "ptr",
+                    "value": null,
+                    "$description": "DMA channel descriptor"
+                  }
+                },
+                "sg_handler": {
+                  "$type": "callback_func",
+                  "$signature": "void (*)(void *)",
+                  "$default": "NULL",
+                  "$description": "Optional custom scatter gather callback",
+                  "value": null
+                },
+                "ctx": {
+                  "$type": "callback_ctx",
+                  "$default": "NULL",
+                  "$description": "Optional custom parameter for the scatter gather callback",
+                  "value": null
+                }
+              },
+              "dma_ch": {
+                "$type": "struct",
+                "$struct_type": "stm32_dma_channel",
+                "$description": "DMA channel descriptor",
+                "$sources": {
+                  "headers": [
+                    "drivers/platform/stm32/stm32_dma.h"
+                  ]
+                },
+                "hdma": {
+                  "$type": "external_ptr",
+                  "value": null,
+                  "$description": "DMA handle (HAL type, managed by STM32CubeMX)"
+                },
+                "ch_num": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "Channel number"
+                },
+                "mem_increment": {
+                  "$type": "bool",
+                  "value": null,
+                  "$default": true,
+                  "$description": "Memory address increment enable"
+                },
+                "per_increment": {
+                  "$type": "bool",
+                  "value": null,
+                  "$default": false,
+                  "$description": "Peripheral address increment enable"
+                },
+                "mem_data_alignment": {
+                  "$type": "enum",
+                  "$enum_type": "stm32_dma_data_alignment",
+                  "$description": "Memory data alignment",
+                  "$values": [
+                    "DATA_ALIGN_BYTE",
+                    "DATA_ALIGN_HALF_WORD",
+                    "DATA_ALIGN_WORD"
+                  ],
+                  "$default": "DATA_ALIGN_BYTE",
+                  "value": null,
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  }
+                },
+                "per_data_alignment": {
+                  "$type": "enum",
+                  "$enum_type": "stm32_dma_data_alignment",
+                  "$description": "Peripheral data alignment",
+                  "$values": [
+                    "DATA_ALIGN_BYTE",
+                    "DATA_ALIGN_HALF_WORD",
+                    "DATA_ALIGN_WORD"
+                  ],
+                  "$default": "DATA_ALIGN_BYTE",
+                  "value": null,
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  }
+                },
+                "dma_mode": {
+                  "$type": "enum",
+                  "$enum_type": "stm32_dma_mode",
+                  "$description": "DMA mode",
+                  "$values": [
+                    "DMA_NORMAL_MODE",
+                    "DMA_CIRCULAR_MODE"
+                  ],
+                  "$default": "DMA_NORMAL_MODE",
+                  "value": null,
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  }
+                }
+              },
+              "onepulse_enable": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Enable one-pulse mode"
+              }
+            }
+          },
+          "tx_pwm_init": {
+            "$type": "struct",
+            "$struct_type": "no_os_pwm_init_param",
+            "$description": "TX PWM initialization parameters (optional, requires HAL_TIM_MODULE_ENABLED)",
+            "$sources": {
+              "headers": [
+                "include/no_os_pwm.h"
+              ]
+            },
+            "id": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM id (e.g., pin number, timer_id)"
+            },
+            "period_ns": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM generator period in nanoseconds"
+            },
+            "duty_cycle_ns": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM generator duty cycle in nanoseconds"
+            },
+            "phase_ns": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "PWM generator phase in nanoseconds"
+            },
+            "polarity": {
+              "$type": "enum",
+              "$enum_type": "no_os_pwm_polarity",
+              "$description": "PWM generator polarity",
+              "$values": [
+                "NO_OS_PWM_POLARITY_HIGH",
+                "NO_OS_PWM_POLARITY_LOW"
+              ],
+              "$default": "NO_OS_PWM_POLARITY_HIGH",
+              "value": null,
+              "$sources": {
+                "headers": [
+                  "include/no_os_pwm.h"
+                ]
+              }
+            },
+            "pwm_gpio": {
+              "$type": "struct",
+              "$struct_type": "no_os_gpio_init_param",
+              "$description": "PWM GPIO pin init param",
+              "$sources": {
+                "headers": [
+                  "include/no_os_gpio.h"
+                ]
+              },
+              "port": {
+                "$type": "int32_t",
+                "value": null,
+                "$description": "Port number"
+              },
+              "number": {
+                "$type": "int32_t",
+                "value": null,
+                "$required": true,
+                "$description": "GPIO number"
+              },
+              "pull": {
+                "$type": "enum",
+                "$enum_type": "no_os_gpio_pull_up",
+                "$description": "Pull up/down resistor configuration",
+                "$values": [
+                  "NO_OS_PULL_NONE",
+                  "NO_OS_PULL_UP",
+                  "NO_OS_PULL_DOWN",
+                  "NO_OS_PULL_UP_WEAK",
+                  "NO_OS_PULL_DOWN_WEAK"
+                ],
+                "$default": "NO_OS_PULL_NONE",
+                "value": null,
+                "$sources": {
+                  "headers": [
+                    "include/no_os_gpio.h"
+                  ]
+                }
+              },
+              "platform_ops": {
+                "$type": "platform_ops",
+                "$target": "no_os_gpio_platform_ops",
+                "$description": "Platform-specific GPIO operations",
+                "$sources": {
+                  "headers": [],
+                  "sources": [],
+                  "api": {
+                    "headers": [
+                      "no_os_gpio.h"
+                    ],
+                    "sources": [
+                      "no_os_gpio.c"
+                    ]
+                  },
+                  "platform": {
+                    "headers": [
+                      "stm32_gpio.h"
+                    ],
+                    "sources": [
+                      "stm32_gpio.c"
+                    ]
+                  }
+                },
+                "$resolved": {
+                  "platform": "stm32",
+                  "symbol": "stm32_gpio_ops"
+                },
+                "value": null
+              },
+              "extra": {
+                "$type": "platform_extra",
+                "$struct_type": "stm32_gpio_init_param",
+                "$description": "Platform-specific initialization parameters",
+                "$sources": {
+                  "headers": [
+                    "drivers/platform/stm32/stm32_gpio.h"
+                  ]
+                },
+                "mode": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "GPIO output mode"
+                },
+                "speed": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "GPIO speed grade"
+                },
+                "alternate": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "GPIO alternate functionality"
+                }
+              }
+            },
+            "irq_id": {
+              "$type": "uint32_t",
+              "value": null,
+              "$description": "IRQ ID"
+            },
+            "pwm_callback": {
+              "$type": "callback_func",
+              "$signature": "void (*)(void *)",
+              "$default": "NULL",
+              "$description": "PWM callback function",
+              "value": null
+            },
+            "platform_ops": {
+              "$type": "platform_ops",
+              "$target": "no_os_pwm_platform_ops",
+              "$description": "PWM platform specific functions",
+              "$sources": {
+                "headers": [],
+                "sources": [],
+                "api": {
+                  "headers": [
+                    "no_os_pwm.h"
+                  ],
+                  "sources": [
+                    "no_os_pwm.c"
+                  ]
+                },
+                "platform": {
+                  "headers": [
+                    "stm32_pwm.h"
+                  ],
+                  "sources": [
+                    "stm32_pwm.c"
+                  ]
+                }
+              },
+              "$resolved": {
+                "platform": "stm32",
+                "symbol": "stm32_pwm_ops"
+              },
+              "value": null
+            },
+            "extra": {
+              "$type": "platform_extra",
+              "$struct_type": "stm32_pwm_init_param",
+              "$description": "PWM extra parameters (platform specific)",
+              "$sources": {
+                "headers": [
+                  "drivers/platform/stm32/stm32_pwm.h"
+                ]
+              },
+              "htimer": {
+                "$type": "ptr",
+                "value": null,
+                "$description": "PWM timer handle"
+              },
+              "pwm_timer": {
+                "$type": "enum",
+                "$values": [
+                  "TIMER1",
+                  "TIMER2",
+                  "TIMER3",
+                  "TIMER4",
+                  "TIMER5",
+                  "TIMER6",
+                  "TIMER7",
+                  "TIMER8"
+                ],
+                "$description": "Type of timer used for PWM",
+                "value": null
+              },
+              "prescaler": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "Timer prescaler (0 to 0xFFFF)"
+              },
+              "timer_autoreload": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Timer autoreload enable"
+              },
+              "mode": {
+                "$type": "enum",
+                "$values": [
+                  "TIM_OC_TOGGLE",
+                  "TIM_OC_PWM1",
+                  "TIM_OC_PWM2"
+                ],
+                "$description": "Timer output compare mode",
+                "value": null
+              },
+              "timer_chn": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "PWM timer channel"
+              },
+              "complementary_channel": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Use complementary channel"
+              },
+              "get_timer_clock": {
+                "$type": "func_ptr",
+                "value": null,
+                "$description": "Get timer source clock function"
+              },
+              "clock_divider": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "Timer clock divider"
+              },
+              "dma_enable": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Enable DMA for PWM"
+              },
+              "dma": {
+                "$type": "struct",
+                "$struct_type": "no_os_dma_init_param",
+                "$description": "DMA initialization parameters",
+                "$sources": {
+                  "headers": [
+                    "include/no_os_dma.h",
+                    "include/no_os_irq.h"
+                  ],
+                  "sources": [
+                    "drivers/api/no_os_irq.c"
+                  ]
+                },
+                "id": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "Unique id of a DMA controller"
+                },
+                "num_ch": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "The number of channels associated with the controller"
+                },
+                "platform_ops": {
+                  "$type": "platform_ops",
+                  "$target": "no_os_dma_platform_ops",
+                  "$description": "Platform specific DMA functions",
+                  "$sources": {
+                    "headers": [],
+                    "sources": [],
+                    "api": {
+                      "headers": [
+                        "no_os_dma.h"
+                      ],
+                      "sources": [
+                        "no_os_dma.c"
+                      ]
+                    },
+                    "platform": {
+                      "headers": [
+                        "stm32_dma.h"
+                      ],
+                      "sources": [
+                        "stm32_dma.c"
+                      ]
+                    }
+                  },
+                  "$resolved": {
+                    "platform": "stm32",
+                    "symbol": "stm32_dma_ops"
+                  },
+                  "value": null
+                },
+                "extra": {
+                  "$type": "platform_extra",
+                  "$struct_type": "stm32_dma_init_param",
+                  "$description": "Platform specific data",
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  },
+                  "chn": {
+                    "$type": "ptr",
+                    "value": null,
+                    "$description": "DMA channel descriptor"
+                  }
+                },
+                "sg_handler": {
+                  "$type": "callback_func",
+                  "$signature": "void (*)(void *)",
+                  "$default": "NULL",
+                  "$description": "Optional custom scatter gather callback",
+                  "value": null
+                },
+                "ctx": {
+                  "$type": "callback_ctx",
+                  "$default": "NULL",
+                  "$description": "Optional custom parameter for the scatter gather callback",
+                  "value": null
+                }
+              },
+              "dma_ch": {
+                "$type": "struct",
+                "$struct_type": "stm32_dma_channel",
+                "$description": "DMA channel descriptor",
+                "$sources": {
+                  "headers": [
+                    "drivers/platform/stm32/stm32_dma.h"
+                  ]
+                },
+                "hdma": {
+                  "$type": "external_ptr",
+                  "value": null,
+                  "$description": "DMA handle (HAL type, managed by STM32CubeMX)"
+                },
+                "ch_num": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "Channel number"
+                },
+                "mem_increment": {
+                  "$type": "bool",
+                  "value": null,
+                  "$default": true,
+                  "$description": "Memory address increment enable"
+                },
+                "per_increment": {
+                  "$type": "bool",
+                  "value": null,
+                  "$default": false,
+                  "$description": "Peripheral address increment enable"
+                },
+                "mem_data_alignment": {
+                  "$type": "enum",
+                  "$enum_type": "stm32_dma_data_alignment",
+                  "$description": "Memory data alignment",
+                  "$values": [
+                    "DATA_ALIGN_BYTE",
+                    "DATA_ALIGN_HALF_WORD",
+                    "DATA_ALIGN_WORD"
+                  ],
+                  "$default": "DATA_ALIGN_BYTE",
+                  "value": null,
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  }
+                },
+                "per_data_alignment": {
+                  "$type": "enum",
+                  "$enum_type": "stm32_dma_data_alignment",
+                  "$description": "Peripheral data alignment",
+                  "$values": [
+                    "DATA_ALIGN_BYTE",
+                    "DATA_ALIGN_HALF_WORD",
+                    "DATA_ALIGN_WORD"
+                  ],
+                  "$default": "DATA_ALIGN_BYTE",
+                  "value": null,
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  }
+                },
+                "dma_mode": {
+                  "$type": "enum",
+                  "$enum_type": "stm32_dma_mode",
+                  "$description": "DMA mode",
+                  "$values": [
+                    "DMA_NORMAL_MODE",
+                    "DMA_CIRCULAR_MODE"
+                  ],
+                  "$default": "DMA_NORMAL_MODE",
+                  "value": null,
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/stm32/stm32_dma.h"
+                    ]
+                  }
+                }
+              },
+              "onepulse_enable": {
+                "$type": "bool",
+                "value": null,
+                "$description": "Enable one-pulse mode"
+              }
+            }
+          }
+        }
+      },
+      "i2c_init": {
+        "$type": "struct",
+        "$struct_type": "no_os_i2c_init_param",
+        "$description": "I2C initialization parameters (for AD5593R variant)",
+        "$sources": {
+          "headers": [
+            "include/no_os_i2c.h"
+          ]
+        },
+        "device_id": {
+          "$type": "uint32_t",
+          "value": null,
+          "$description": "I2C peripheral device ID"
+        },
+        "max_speed_hz": {
+          "$type": "uint32_t",
+          "value": null,
+          "$description": "Maximum I2C clock frequency in Hz"
+        },
+        "slave_address": {
+          "$type": "uint8_t",
+          "value": null,
+          "$description": "I2C slave device address"
+        },
+        "platform_ops": {
+          "$type": "platform_ops",
+          "$target": "no_os_i2c_platform_ops",
+          "$description": "Platform-specific I2C operations",
+          "$sources": {
+            "headers": [],
+            "sources": [],
+            "api": {
+              "headers": [
+                "no_os_i2c.h"
+              ],
+              "sources": [
+                "no_os_i2c.c"
+              ]
+            },
+            "platform": {
+              "headers": [
+                "stm32_i2c.h"
+              ],
+              "sources": [
+                "stm32_i2c.c"
+              ]
+            }
+          },
+          "$resolved": {
+            "platform": "stm32",
+            "symbol": "stm32_i2c_ops"
+          },
+          "value": null
+        },
+        "extra": {
+          "$type": "platform_extra",
+          "$note": "No platform-specific init param for stm32",
+          "$resolved": null
+        }
+      },
+      "ss_init": {
+        "$type": "struct",
+        "$struct_type": "no_os_gpio_init_param",
+        "$description": "Slave select GPIO initialization parameters",
+        "$sources": {
+          "headers": [
+            "include/no_os_gpio.h"
+          ]
+        },
+        "port": {
+          "$type": "int32_t",
+          "value": null,
+          "$description": "Port number"
+        },
+        "number": {
+          "$type": "int32_t",
+          "value": null,
+          "$required": true,
+          "$description": "GPIO number"
+        },
+        "pull": {
+          "$type": "enum",
+          "$enum_type": "no_os_gpio_pull_up",
+          "$description": "Pull up/down resistor configuration",
+          "$values": [
+            "NO_OS_PULL_NONE",
+            "NO_OS_PULL_UP",
+            "NO_OS_PULL_DOWN",
+            "NO_OS_PULL_UP_WEAK",
+            "NO_OS_PULL_DOWN_WEAK"
+          ],
+          "$default": "NO_OS_PULL_NONE",
+          "value": null,
+          "$sources": {
+            "headers": [
+              "include/no_os_gpio.h"
+            ]
+          }
+        },
+        "platform_ops": {
+          "$type": "platform_ops",
+          "$target": "no_os_gpio_platform_ops",
+          "$description": "Platform-specific GPIO operations",
+          "$sources": {
+            "headers": [],
+            "sources": [],
+            "api": {
+              "headers": [
+                "no_os_gpio.h"
+              ],
+              "sources": [
+                "no_os_gpio.c"
+              ]
+            },
+            "platform": {
+              "headers": [
+                "stm32_gpio.h"
+              ],
+              "sources": [
+                "stm32_gpio.c"
+              ]
+            }
+          },
+          "$resolved": {
+            "platform": "stm32",
+            "symbol": "stm32_gpio_ops"
+          },
+          "value": null
+        },
+        "extra": {
+          "$type": "platform_extra",
+          "$struct_type": "stm32_gpio_init_param",
+          "$description": "Platform-specific initialization parameters",
+          "$sources": {
+            "headers": [
+              "drivers/platform/stm32/stm32_gpio.h"
+            ]
+          },
+          "mode": {
+            "$type": "uint32_t",
+            "value": null,
+            "$description": "GPIO output mode"
+          },
+          "speed": {
+            "$type": "uint32_t",
+            "value": null,
+            "$description": "GPIO speed grade"
+          },
+          "alternate": {
+            "$type": "uint32_t",
+            "value": null,
+            "$description": "GPIO alternate functionality"
+          }
+        }
+      },
+      "channel_modes": {
+        "$type": "array",
+        "value": [
+          "CH_MODE_DAC",
+          "CH_MODE_DAC",
+          "CH_MODE_DAC",
+          "CH_MODE_DAC",
+          "CH_MODE_ADC",
+          "CH_MODE_ADC",
+          "CH_MODE_ADC",
+          "CH_MODE_ADC"
+        ],
+        "$description": "Mode configuration for each of the 8 channels"
+      },
+      "channel_offstate": {
+        "$type": "array",
+        "value": [
+          "CH_OFFSTATE_PULLDOWN",
+          "CH_OFFSTATE_PULLDOWN",
+          "CH_OFFSTATE_PULLDOWN",
+          "CH_OFFSTATE_PULLDOWN",
+          "CH_OFFSTATE_PULLDOWN",
+          "CH_OFFSTATE_PULLDOWN",
+          "CH_OFFSTATE_PULLDOWN",
+          "CH_OFFSTATE_PULLDOWN"
+        ],
+        "$description": "Off-state configuration for each of the 8 channels"
+      },
+      "adc_range": {
+        "$type": "enum",
+        "$enum_type": "ad559xr_range",
+        "$description": "ADC input voltage range",
+        "$values": [
+          "ZERO_TO_VREF",
+          "ZERO_TO_2VREF"
+        ],
+        "$default": "ZERO_TO_VREF",
+        "value": "ZERO_TO_VREF",
+        "$sources": {
+          "headers": [
+            "drivers/adc-dac/ad5592r/ad5592r-base.h"
+          ]
+        }
+      },
+      "dac_range": {
+        "$type": "enum",
+        "$enum_type": "ad559xr_range",
+        "$description": "DAC output voltage range",
+        "$values": [
+          "ZERO_TO_VREF",
+          "ZERO_TO_2VREF"
+        ],
+        "$default": "ZERO_TO_VREF",
+        "value": "ZERO_TO_VREF",
+        "$sources": {
+          "headers": [
+            "drivers/adc-dac/ad5592r/ad5592r-base.h"
+          ]
+        }
+      },
+      "adc_buf": {
+        "$type": "bool",
+        "value": true,
+        "$default": false,
+        "$description": "Enable ADC precharge buffer for improved performance"
+      },
+      "power_down": {
+        "$type": "array",
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "$description": "Power down state for each of the 8 channels (0 = enabled, 1 = powered down)"
+      }
+    },
+    "uart": {
+      "$sources": {
+        "headers": [
+          "include/no_os_uart.h"
+        ]
+      },
+      "device_id": {
+        "$type": "uint8_t",
+        "value": 5,
+        "$required": true,
+        "$description": "UART peripheral device ID"
+      },
+      "irq_id": {
+        "$type": "uint32_t",
+        "value": 0,
+        "$description": "UART interrupt ID"
+      },
+      "asynchronous_rx": {
+        "$type": "bool",
+        "value": false,
+        "$default": false,
+        "$description": "If set, the reception is interrupt driven"
+      },
+      "baud_rate": {
+        "$type": "uint32_t",
+        "value": 115200,
+        "$required": true,
+        "$description": "UART baud rate in bits per second"
+      },
+      "size": {
+        "$type": "enum",
+        "$enum_type": "no_os_uart_size",
+        "$description": "UART character size (number of data bits)",
+        "$values": [
+          "NO_OS_UART_CS_5",
+          "NO_OS_UART_CS_6",
+          "NO_OS_UART_CS_7",
+          "NO_OS_UART_CS_8",
+          "NO_OS_UART_CS_9"
+        ],
+        "$default": "NO_OS_UART_CS_8",
+        "value": "NO_OS_UART_CS_8",
+        "$sources": {
+          "headers": [
+            "include/no_os_uart.h"
+          ]
+        }
+      },
+      "parity": {
+        "$type": "enum",
+        "$enum_type": "no_os_uart_parity",
+        "$description": "UART parity configuration",
+        "$values": [
+          "NO_OS_UART_PAR_NO",
+          "NO_OS_UART_PAR_MARK",
+          "NO_OS_UART_PAR_SPACE",
+          "NO_OS_UART_PAR_ODD",
+          "NO_OS_UART_PAR_EVEN"
+        ],
+        "$default": "NO_OS_UART_PAR_NO",
+        "value": "NO_OS_UART_PAR_NO",
+        "$sources": {
+          "headers": [
+            "include/no_os_uart.h"
+          ]
+        }
+      },
+      "stop": {
+        "$type": "enum",
+        "$enum_type": "no_os_uart_stop",
+        "$description": "UART number of stop bits",
+        "$values": [
+          "NO_OS_UART_STOP_1_BIT",
+          "NO_OS_UART_STOP_2_BIT"
+        ],
+        "$default": "NO_OS_UART_STOP_1_BIT",
+        "value": "NO_OS_UART_STOP_1_BIT",
+        "$sources": {
+          "headers": [
+            "include/no_os_uart.h"
+          ]
+        }
+      },
+      "platform_ops": {
+        "$type": "platform_ops",
+        "$target": "no_os_uart_platform_ops",
+        "$description": "Platform-specific UART operations",
+        "$sources": {
+          "headers": [],
+          "sources": [],
+          "api": {
+            "headers": [
+              "no_os_uart.h"
+            ],
+            "sources": [
+              "no_os_uart.c"
+            ]
+          },
+          "platform": {
+            "headers": [
+              "stm32_uart.h"
+            ],
+            "sources": [
+              "stm32_uart.c"
+            ]
+          }
+        },
+        "$resolved": {
+          "platform": "stm32",
+          "symbol": "stm32_uart_ops"
+        },
+        "value": "stm32_uart_ops"
+      },
+      "extra": {
+        "$type": "platform_extra",
+        "$struct_type": "stm32_uart_init_param",
+        "$description": "Platform-specific initialization parameters",
+        "$sources": {
+          "headers": [
+            "drivers/platform/stm32/stm32_uart.h"
+          ]
+        },
+        "huart": {
+          "$type": "external_ptr",
+          "value": "NULL",
+          "$description": "UART instance handle (from STM32 HAL)"
+        },
+        "timeout": {
+          "$type": "uint32_t",
+          "value": null,
+          "$description": "UART transaction timeout (HAL_IncTick() units)"
+        }
+      }
+    }
+  },
+  "makefile": {
+    "$platform": "stm32",
+    "$prefix_map": {
+      "project": "$(PROJECT)/",
+      "driver": "$(DRIVERS)/",
+      "no-os-api": "$(DRIVERS)/api/",
+      "no-os-util": "$(NO-OS)/util/",
+      "no-os": "$(INCLUDE)/",
+      "platform": "$(PLATFORM_DRIVERS)/",
+      "sdk": null
+    },
+    "srcs": {
+      "project": [
+        "src/main.c",
+        "src/user_app.c",
+        "src/common/common_data.c"
+      ],
+      "no-os-util": [
+        "no_os_util.c",
+        "no_os_alloc.c",
+        "no_os_mutex.c",
+        "no_os_list.c",
+        "no_os_lf256fifo.c"
+      ],
+      "platform": [
+        "stm32_delay.c"
+      ]
+    },
+    "incs": {
+      "project": [
+        "src/user_app.h",
+        "src/common/common_data.h"
+      ],
+      "no-os": [
+        "no_os_delay.h",
+        "no_os_error.h",
+        "no_os_util.h",
+        "no_os_alloc.h",
+        "no_os_mutex.h",
+        "no_os_list.h",
+        "no_os_lf256fifo.h",
+        "no_os_print_log.h",
+        "no_os_units.h",
+        "no_os_init.h"
+      ]
+    }
+  }
+}

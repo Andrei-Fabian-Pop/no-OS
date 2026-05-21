@@ -1,0 +1,30 @@
+$id: "devices/adi,ad7124.yaml"
+$type: struct
+$name: ad7124_init_param
+$description: "AD7124 24-bit Sigma-Delta ADC"
+$sources:
+  headers:
+    - "drivers/adc/ad7124/ad7124.h"
+  sources:
+    - "drivers/adc/ad7124/ad7124.c"
+
+active_device:
+  type: enum
+  required: true
+  values: [ID_AD7124_4, ID_AD7124_8]
+  default: ID_AD7124_4
+  description: "Device variant (4 or 8 channels)"
+
+spi_init:
+  include: "no-os/no_os_spi_init_param.yaml"
+  required: true
+  description: "SPI initialization parameters"
+
+ref_en:
+  type: bool
+  default: true
+  description: "Enable internal reference"
+
+power_mode:
+  include: "devices/ad7124-enums/ad7124_power_mode.yaml"
+  description: "Power mode selection"

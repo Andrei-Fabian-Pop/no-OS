@@ -3,9 +3,9 @@ $type: enum
 $name: mxc_gpio_vssel_t
 $description: "Maxim MAX32690 GPIO voltage select options"
 $sources:
-  headers:
-    - "gpio.h"
-  note: "Defined in Maxim SDK, not no-OS"
+  sdk:
+    headers:
+      - "gpio.h"
 
 values:
   MXC_GPIO_VSSEL_VDDIO:
