@@ -92,6 +92,21 @@ const styles = {
     fontSize: '14px',
     fontFamily: 'monospace',
   },
+  unconfigureBtn: {
+    background: 'none',
+    border: '1px solid #ccc',
+    borderRadius: '3px',
+    padding: '2px 6px',
+    fontSize: '11px',
+    color: '#666',
+    cursor: 'pointer',
+    marginLeft: '8px',
+  },
+  fieldRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
 };
 
 // Check if a field or any of its children have a value set
@@ -122,6 +137,20 @@ export function FieldRenderer({
   disabledReason,
 }: FieldRendererProps) {
   const [collapsed, setCollapsed] = useState(false);
+  // Track which array elements are expanded (default: all collapsed)
+  const [expandedElements, setExpandedElements] = useState<Set<number>>(new Set());
+
+  const toggleElement = (index: number) => {
+    setExpandedElements(prev => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
 
   const type = field.$type;
   const value = field.value;
@@ -147,15 +176,26 @@ export function FieldRenderer({
       const hasValue = currentValue !== null && currentValue !== undefined;
       return (
         <div style={styles.field}>
-          <label style={styles.label}>
-            {name}
-            {isRequired && <span style={styles.required}>*required</span>}
-            {!hasValue && field.$default && (
-              <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
-                (default: {String(field.$default)})
-              </span>
+          <div style={styles.fieldRow}>
+            <label style={{ ...styles.label, marginBottom: 0 }}>
+              {name}
+              {isRequired && <span style={styles.required}>*required</span>}
+              {!hasValue && field.$default !== undefined && (
+                <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
+                  (default: {String(field.$default)})
+                </span>
+              )}
+            </label>
+            {hasValue && (
+              <button
+                style={styles.unconfigureBtn}
+                onClick={() => updateValue(path, null)}
+                title="Reset to unconfigured"
+              >
+                ✕ clear
+              </button>
             )}
-          </label>
+          </div>
           {description && <div style={styles.description}>{description}</div>}
           <select
             style={styles.select}
@@ -183,15 +223,26 @@ export function FieldRenderer({
       const hasValue = value !== null && value !== undefined;
       return (
         <div style={styles.field}>
-          <label style={styles.label}>
-            {name}
-            {isRequired && <span style={styles.required}>*required</span>}
-            {!hasValue && field.$default !== undefined && (
-              <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
-                (default: {String(field.$default)})
-              </span>
+          <div style={styles.fieldRow}>
+            <label style={{ ...styles.label, marginBottom: 0 }}>
+              {name}
+              {isRequired && <span style={styles.required}>*required</span>}
+              {!hasValue && field.$default !== undefined && (
+                <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
+                  (default: {String(field.$default)})
+                </span>
+              )}
+            </label>
+            {hasValue && (
+              <button
+                style={styles.unconfigureBtn}
+                onClick={() => updateValue(path, null)}
+                title="Reset to unconfigured"
+              >
+                ✕ clear
+              </button>
             )}
-          </label>
+          </div>
           {description && <div style={styles.description}>{description}</div>}
           <input
             type="number"
@@ -212,21 +263,32 @@ export function FieldRenderer({
       const isChecked = hasValue ? value === true : false;
       return (
         <div style={styles.field}>
-          <label style={{ ...styles.label, cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              style={styles.checkbox}
-              checked={isChecked}
-              onChange={(e) => updateValue(path, e.target.checked)}
-            />
-            {name}
-            {isRequired && <span style={styles.required}>*required</span>}
-            {!hasValue && field.$default !== undefined && (
-              <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
-                (default: {String(field.$default)})
-              </span>
+          <div style={styles.fieldRow}>
+            <label style={{ ...styles.label, cursor: 'pointer', marginBottom: 0 }}>
+              <input
+                type="checkbox"
+                style={styles.checkbox}
+                checked={isChecked}
+                onChange={(e) => updateValue(path, e.target.checked)}
+              />
+              {name}
+              {isRequired && <span style={styles.required}>*required</span>}
+              {!hasValue && field.$default !== undefined && (
+                <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
+                  (default: {String(field.$default)})
+                </span>
+              )}
+            </label>
+            {hasValue && (
+              <button
+                style={styles.unconfigureBtn}
+                onClick={() => updateValue(path, null)}
+                title="Reset to unconfigured"
+              >
+                ✕ clear
+              </button>
             )}
-          </label>
+          </div>
           {description && <div style={styles.description}>{description}</div>}
         </div>
       );
@@ -415,6 +477,100 @@ export function FieldRenderer({
                     disabled={false}
                   />
                 ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    case 'array': {
+      const elements = field.$elements as ConfigField[] || [];
+      const elementType = field.$element_type as string || 'unknown';
+      const size = field.$size as number || elements.length;
+
+      return (
+        <div style={styles.field}>
+          <div
+            style={styles.structHeader}
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            <span style={{
+              ...styles.expandIcon,
+              transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)'
+            }}>▼</span>
+            <span style={{ fontWeight: 'bold' }}>{name}</span>
+            <span style={{ color: '#666', fontSize: '12px' }}>
+              [{size}] {elementType}
+            </span>
+          </div>
+          {description && <div style={styles.description}>{description}</div>}
+          {!collapsed && (
+            <div style={styles.struct}>
+              {elements.map((element, index) => {
+                // Check if this element has any configured values
+                const elementHasValues = hasAnyValue(element);
+                const isElementExpanded = expandedElements.has(index);
+
+                return (
+                  <div key={index} style={{ marginBottom: '10px' }}>
+                    <div
+                      style={{
+                        ...styles.structHeader,
+                        background: elementHasValues ? '#e8f5e9' : '#f5f5f5',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        marginBottom: '5px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => toggleElement(index)}
+                    >
+                      <span style={{
+                        ...styles.expandIcon,
+                        transform: isElementExpanded ? 'rotate(0deg)' : 'rotate(-90deg)'
+                      }}>▼</span>
+                      <span style={{ fontWeight: 'bold', color: '#333' }}>
+                        [{index}]
+                      </span>
+                      {elementHasValues && (
+                        <span style={{ color: '#28a745', fontSize: '11px', marginLeft: '8px' }}>
+                          ● configured
+                        </span>
+                      )}
+                    </div>
+                    {isElementExpanded && (element.$type === 'struct' || element.$struct_type) ? (
+                      <div style={{ ...styles.struct, marginTop: 0 }}>
+                        {Object.entries(element)
+                          .filter(([key]) => !key.startsWith('$') && key !== 'value')
+                          .map(([key, childField]) => (
+                            <FieldRenderer
+                              key={key}
+                              name={key}
+                              field={childField as ConfigField}
+                              path={[...path, '$elements', String(index), key]}
+                              deviceId={deviceId}
+                              updateValue={updateValue}
+                              getValueAtPath={getValueAtPath}
+                              getFieldAtPath={getFieldAtPath}
+                              disabled={false}
+                            />
+                          ))}
+                      </div>
+                    ) : isElementExpanded ? (
+                      // Primitive or enum element
+                      <FieldRenderer
+                        name={`[${index}]`}
+                        field={element}
+                        path={[...path, '$elements', String(index)]}
+                        deviceId={deviceId}
+                        updateValue={updateValue}
+                        getValueAtPath={getValueAtPath}
+                        getFieldAtPath={getFieldAtPath}
+                        disabled={false}
+                      />
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

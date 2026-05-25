@@ -97,16 +97,27 @@ function getMutexDisabledReason(
 
 export function ConfigForm({ config, onChange }: ConfigFormProps) {
   const updateValue = (deviceId: string, path: string[], value: unknown) => {
+    console.log('updateValue called:', { deviceId, path, value });
     const newConfig = JSON.parse(JSON.stringify(config)) as Configuration;
     let current: Record<string, unknown> = newConfig.configuration[deviceId] as Record<string, unknown>;
 
     for (let i = 0; i < path.length - 1; i++) {
-      current = current[path[i]] as Record<string, unknown>;
+      const key = path[i];
+      console.log(`  traversing path[${i}] = "${key}", current keys:`, Object.keys(current));
+      if (current[key] === undefined) {
+        console.error(`  ERROR: key "${key}" not found!`);
+        return;
+      }
+      current = current[key] as Record<string, unknown>;
     }
 
     const lastKey = path[path.length - 1];
+    console.log(`  lastKey = "${lastKey}", current[lastKey]:`, current[lastKey]);
     if (current[lastKey] && typeof current[lastKey] === 'object') {
       (current[lastKey] as Record<string, unknown>).value = value;
+      console.log('  value set successfully');
+    } else {
+      console.error('  ERROR: target field not found or not an object');
     }
 
     onChange(newConfig);

@@ -5,6 +5,8 @@ $description: "Structure holding the parameters for SPI initialization"
 $sources:
   headers:
     - "include/no_os_spi.h"
+  sources:
+    - "drivers/api/no_os_spi.c"
 
 device_id:
   type: uint32_t

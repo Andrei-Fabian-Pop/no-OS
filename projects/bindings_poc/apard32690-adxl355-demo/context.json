@@ -9,5 +9,7 @@
       "name": "adi,adxl355"
     }
   ],
-  "extra_init": ["uart"]
+  "extra_init": [
+    "uart"
+  ]
 }

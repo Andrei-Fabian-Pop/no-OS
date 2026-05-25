@@ -7,6 +7,14 @@ $sources:
     - "drivers/temperature/adt7420/adt7420.h"
   sources:
     - "drivers/temperature/adt7420/adt7420.c"
+  api:
+    headers:
+      - "no_os_i2c.h"
+      - "no_os_spi.h"
+    sources:
+      - "no_os_i2c.c"
+      - "no_os_spi.c"
+  $note: "Driver header includes both I2C and SPI regardless of interface selection"
 
 active_device:
   type: enum

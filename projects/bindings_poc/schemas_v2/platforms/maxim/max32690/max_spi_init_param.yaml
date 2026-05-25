@@ -20,7 +20,8 @@ vssel:
 
 dma_param:
   include: "no-os/no_os_dma_init_param.yaml"
-  description: "DMA initialization parameters"
+  pointer: true
+  description: "DMA initialization parameters (pointer to DMA init struct, NULL if not used)"
 
 dma_rx_priority:
   type: uint32_t
@@ -32,11 +33,16 @@ dma_tx_priority:
 
 $override:
   $parent:
+    - device_id:
+        default: 4
+
     - max_speed_hz:
+        default: 1000000
         minimum: 0
         maximum: 1_000_000
 
     - chip_select:
+      default: 0
       maximum: 4
 
     - $if:

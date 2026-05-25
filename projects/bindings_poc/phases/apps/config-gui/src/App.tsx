@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Configuration, DEVICES, PLATFORMS, DeviceInfo, PlatformInfo } from './types/configuration';
 import { ConfigForm } from './components/ConfigForm';
 
@@ -110,10 +110,18 @@ function App() {
   const [device, setDevice] = useState<DeviceInfo>(DEVICES[0]);
   const [platform, setPlatform] = useState<PlatformInfo>(PLATFORMS[0]);
   const [config, setConfig] = useState<Configuration | null>(null);
+  const configRef = useRef<Configuration | null>(null);
   const [configPath, setConfigPath] = useState<string | null>(null);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    configRef.current = config;
+  }, [config]);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
   const [output, setOutput] = useState<string>('');
+  const [projectPath, setProjectPath] = useState<string>('/home/andrei-fabian/adi/no-OS/projects/bindings_poc');
+  const [projectName, setProjectName] = useState<string>('');
 
   const generateConfig = useCallback(async () => {
     setLoading(true);
@@ -133,6 +141,7 @@ function App() {
         throw new Error(data.error);
       }
       setConfig(data.configuration);
+      configRef.current = data.configuration;  // Also update ref
       setConfigPath(data.configPath);
       setStatus({ type: 'success', message: `Configuration generated! Saved to: ${data.configPath}` });
       setOutput('');
@@ -143,50 +152,117 @@ function App() {
     }
   }, [device, platform]);
 
-  const updateConfig = useCallback(async () => {
-    if (!config) return;
-    setLoading(true);
-    setStatus({ type: 'info', message: 'Saving configuration...' });
-    try {
-      const response = await fetch('/api/update-config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ configuration: config }),
-      });
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      setStatus({ type: 'success', message: `Configuration saved to: ${data.path}` });
-    } catch (err) {
-      setStatus({ type: 'error', message: `Error: ${err instanceof Error ? err.message : 'Unknown error'}` });
-    } finally {
-      setLoading(false);
+  const generateProject = useCallback(async () => {
+    if (!projectName.trim()) {
+      setStatus({ type: 'error', message: 'Please enter a project name' });
+      return;
     }
-  }, [config]);
+    // Use ref to get the latest config (avoids React async state timing issues)
+    const currentConfig = configRef.current;
+    if (!currentConfig) {
+      setStatus({ type: 'error', message: 'No configuration loaded' });
+      return;
+    }
 
-  const generateMakefile = useCallback(async () => {
+    // Debug: log the config being sent
+    console.log('generateProject - config to send:', JSON.stringify(currentConfig, null, 2).slice(0, 2000));
+
     setLoading(true);
-    setStatus({ type: 'info', message: 'Generating makefile...' });
+    setStatus({ type: 'info', message: 'Saving configuration and generating project...' });
     try {
-      const response = await fetch('/api/generate-makefile', {
+      // Send current config state with the request - it will be saved in the project
+      const response = await fetch('/api/generate-project', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectPath,
+          projectName: projectName.trim(),
+          configuration: currentConfig  // Include current config state from ref
+        }),
       });
       const data = await response.json();
       if (data.error) {
         throw new Error(data.error);
       }
-      setOutput(data.makefile);
-      setStatus({ type: 'success', message: `Makefile generated! Saved to: ${data.makefilePath}` });
+      setStatus({ type: 'success', message: `Project generated at: ${data.path}` });
+      setOutput(`Generated files:\n${data.files.map((f: string) => `  - ${f}`).join('\n')}`);
     } catch (err) {
       setStatus({ type: 'error', message: `Error: ${err instanceof Error ? err.message : 'Unknown error'}` });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [projectPath, projectName]);
+
+  const [buildStage, setBuildStage] = useState<string>('');
+
+  const buildAndFlash = useCallback(async () => {
+    if (!projectName.trim()) {
+      setStatus({ type: 'error', message: 'Please enter a project name' });
+      return;
+    }
+    const fullPath = `${projectPath}/${projectName.trim()}`;
+    setLoading(true);
+    setBuildStage('clean');
+    setStatus({ type: 'info', message: 'Cleaning...' });
+    setOutput('');
+
+    // Simulate stage updates (since we can't get real-time feedback easily)
+    const stageTimer = setInterval(() => {
+      setBuildStage(prev => {
+        if (prev === 'clean') {
+          setStatus({ type: 'info', message: 'Building...' });
+          return 'build';
+        } else if (prev === 'build') {
+          setStatus({ type: 'info', message: 'Flashing...' });
+          return 'flash';
+        }
+        return prev;
+      });
+    }, 3000);
+
+    try {
+      const response = await fetch('/api/build-and-flash', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectPath: fullPath }),
+      });
+      clearInterval(stageTimer);
+
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        // Response wasn't JSON - show raw text
+        setOutput(text || 'No response from server');
+        setBuildStage('error');
+        setStatus({ type: 'error', message: 'Server returned invalid response' });
+        return;
+      }
+
+      if (data.output) {
+        setOutput(data.output);
+      }
+      if (!response.ok || data.error) {
+        setBuildStage('error');
+        setStatus({ type: 'error', message: data.error || 'Build failed' });
+      } else {
+        setBuildStage('done');
+        setStatus({ type: 'success', message: 'Build & Flash complete!' });
+      }
+    } catch (err) {
+      clearInterval(stageTimer);
+      setBuildStage('error');
+      setStatus({ type: 'error', message: `Failed: ${err instanceof Error ? err.message : 'Unknown error'}` });
+    } finally {
+      setLoading(false);
+    }
+  }, [projectPath, projectName]);
 
   const handleConfigChange = useCallback((newConfig: Configuration) => {
+    console.log('handleConfigChange called - newConfig snippet:',
+      JSON.stringify(newConfig.configuration?.['adi,ad7124']?.['power_mode'] || 'no power_mode', null, 2));
+    configRef.current = newConfig;  // Update ref immediately
     setConfig(newConfig);
   }, []);
 
@@ -244,21 +320,62 @@ function App() {
         >
           Generate Configuration
         </button>
-        <button
-          style={{ ...styles.button, ...styles.secondaryButton, ...(loading || !config ? styles.disabledButton : {}) }}
-          onClick={updateConfig}
-          disabled={loading || !config}
-        >
-          Save Configuration
-        </button>
-        <button
-          style={{ ...styles.button, ...styles.successButton, ...(loading || !config ? styles.disabledButton : {}) }}
-          onClick={generateMakefile}
-          disabled={loading || !config}
-        >
-          Generate Makefile
-        </button>
       </div>
+
+      {config && (
+        <div style={{
+          background: '#f8f9fa',
+          padding: '15px',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          border: '1px solid #dee2e6'
+        }}>
+          <h3 style={{ margin: '0 0 15px 0', fontSize: '16px' }}>Generate Project</h3>
+          <div style={{ display: 'flex', gap: '15px', marginBottom: '10px' }}>
+            <div style={{ flex: 2 }}>
+              <label style={styles.label}>Project Path</label>
+              <input
+                type="text"
+                style={{ ...styles.select, padding: '8px' }}
+                value={projectPath}
+                onChange={(e) => setProjectPath(e.target.value)}
+                placeholder="/path/to/projects"
+              />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={styles.label}>Project Name</label>
+              <input
+                type="text"
+                style={{ ...styles.select, padding: '8px' }}
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                placeholder={`${device.id.replace('adi,', '')}-${platform.id}-demo`}
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '10px', alignItems: 'center' }}>
+            <button
+              style={{ ...styles.button, background: '#17a2b8', color: 'white', ...(loading || !config ? styles.disabledButton : {}) }}
+              onClick={generateProject}
+              disabled={loading || !config}
+            >
+              Save &amp; Generate Project
+            </button>
+            <button
+              style={{ ...styles.button, background: '#fd7e14', color: 'white', ...(loading || !projectName.trim() ? styles.disabledButton : {}) }}
+              onClick={buildAndFlash}
+              disabled={loading || !projectName.trim()}
+            >
+              {loading && buildStage ? (
+                buildStage === 'clean' ? '🧹 Cleaning...' :
+                buildStage === 'build' ? '🔨 Building...' :
+                buildStage === 'flash' ? '⚡ Flashing...' :
+                'Build & Flash'
+              ) : 'Build & Flash'}
+            </button>
+          </div>
+        </div>
+      )}
 
       {status && (
         <div style={{

@@ -22,7 +22,9 @@ SRCS += $(PLATFORM_DRIVERS)/maxim_delay.c \
 	$(PLATFORM_DRIVERS)/../common/maxim_dma.c \
 	$(PLATFORM_DRIVERS)/maxim_irq.c \
 	$(PLATFORM_DRIVERS)/maxim_uart.c \
-	$(PLATFORM_DRIVERS)/maxim_uart_stdio.c
+	$(PLATFORM_DRIVERS)/maxim_uart_stdio.c \
+	$(PLATFORM_DRIVERS)/maxim_gpio_irq.c \
+	$(PLATFORM_DRIVERS)/maxim_gpio.c
 
 # driver
 SRCS += $(DRIVERS)/accel/adxl355/adxl355.c
@@ -32,7 +34,8 @@ SRCS += $(DRIVERS)/api/no_os_i2c.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_dma.c \
 	$(DRIVERS)/api/no_os_irq.c \
-	$(DRIVERS)/api/no_os_uart.c
+	$(DRIVERS)/api/no_os_uart.c \
+	$(DRIVERS)/api/no_os_gpio.c
 
 # Includes
 # project
@@ -54,7 +57,8 @@ INCS += $(INCLUDE)/no_os_delay.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_dma.h \
 	$(INCLUDE)/no_os_irq.h \
-	$(INCLUDE)/no_os_uart.h
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_gpio.h
 
 # driver
 INCS += $(DRIVERS)/accel/adxl355/adxl355.h
@@ -64,4 +68,6 @@ INCS += $(PLATFORM_DRIVERS)/maxim_spi.h \
 	$(PLATFORM_DRIVERS)/../common/maxim_dma.h \
 	$(PLATFORM_DRIVERS)/maxim_irq.h \
 	$(PLATFORM_DRIVERS)/maxim_uart.h \
-	$(PLATFORM_DRIVERS)/maxim_uart_stdio.h
+	$(PLATFORM_DRIVERS)/maxim_uart_stdio.h \
+	$(PLATFORM_DRIVERS)/maxim_gpio.h \
+	$(PLATFORM_DRIVERS)/maxim_gpio_irq.h

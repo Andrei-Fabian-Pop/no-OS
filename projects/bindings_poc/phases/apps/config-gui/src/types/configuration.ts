@@ -15,6 +15,10 @@ export interface ConfigField {
     headers?: string[];
     sources?: string[];
   };
+  // Array support
+  $size?: number;
+  $element_type?: string;
+  $elements?: ConfigField[];
   value?: unknown;
   [key: string]: unknown;
 }

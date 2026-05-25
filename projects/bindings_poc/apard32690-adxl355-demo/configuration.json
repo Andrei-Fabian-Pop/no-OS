@@ -1,0 +1,685 @@
+{
+  "configuration": {
+    "adi,adxl355": {
+      "$sources": {
+        "headers": [
+          "drivers/accel/adxl355/adxl355.h"
+        ],
+        "sources": [
+          "drivers/accel/adxl355/adxl355.c"
+        ],
+        "api": {
+          "headers": [
+            "no_os_i2c.h",
+            "no_os_spi.h"
+          ],
+          "sources": [
+            "no_os_i2c.c",
+            "no_os_spi.c"
+          ]
+        },
+        "$note": "Driver header includes both I2C and SPI regardless of comm_type selection"
+      },
+      "comm_type": {
+        "$type": "enum",
+        "$required": true,
+        "$values": [
+          "ADXL355_SPI_COMM",
+          "ADXL355_I2C_COMM"
+        ],
+        "$default": "ADXL355_SPI_COMM",
+        "$description": "Communication interface type (SPI or I2C)",
+        "value": "ADXL355_SPI_COMM"
+      },
+      "dev_type": {
+        "$type": "enum",
+        "$required": true,
+        "$values": [
+          "ID_ADXL355",
+          "ID_ADXL357",
+          "ID_ADXL359"
+        ],
+        "$default": "ID_ADXL355",
+        "$description": "Device variant identifier",
+        "value": "ID_ADXL355"
+      },
+      "comm_init": {
+        "$type": "union",
+        "$selector": "comm_type",
+        "$description": "Communication initialization parameters",
+        "$required": true,
+        "$members": {
+          "ADXL355_SPI_COMM": {
+            "spi_init": {
+              "$type": "struct",
+              "$struct_type": "no_os_spi_init_param",
+              "$description": "SPI initialization parameters",
+              "$sources": {
+                "headers": [
+                  "include/no_os_spi.h"
+                ],
+                "sources": [
+                  "drivers/api/no_os_spi.c"
+                ]
+              },
+              "device_id": {
+                "$type": "uint32_t",
+                "value": 4,
+                "$required": true,
+                "$description": "SPI peripheral device ID"
+              },
+              "max_speed_hz": {
+                "$type": "uint32_t",
+                "value": 1000000,
+                "$description": "Maximum SPI clock frequency in Hz"
+              },
+              "chip_select": {
+                "$type": "uint8_t",
+                "value": 0,
+                "$required": true,
+                "$description": "Chip select line number"
+              },
+              "mode": {
+                "$type": "enum",
+                "$enum_type": "no_os_spi_mode",
+                "$description": "SPI mode (clock polarity and phase)",
+                "$values": [
+                  "NO_OS_SPI_MODE_0",
+                  "NO_OS_SPI_MODE_1",
+                  "NO_OS_SPI_MODE_2",
+                  "NO_OS_SPI_MODE_3"
+                ],
+                "$default": "NO_OS_SPI_MODE_0",
+                "value": "NO_OS_SPI_MODE_0",
+                "$sources": {
+                  "headers": [
+                    "include/no_os_spi.h"
+                  ]
+                }
+              },
+              "bit_order": {
+                "$type": "enum",
+                "$enum_type": "no_os_spi_bit_order",
+                "$description": "Bit order (MSB or LSB first)",
+                "$values": [
+                  "NO_OS_SPI_BIT_ORDER_MSB_FIRST",
+                  "NO_OS_SPI_BIT_ORDER_LSB_FIRST"
+                ],
+                "$default": "NO_OS_SPI_BIT_ORDER_MSB_FIRST",
+                "value": null,
+                "$sources": {
+                  "headers": [
+                    "include/no_os_spi.h"
+                  ]
+                }
+              },
+              "platform_ops": {
+                "$type": "platform_ops",
+                "$target": "no_os_spi_platform_ops",
+                "$description": "Platform-specific SPI operations",
+                "$sources": {
+                  "headers": [],
+                  "sources": [],
+                  "api": {
+                    "headers": [
+                      "no_os_spi.h",
+                      "no_os_dma.h",
+                      "no_os_irq.h"
+                    ],
+                    "sources": [
+                      "no_os_spi.c",
+                      "no_os_dma.c",
+                      "no_os_irq.c"
+                    ]
+                  },
+                  "platform": {
+                    "headers": [
+                      "maxim_spi.h",
+                      "../common/maxim_dma.h",
+                      "maxim_irq.h"
+                    ],
+                    "sources": [
+                      "maxim_spi.c",
+                      "../common/maxim_dma.c",
+                      "maxim_irq.c"
+                    ]
+                  },
+                  "sdk": {
+                    "headers": [
+                      "spi.h",
+                      "gpio.h",
+                      "dma.h"
+                    ]
+                  }
+                },
+                "$resolved": {
+                  "platform": "maxim",
+                  "symbol": "max_spi_ops"
+                },
+                "value": null
+              },
+              "extra": {
+                "$type": "platform_extra",
+                "$struct_type": "max_spi_init_param",
+                "$description": "Platform-specific initialization parameters",
+                "$sources": {
+                  "headers": [
+                    "drivers/platform/maxim/max32690/maxim_spi.h"
+                  ]
+                },
+                "$override": {
+                  "$parent": {
+                    "0": {
+                      "max_speed_hz": {
+                        "minimum": 0,
+                        "maximum": "1_000_000"
+                      }
+                    },
+                    "1": {
+                      "chip_select": null,
+                      "maximum": 4
+                    },
+                    "2": {
+                      "$if": {
+                        "device_id": {
+                          "value": 1
+                        }
+                      },
+                      "$then": {
+                        "chip_select": {
+                          "maximum": 3
+                        }
+                      }
+                    },
+                    "3": {
+                      "$switch": {
+                        "$on": "device_id",
+                        "$cases": {
+                          "0": {
+                            "chip_select": {
+                              "maximum": 3
+                            }
+                          },
+                          "1": {
+                            "chip_select": {
+                              "maximum": 4
+                            }
+                          },
+                          "2": {
+                            "chip_select": {
+                              "maximum": 4
+                            }
+                          },
+                          "3": {
+                            "chip_select": {
+                              "maximum": 4
+                            }
+                          },
+                          "_": {
+                            "chip_select": {
+                              "maximum": 4
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "num_slaves": {
+                  "$type": "uint32_t",
+                  "value": 1,
+                  "$description": "Number of slaves"
+                },
+                "polarity": {
+                  "$type": "enum",
+                  "$enum_type": "spi_ss_polarity",
+                  "$description": "Slave select polarity",
+                  "$values": [
+                    "SPI_SS_POL_LOW",
+                    "SPI_SS_POL_HIGH"
+                  ],
+                  "$default": "SPI_SS_POL_LOW",
+                  "value": "SPI_SS_POL_LOW",
+                  "$sources": {
+                    "headers": [
+                      "drivers/platform/maxim/max32690/maxim_spi.h"
+                    ]
+                  }
+                },
+                "vssel": {
+                  "$type": "enum",
+                  "$enum_type": "mxc_gpio_vssel_t",
+                  "$description": "GPIO voltage select",
+                  "$values": [
+                    "MXC_GPIO_VSSEL_VDDIO",
+                    "MXC_GPIO_VSSEL_VDDIOH"
+                  ],
+                  "$default": "MXC_GPIO_VSSEL_VDDIO",
+                  "value": "MXC_GPIO_VSSEL_VDDIOH",
+                  "$sources": {
+                    "sdk": {
+                      "headers": [
+                        "gpio.h"
+                      ]
+                    }
+                  }
+                },
+                "dma_param": {
+                  "$type": "struct",
+                  "$struct_type": "no_os_dma_init_param",
+                  "$description": "DMA initialization parameters (pointer to DMA init struct, NULL if not used)",
+                  "$sources": {
+                    "headers": [
+                      "include/no_os_dma.h",
+                      "include/no_os_irq.h"
+                    ],
+                    "sources": [
+                      "drivers/api/no_os_irq.c"
+                    ]
+                  },
+                  "id": {
+                    "$type": "uint32_t",
+                    "value": null,
+                    "$description": "Unique id of a DMA controller"
+                  },
+                  "num_ch": {
+                    "$type": "uint32_t",
+                    "value": null,
+                    "$description": "The number of channels associated with the controller"
+                  },
+                  "platform_ops": {
+                    "$type": "platform_ops",
+                    "$target": "no_os_dma_platform_ops",
+                    "$description": "Platform specific DMA functions",
+                    "$sources": {
+                      "headers": [],
+                      "sources": [],
+                      "api": {
+                        "headers": [
+                          "no_os_dma.h"
+                        ],
+                        "sources": [
+                          "no_os_dma.c"
+                        ]
+                      },
+                      "platform": {
+                        "headers": [
+                          "../common/maxim_dma.h",
+                          "maxim_irq.h"
+                        ],
+                        "sources": [
+                          "../common/maxim_dma.c",
+                          "maxim_irq.c"
+                        ]
+                      },
+                      "sdk": {
+                        "headers": [
+                          "dma.h"
+                        ]
+                      }
+                    },
+                    "$resolved": {
+                      "platform": "maxim",
+                      "symbol": "max_dma_ops"
+                    },
+                    "value": null
+                  },
+                  "extra": {
+                    "$type": "platform_extra",
+                    "$note": "No platform-specific init param for maxim",
+                    "$resolved": null
+                  },
+                  "sg_handler": {
+                    "$type": "callback_func",
+                    "$signature": "void (*)(void *)",
+                    "$default": "NULL",
+                    "$description": "Optional custom scatter gather callback",
+                    "value": null
+                  },
+                  "ctx": {
+                    "$type": "callback_ctx",
+                    "$default": "NULL",
+                    "$description": "Optional custom parameter for the scatter gather callback",
+                    "value": null
+                  },
+                  "$pointer": true
+                },
+                "dma_rx_priority": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "DMA RX priority"
+                },
+                "dma_tx_priority": {
+                  "$type": "uint32_t",
+                  "value": null,
+                  "$description": "DMA TX priority"
+                }
+              }
+            }
+          },
+          "ADXL355_I2C_COMM": {
+            "i2c_init": {
+              "$type": "struct",
+              "$struct_type": "no_os_i2c_init_param",
+              "$description": "I2C initialization parameters",
+              "$sources": {
+                "headers": [
+                  "include/no_os_i2c.h"
+                ]
+              },
+              "device_id": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "I2C peripheral device ID"
+              },
+              "max_speed_hz": {
+                "$type": "uint32_t",
+                "value": null,
+                "$description": "Maximum I2C clock frequency in Hz"
+              },
+              "slave_address": {
+                "$type": "uint8_t",
+                "value": null,
+                "$description": "I2C slave device address"
+              },
+              "platform_ops": {
+                "$type": "platform_ops",
+                "$target": "no_os_i2c_platform_ops",
+                "$description": "Platform-specific I2C operations",
+                "$sources": {
+                  "headers": [],
+                  "sources": [],
+                  "api": {
+                    "headers": [
+                      "no_os_i2c.h"
+                    ],
+                    "sources": [
+                      "no_os_i2c.c"
+                    ]
+                  },
+                  "platform": {
+                    "headers": [
+                      "maxim_i2c.h"
+                    ],
+                    "sources": [
+                      "maxim_i2c.c"
+                    ]
+                  },
+                  "sdk": {
+                    "headers": [
+                      "i2c.h",
+                      "gpio.h"
+                    ]
+                  }
+                },
+                "$resolved": {
+                  "platform": "maxim",
+                  "symbol": "max_i2c_ops"
+                },
+                "value": null
+              },
+              "extra": {
+                "$type": "platform_extra",
+                "$struct_type": "max_i2c_init_param",
+                "$description": "Platform-specific initialization parameters",
+                "$sources": {
+                  "headers": [
+                    "drivers/platform/maxim/max32690/maxim_i2c.h"
+                  ]
+                },
+                "vssel": {
+                  "$type": "enum",
+                  "$enum_type": "mxc_gpio_vssel_t",
+                  "$description": "GPIO voltage select",
+                  "$values": [
+                    "MXC_GPIO_VSSEL_VDDIO",
+                    "MXC_GPIO_VSSEL_VDDIOH"
+                  ],
+                  "$default": "MXC_GPIO_VSSEL_VDDIO",
+                  "value": null,
+                  "$sources": {
+                    "sdk": {
+                      "headers": [
+                        "gpio.h"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "uart": {
+      "$sources": {
+        "headers": [
+          "include/no_os_uart.h"
+        ]
+      },
+      "device_id": {
+        "$type": "uint8_t",
+        "value": 0,
+        "$required": true,
+        "$description": "UART peripheral device ID"
+      },
+      "irq_id": {
+        "$type": "uint32_t",
+        "value": null,
+        "$description": "UART interrupt ID"
+      },
+      "asynchronous_rx": {
+        "$type": "bool",
+        "value": null,
+        "$default": false,
+        "$description": "If set, the reception is interrupt driven"
+      },
+      "baud_rate": {
+        "$type": "uint32_t",
+        "value": 115200,
+        "$required": true,
+        "$description": "UART baud rate in bits per second"
+      },
+      "size": {
+        "$type": "enum",
+        "$enum_type": "no_os_uart_size",
+        "$description": "UART character size (number of data bits)",
+        "$values": [
+          "NO_OS_UART_CS_5",
+          "NO_OS_UART_CS_6",
+          "NO_OS_UART_CS_7",
+          "NO_OS_UART_CS_8",
+          "NO_OS_UART_CS_9"
+        ],
+        "$default": "NO_OS_UART_CS_8",
+        "value": null,
+        "$sources": {
+          "headers": [
+            "include/no_os_uart.h"
+          ]
+        }
+      },
+      "parity": {
+        "$type": "enum",
+        "$enum_type": "no_os_uart_parity",
+        "$description": "UART parity configuration",
+        "$values": [
+          "NO_OS_UART_PAR_NO",
+          "NO_OS_UART_PAR_MARK",
+          "NO_OS_UART_PAR_SPACE",
+          "NO_OS_UART_PAR_ODD",
+          "NO_OS_UART_PAR_EVEN"
+        ],
+        "$default": "NO_OS_UART_PAR_NO",
+        "value": null,
+        "$sources": {
+          "headers": [
+            "include/no_os_uart.h"
+          ]
+        }
+      },
+      "stop": {
+        "$type": "enum",
+        "$enum_type": "no_os_uart_stop",
+        "$description": "UART number of stop bits",
+        "$values": [
+          "NO_OS_UART_STOP_1_BIT",
+          "NO_OS_UART_STOP_2_BIT"
+        ],
+        "$default": "NO_OS_UART_STOP_1_BIT",
+        "value": null,
+        "$sources": {
+          "headers": [
+            "include/no_os_uart.h"
+          ]
+        }
+      },
+      "platform_ops": {
+        "$type": "platform_ops",
+        "$target": "no_os_uart_platform_ops",
+        "$description": "Platform-specific UART operations",
+        "$sources": {
+          "headers": [],
+          "sources": [],
+          "api": {
+            "headers": [
+              "no_os_uart.h",
+              "no_os_irq.h",
+              "no_os_gpio.h",
+              "no_os_dma.h"
+            ],
+            "sources": [
+              "no_os_uart.c",
+              "no_os_irq.c",
+              "no_os_gpio.c",
+              "no_os_dma.c"
+            ]
+          },
+          "platform": {
+            "headers": [
+              "maxim_uart.h",
+              "maxim_uart_stdio.h",
+              "maxim_irq.h",
+              "maxim_gpio.h",
+              "maxim_gpio_irq.h",
+              "../common/maxim_dma.h"
+            ],
+            "sources": [
+              "maxim_uart.c",
+              "maxim_uart_stdio.c",
+              "maxim_irq.c",
+              "maxim_gpio_irq.c",
+              "maxim_gpio.c",
+              "../common/maxim_dma.c"
+            ]
+          },
+          "sdk": {
+            "headers": [
+              "uart.h",
+              "gpio.h"
+            ]
+          }
+        },
+        "$resolved": {
+          "platform": "maxim",
+          "symbol": "max_uart_ops"
+        },
+        "value": null
+      },
+      "extra": {
+        "$type": "platform_extra",
+        "$struct_type": "max_uart_init_param",
+        "$description": "Platform-specific initialization parameters",
+        "$sources": {
+          "headers": [
+            "drivers/platform/maxim/max32690/maxim_uart.h"
+          ]
+        },
+        "flow": {
+          "$type": "enum",
+          "$enum_type": "max_uart_flow_ctrl",
+          "$description": "UART flow control setting",
+          "$values": [
+            "MAX_UART_FLOW_DIS",
+            "UART_FLOW_LOW",
+            "UART_FLOW_HIGH",
+            "UART_FLOW_EN"
+          ],
+          "$default": "MAX_UART_FLOW_DIS",
+          "value": null,
+          "$sources": {
+            "headers": [
+              "drivers/platform/maxim/max32690/maxim_uart.h"
+            ]
+          }
+        },
+        "vssel": {
+          "$type": "enum",
+          "$enum_type": "mxc_gpio_vssel_t",
+          "$description": "GPIO voltage select",
+          "$values": [
+            "MXC_GPIO_VSSEL_VDDIO",
+            "MXC_GPIO_VSSEL_VDDIOH"
+          ],
+          "$default": "MXC_GPIO_VSSEL_VDDIO",
+          "value": "MXC_GPIO_VSSEL_VDDIOH",
+          "$sources": {
+            "sdk": {
+              "headers": [
+                "gpio.h"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "makefile": {
+    "$platform": "maxim",
+    "$prefix_map": {
+      "project": "$(PROJECT)/",
+      "driver": "$(DRIVERS)/",
+      "no-os-api": "$(DRIVERS)/api/",
+      "no-os-util": "$(NO-OS)/util/",
+      "no-os": "$(INCLUDE)/",
+      "platform": "$(PLATFORM_DRIVERS)/",
+      "sdk": null
+    },
+    "srcs": {
+      "project": [
+        "src/main.c",
+        "src/user_app.c",
+        "src/common/common_data.c"
+      ],
+      "no-os-util": [
+        "no_os_util.c",
+        "no_os_alloc.c",
+        "no_os_mutex.c",
+        "no_os_list.c",
+        "no_os_lf256fifo.c"
+      ],
+      "platform": [
+        "maxim_delay.c",
+        "maxim_init.c"
+      ]
+    },
+    "incs": {
+      "project": [
+        "src/user_app.h",
+        "src/common/common_data.h"
+      ],
+      "no-os": [
+        "no_os_delay.h",
+        "no_os_error.h",
+        "no_os_util.h",
+        "no_os_alloc.h",
+        "no_os_mutex.h",
+        "no_os_list.h",
+        "no_os_lf256fifo.h",
+        "no_os_print_log.h",
+        "no_os_units.h",
+        "no_os_init.h"
+      ]
+    }
+  }
+}

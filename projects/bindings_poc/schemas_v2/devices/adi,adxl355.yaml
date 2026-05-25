@@ -10,9 +10,11 @@ $sources:
   api:
     headers:
       - "no_os_i2c.h"
+      - "no_os_spi.h"
     sources:
       - "no_os_i2c.c"
-  $note: "Driver references I2C functions regardless of comm_type selection"
+      - "no_os_spi.c"
+  $note: "Driver header includes both I2C and SPI regardless of comm_type selection"
 
 comm_type:
   type: enum

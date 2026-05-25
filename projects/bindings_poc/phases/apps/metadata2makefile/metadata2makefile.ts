@@ -96,6 +96,14 @@ function hasValue(node: ConfigNode): boolean {
   return node.value !== undefined && node.value !== null;
 }
 
+// Get effective value (value if set, else $default)
+function getEffectiveValue(node: ConfigNode): unknown {
+  if (node.value !== undefined && node.value !== null) {
+    return node.value;
+  }
+  return node.$default;
+}
+
 // Determine category for a source path based on path structure
 function categorizeSource(sourcePath: string): { category: string; file: string } | null {
   if (sourcePath.startsWith("include/")) {
@@ -104,11 +112,12 @@ function categorizeSource(sourcePath: string): { category: string; file: string 
   if (sourcePath.startsWith("drivers/api/")) {
     return { category: "no-os-api", file: sourcePath.replace("drivers/api/", "") };
   }
-  if (sourcePath.startsWith("drivers/accel/") || sourcePath.startsWith("drivers/adc-dac/")) {
-    return { category: "driver", file: sourcePath.replace("drivers/", "") };
-  }
   if (sourcePath.startsWith("drivers/platform/")) {
     return { category: "platform", file: path.basename(sourcePath) };
+  }
+  // All other drivers/ paths are device drivers
+  if (sourcePath.startsWith("drivers/")) {
+    return { category: "driver", file: sourcePath.replace("drivers/", "") };
   }
   // Platform-relative paths (e.g., "maxim_spi.h")
   if (!sourcePath.includes("/")) {
@@ -229,6 +238,19 @@ function walkConfigurationTree(
     collectFromSourcesDef(node.$sources, collected);
   }
 
+  // For top-level nodes (like uart, devices), always collect platform_ops sources
+  // Being at top-level means the user explicitly requested this peripheral/device
+  if (isTopLevel) {
+    for (const [key, value] of Object.entries(node)) {
+      if (key.startsWith("$")) continue;
+      if (typeof value !== "object" || value === null) continue;
+      const childNode = value as ConfigNode;
+      if (childNode.$type === "platform_ops" && childNode.$sources) {
+        collectFromSourcesDef(childNode.$sources, collected);
+      }
+    }
+  }
+
   // Walk child properties
   for (const [key, value] of Object.entries(node)) {
     if (key.startsWith("$") || key === "value") continue;
@@ -236,29 +258,39 @@ function walkConfigurationTree(
 
     const childNode = value as ConfigNode;
 
-    // Handle union types - walk only the selected member if selector has value
+    // Handle union types - walk the selected member based on effective value (value or default)
     if (childNode.$type === "union" && childNode.$members) {
       const selectorField = childNode.$selector as string;
       const selectorNode = node[selectorField] as ConfigNode | undefined;
 
-      // Only walk union if selector has an explicit value set
-      if (selectorNode && hasValue(selectorNode)) {
-        const selectorValue = selectorNode.value as string;
-        if (childNode.$members[selectorValue]) {
+      // Walk union if selector has an effective value (value or default)
+      if (selectorNode) {
+        const selectorValue = getEffectiveValue(selectorNode) as string;
+        if (selectorValue && childNode.$members[selectorValue]) {
           const activeMember = childNode.$members[selectorValue];
           for (const propNode of Object.values(activeMember)) {
-            walkConfigurationTree(propNode as ConfigNode, collected, false);
+            // Treat selected union member as top-level (it IS being used)
+            walkConfigurationTree(propNode as ConfigNode, collected, true);
           }
         }
       }
       continue;
     }
 
-    // Handle struct types - only walk if they have configured children
+    // Handle struct types - walk if they have configured children OR are required
     if (childNode.$type === "struct" || childNode.$type === "platform_extra") {
-      if (hasAnyConfiguredChild(childNode)) {
+      const isRequired = childNode.$required === true;
+      if (hasAnyConfiguredChild(childNode) || isRequired) {
         if (childNode.$sources) {
           collectFromSourcesDef(childNode.$sources, collected);
+        }
+        // Also collect platform_ops sources - if struct is used, platform impl is needed
+        for (const [childKey, childValue] of Object.entries(childNode)) {
+          if (childKey.startsWith("$")) continue;
+          const grandChild = childValue as ConfigNode;
+          if (grandChild.$type === "platform_ops" && grandChild.$sources) {
+            collectFromSourcesDef(grandChild.$sources, collected);
+          }
         }
         walkConfigurationTree(childNode, collected, false);
       }

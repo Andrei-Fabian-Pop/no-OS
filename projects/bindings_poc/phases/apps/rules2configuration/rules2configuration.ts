@@ -308,6 +308,19 @@ class SchemaExpander {
       result.$override = schema.$override;
     }
 
+    // Embed $pointer for devices that take init_param by pointer
+    if (schema.$pointer) {
+      result.$pointer = schema.$pointer;
+    }
+
+    // Embed custom init/remove function names
+    if (schema.$init_function) {
+      result.$init_function = schema.$init_function;
+    }
+    if (schema.$remove_function) {
+      result.$remove_function = schema.$remove_function;
+    }
+
     // Get all property keys (exclude $ prefixed metadata)
     const propertyKeys = Object.keys(schema).filter(
       (k) => !k.startsWith("$") && k !== "values" && k !== "default" && k !== "platforms"
@@ -383,12 +396,21 @@ class SchemaExpander {
         return this.expandPlatformOpsImpl(includedSchema, prop.description as string | undefined);
       } else if (includedSchema.$type === "struct") {
         const expanded = this.expandStructSchema(includedSchema);
-        return {
+        const result: ExpandedProperty = {
           $type: "struct",
           $struct_type: includedSchema.$name,
           $description: (prop.description as string) || includedSchema.$description,
           ...expanded,
         };
+        // Propagate pointer attribute for struct pointers
+        if (prop.pointer === true) {
+          result.$pointer = true;
+        }
+        // Propagate required attribute
+        if (prop.required === true) {
+          result.$required = true;
+        }
+        return result;
       }
     }
 
@@ -409,6 +431,10 @@ class SchemaExpander {
 
     if (type === "union") {
       return this.expandUnion(prop);
+    }
+
+    if (type === "array") {
+      return this.expandArray(prop);
     }
 
     if (type === "platform_extra") {
@@ -603,12 +629,17 @@ class SchemaExpander {
           if (propWithInclude.include) {
             const includedSchema = this.loadSchema(propWithInclude.include as string);
             const expanded = this.expandStructSchema(includedSchema);
-            expandedMembers[memberKey][propKey] = {
+            const memberResult: ExpandedProperty = {
               $type: "struct",
               $struct_type: includedSchema.$name,
               $description: (propWithInclude.description as string) || includedSchema.$description,
               ...expanded,
             };
+            // Propagate pointer attribute for struct pointers
+            if (propWithInclude.pointer === true) {
+              memberResult.$pointer = true;
+            }
+            expandedMembers[memberKey][propKey] = memberResult;
           } else {
             expandedMembers[memberKey][propKey] = this.expandProperty(
               propValue as Record<string, unknown>
@@ -624,6 +655,45 @@ class SchemaExpander {
       $description: prop.description,
       $required: prop.required,
       $members: expandedMembers,
+    };
+  }
+
+  private expandArray(prop: Record<string, unknown>): ExpandedProperty {
+    const size = prop.size as number;
+    const elementDef = prop.element as Record<string, unknown>;
+
+    if (!size || !elementDef) {
+      return {
+        $type: "array",
+        $error: "Array requires 'size' and 'element' properties",
+      };
+    }
+
+    // Expand the element type once to get its structure
+    const expandedElement = this.expandProperty(elementDef);
+
+    // Create array of expanded elements (deep copy for each)
+    const elements: ExpandedProperty[] = [];
+    for (let i = 0; i < size; i++) {
+      elements.push(JSON.parse(JSON.stringify(expandedElement)));
+    }
+
+    // Determine element type name
+    let elementType: string;
+    if (expandedElement.$struct_type) {
+      elementType = expandedElement.$struct_type as string;
+    } else if (expandedElement.$enum_type) {
+      elementType = expandedElement.$enum_type as string;
+    } else {
+      elementType = expandedElement.$type as string;
+    }
+
+    return {
+      $type: "array",
+      $size: size,
+      $element_type: elementType,
+      $description: prop.description,
+      $elements: elements,
     };
   }
 

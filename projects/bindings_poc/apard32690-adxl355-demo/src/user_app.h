@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   user_app.h
- *   @brief  User application header for APARD32690 + ADXL355 demo.
+ *   @brief  User application header for ADXL355 demo.
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
