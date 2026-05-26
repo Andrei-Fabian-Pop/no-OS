@@ -1,0 +1,10 @@
+$id: "platforms/pico/platform_ops/timer_ops.yaml"
+$type: platform_ops_impl
+$name: pico_timer_ops
+symbol: pico_timer_ops
+$description: "Pico Timer platform ops"
+$sources:
+  headers:
+    - "drivers/platform/pico/pico_timer.h"
+  sources:
+    - "drivers/platform/pico/pico_timer.c"

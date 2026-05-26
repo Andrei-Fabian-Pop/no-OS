@@ -517,6 +517,26 @@ override_types:
 
 # Constraint actions that can be applied in $then or $cases
 constraint_actions:
+  value:
+    type: any
+    description: |
+      Context-dependent behavior:
+      - In $if conditions: matches the property's current value (scalar comparison)
+      - In $then actions with scalar: sets the property's value
+      - In $then actions with array: overrides the enum options to only these values
+    examples:
+      condition: |
+        $if:
+          device_id:
+            value: 0      # Check if device_id equals 0
+      set_value: |
+        $then:
+          device_id:
+            value: 1      # Set device_id to 1
+      override_enum: |
+        $then:
+          spi_tx_pin:
+            value: [SPI0_TX_GP3, SPI0_TX_GP7, SPI0_TX_GP19]  # Restrict enum options
   disabled:
     type: boolean
     description: |
@@ -531,9 +551,9 @@ constraint_actions:
   maximum:
     type: number
     description: Maximum allowed value for numeric properties.
-  allowed_values:
+  platforms:
     type: array
-    description: Restrict property to specific values from the list.
+    description: Override available platform options for platform_ops fields.
 
 # Special match values used in $if conditions
 special_match_values:

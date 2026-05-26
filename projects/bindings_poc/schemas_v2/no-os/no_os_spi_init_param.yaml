@@ -41,6 +41,7 @@ platform_ops:
     - include: "platforms/xilinx/platform_ops/spi_ops.yaml"
     - include: "platforms/xilinx/platform_ops/spi_pl_ops.yaml"
     - include: "platforms/xilinx/platform_ops/spi_engine_ops.yaml"
+    - include: "platforms/pico/platform_ops/spi_ops.yaml"
 
 extra:
   type: platform_extra
@@ -50,3 +51,4 @@ extra:
     - include: "platforms/maxim/max32690/max_spi_init_param.yaml"
     - include: "platforms/stm32/stm32_spi_init_param.yaml"
     - include: "platforms/xilinx/xil_spi_init_param.yaml"
+    - include: "platforms/pico/pico_spi_init_param.yaml"
