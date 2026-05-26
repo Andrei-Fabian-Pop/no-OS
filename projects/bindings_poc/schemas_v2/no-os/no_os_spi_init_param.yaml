@@ -42,6 +42,7 @@ platform_ops:
     - include: "platforms/xilinx/platform_ops/spi_pl_ops.yaml"
     - include: "platforms/xilinx/platform_ops/spi_engine_ops.yaml"
     - include: "platforms/pico/platform_ops/spi_ops.yaml"
+    - include: "platforms/linux/platform_ops/spi_ops.yaml"
 
 extra:
   type: platform_extra

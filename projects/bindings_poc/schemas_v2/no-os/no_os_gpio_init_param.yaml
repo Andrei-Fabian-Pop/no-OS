@@ -26,6 +26,9 @@ platform_ops:
   platforms:
     - include: "platforms/maxim/max32690/platform_ops/gpio_ops.yaml"
     - include: "platforms/stm32/platform_ops/gpio_ops.yaml"
+    - include: "platforms/xilinx/platform_ops/gpio_ops.yaml"
+    - include: "platforms/pico/platform_ops/gpio_ops.yaml"
+    - include: "platforms/linux/platform_ops/gpio_ops.yaml"
 
 extra:
   type: platform_extra
@@ -33,3 +36,4 @@ extra:
   platforms:
     - include: "platforms/maxim/max32690/max_gpio_init_param.yaml"
     - include: "platforms/stm32/stm32_gpio_init_param.yaml"
+    - include: "platforms/xilinx/xil_gpio_init_param.yaml"

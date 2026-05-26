@@ -1,0 +1,10 @@
+$id: "platforms/linux/platform_ops/spi_ops.yaml"
+$type: platform_ops_impl
+$name: linux_spi_ops
+symbol: linux_spi_ops
+$description: "Linux SPI platform ops"
+$sources:
+  headers:
+    - "drivers/platform/linux/linux_spi.h"
+  sources:
+    - "drivers/platform/linux/linux_spi.c"

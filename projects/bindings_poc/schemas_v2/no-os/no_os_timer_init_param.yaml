@@ -32,6 +32,7 @@ platform_ops:
     - include: "platforms/stm32/platform_ops/timer_ops.yaml"
     - include: "platforms/xilinx/platform_ops/timer_ops.yaml"
     - include: "platforms/pico/platform_ops/timer_ops.yaml"
+    - include: "platforms/linux/platform_ops/timer_ops.yaml"
 
 extra:
   type: platform_extra
