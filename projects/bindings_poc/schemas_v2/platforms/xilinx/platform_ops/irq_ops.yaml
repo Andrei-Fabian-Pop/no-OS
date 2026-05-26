@@ -1,0 +1,10 @@
+$id: "platforms/xilinx/platform_ops/irq_ops.yaml"
+$type: platform_ops_impl
+$name: xil_irq_ops
+symbol: xil_irq_ops
+$description: "Xilinx IRQ platform ops"
+$sources:
+  headers:
+    - "drivers/platform/xilinx/xilinx_irq.h"
+  sources:
+    - "drivers/platform/xilinx/xilinx_irq.c"

@@ -293,79 +293,187 @@ special_types:
 # =============================================================================
 # Schemas can define constraints on their properties or relationships between
 # properties using the $override field. This supports conditional constraints,
-# mutual exclusion, and parent property overrides.
+# mutual exclusion, and cross-schema overrides.
+#
+# SCOPE SELECTORS:
+#   $this   - refers to fields in the current schema
+#   $parent - refers to fields in the parent schema (the one that includes this)
+#
+# SCOPE RULES:
+#   1. Inside a $parent: block → all fields implicitly refer to $parent
+#   2. At root of $override array → must use explicit $this/$parent selectors
+#   3. $this is the default selector for conditions if none specified
 
 override_fields:
   $override:
     required: false
-    type: array
+    type: object_or_array
     description: |
-      List of constraint rules applied to this schema's properties.
-      Each array item can be one of the following types:
-        - $if/$then: Conditional constraint
-        - $mutex: Mutual exclusion between properties
-        - $parent: Overrides for parent struct properties
+      Constraint rules for this schema. Can be structured in two ways:
+
+      PATTERN 1: $parent block (all rules target parent)
+        Use when all overrides modify the parent schema.
+        Fields inside implicitly refer to $parent.
+
+        $override:
+          $parent:
+            - device_id:
+                default: 4
+            - $if:
+                device_id:        # implicitly $parent
+                  value: 1
+              $then:
+                chip_select:      # implicitly $parent
+                  maximum: 3
+
+      PATTERN 2: Root-level array (cross-schema rules)
+        Use when rules check $this but modify $parent (or vice versa).
+        Must use explicit $this/$parent selectors.
+
+        $override:
+          - $if:
+              $this:              # explicit selector
+                type:
+                  value: SPI_PS
+            $then:
+              $parent:            # explicit selector
+                platform_ops:
+                  platforms:
+                    - include: "platforms/xilinx/platform_ops/spi_ops.yaml"
+
     items:
       oneOf:
         - $ref: "#/override_types/conditional_if_then"
         - $ref: "#/override_types/mutex"
         - $ref: "#/override_types/switch"
-    example: |
-      $override:
-        - $if:
-            spi_init:
-              value: $any
-          $then:
-            i2c_init:
-              disabled: true
-
-        - $mutex: [spi_init, i2c_init]
+        - $ref: "#/override_types/parent_block"
 
 override_types:
+  # Scope selectors
+  scope_selectors:
+    $this:
+      description: |
+        Refers to fields in the current schema (the one containing $override).
+        This is the default selector for $if conditions when not specified.
+      example: |
+        $if:
+          $this:
+            type:
+              value: SPI_PS
+
+    $parent:
+      description: |
+        Refers to fields in the parent schema (the one that includes this schema
+        via platform_extra or similar inclusion mechanism).
+      example: |
+        $then:
+          $parent:
+            platform_ops:
+              platforms:
+                - include: "platforms/xilinx/platform_ops/spi_ops.yaml"
+
+  # Parent block - scoped container for parent-only rules
+  parent_block:
+    description: |
+      A scoped container where all rules implicitly refer to $parent.
+      Use when all overrides in the schema target the parent.
+    syntax:
+      $parent:
+        type: array
+        description: |
+          Array of rules. All field references inside implicitly refer to
+          the parent schema. No need for explicit $parent selectors.
+    example: |
+      # All rules here target the parent schema
+      $override:
+        $parent:
+          # Simple property overrides
+          - device_id:
+              default: 4
+          - max_speed_hz:
+              default: 1000000
+              minimum: 0
+              maximum: 1_000_000
+
+          # Conditional - both condition and action refer to parent
+          - $if:
+              device_id:          # implicitly $parent
+                value: 1
+            $then:
+              chip_select:        # implicitly $parent
+                maximum: 3
+
   # Conditional overrides - if/then syntax
   conditional_if_then:
     description: |
-      Apply constraints conditionally based on another property's value.
+      Apply constraints conditionally based on a property's value.
       When the condition is true, apply the constraints in $then.
+
+      SCOPE RULES:
+      - Inside $parent: block → fields implicitly refer to $parent
+      - At root of $override → use explicit $this/$parent selectors
+      - $this is default for conditions if no selector specified
     syntax:
       $if:
         type: object
         description: |
-          Condition object. Keys are property names, values are match criteria.
+          Condition object with optional scope selector ($this or $parent).
+          Keys are property names, values are match criteria.
           Special value "$any" matches any non-null value.
         example:
-          spi_init:
-            value: $any
+          $this:
+            type:
+              value: SPI_PS
       $then:
         type: object
         description: |
           Constraints to apply when condition is true.
-          Keys are property names, values are constraint objects.
+          Must include scope selector ($this or $parent) when at root level.
         example:
-          i2c_init:
-            disabled: true
-    example: |
-      # If spi_init has any value set, disable i2c_init
-      - $if:
-          spi_init:
-            value: $any
-        $then:
-          i2c_init:
-            disabled: true
+          $parent:
+            platform_ops:
+              platforms:
+                - include: "platforms/xilinx/platform_ops/spi_ops.yaml"
+    examples:
+      # Cross-schema: check $this, modify $parent
+      cross_schema: |
+        - $if:
+            $this:
+              type:
+                value: SPI_PS
+          $then:
+            $parent:
+              platform_ops:
+                platforms:
+                  - include: "platforms/xilinx/platform_ops/spi_ops.yaml"
 
-      # If device_id is 1, restrict chip_select to max 3
-      - $if:
-          device_id:
-            value: 1
-        $then:
-          chip_select:
-            maximum: 3
+      # Same-schema (inside $parent block): both refer to parent
+      same_schema: |
+        $parent:
+          - $if:
+              device_id:
+                value: 1
+            $then:
+              chip_select:
+                maximum: 3
+
+      # $this inferred for condition (shorthand)
+      inferred_this: |
+        - $if:
+            type:                 # $this is inferred
+              value: SPI_ENGINE
+          $then:
+            $parent:
+              platform_ops:
+                platforms:
+                  - include: "platforms/xilinx/platform_ops/spi_engine_ops.yaml"
 
   # Mutual exclusion constraint
   mutex:
     description: |
       Declares that only one of the listed properties can have a value set.
       This is a shorthand for multiple $if/$then rules.
+      Properties refer to current schema ($this) by default.
     syntax:
       $mutex:
         type: array
@@ -380,47 +488,32 @@ override_types:
     description: |
       Apply different constraints based on a selector property's value.
       More readable than multiple if/then blocks for multi-value conditions.
+      Follows same scope rules as $if/$then.
     syntax:
       $switch:
         $on:
           type: string
-          description: The property name to switch on
+          description: The property name to switch on (with optional $this/$parent)
         $cases:
           type: object
           description: |
             Map of selector values to constraint objects.
             Use "_" (underscore) as the default/fallback case.
     example: |
-      $switch:
-        $on: device_id
-        $cases:
-          0:
-            chip_select:
-              maximum: 3
-          1:
-            chip_select:
-              maximum: 4
-          _:
-            chip_select:
-              maximum: 4
-
-  # Parent property overrides (for platform extra structs)
-  parent:
-    description: |
-      Override constraints on parent struct properties.
-      Used when this struct is the "extra" field of a parent init_param struct.
-    syntax:
+      # Inside $parent block - all fields refer to parent
       $parent:
-        type: object
-        description: |
-          Contains overrides for properties in the parent struct.
-          Keys are property names from the parent, values are constraint objects.
-    example: |
-      # In max_spi_init_param, override parent no_os_spi_init_param constraints
-      $override:
-        $parent:
-          max_speed_hz:
-            maximum: 48000000
+        - $switch:
+            $on: device_id
+            $cases:
+              0:
+                chip_select:
+                  maximum: 3
+              1:
+                chip_select:
+                  maximum: 4
+              _:
+                chip_select:
+                  maximum: 4
 
 # Constraint actions that can be applied in $then or $cases
 constraint_actions:

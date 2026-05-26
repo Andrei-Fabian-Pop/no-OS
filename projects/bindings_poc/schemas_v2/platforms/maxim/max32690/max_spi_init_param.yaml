@@ -54,21 +54,21 @@ $override:
 
     ########### OR #########
 
-    - $switch:
-        $on: device_id
-        $cases:
-          0:
-            chip_select:
-              maximum: 3
-          1:
-            chip_select:
-              maximum: 4
-          2:
-            chip_select:
-              maximum: 4
-          3:
-            chip_select:
-              maximum: 4
-          _:
-            chip_select:
-              maximum: 4
+    # - $switch:
+    #     $on: device_id
+    #     $cases:
+    #       0:
+    #         chip_select:
+    #           maximum: 3
+    #       1:
+    #         chip_select:
+    #           maximum: 4
+    #       2:
+    #         chip_select:
+    #           maximum: 4
+    #       3:
+    #         chip_select:
+    #           maximum: 4
+    #       _:
+    #         chip_select:
+    #           maximum: 4

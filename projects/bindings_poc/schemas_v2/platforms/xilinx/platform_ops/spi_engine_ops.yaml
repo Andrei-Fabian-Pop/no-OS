@@ -1,0 +1,10 @@
+$id: "platforms/xilinx/platform_ops/spi_engine_ops.yaml"
+$type: platform_ops_impl
+$name: spi_eng_platform_ops
+symbol: spi_eng_platform_ops
+$description: "ADI SPI Engine platform ops (for SPI Engine IP core in FPGA)"
+$sources:
+  headers:
+    - "drivers/axi_core/spi_engine/spi_engine.h"
+  sources:
+    - "drivers/axi_core/spi_engine/spi_engine.c"

@@ -1,0 +1,11 @@
+$id: "platforms/xilinx/enums/xil_uart_type.yaml"
+$type: enum
+$name: xil_uart_type
+$description: "Xilinx platform architecture sections for UART"
+$sources:
+  headers:
+    - "drivers/platform/xilinx/xilinx_uart.h"
+
+values:
+  - UART_PL
+  - UART_PS

@@ -25,9 +25,11 @@ platform_ops:
   platforms:
     - include: "platforms/maxim/max32690/platform_ops/i2c_ops.yaml"
     - include: "platforms/stm32/platform_ops/i2c_ops.yaml"
+    - include: "platforms/xilinx/platform_ops/i2c_ops.yaml"
 
 extra:
   type: platform_extra
   description: "Platform-specific initialization parameters"
   platforms:
     - include: "platforms/maxim/max32690/max_i2c_init_param.yaml"
+    - include: "platforms/xilinx/xil_i2c_init_param.yaml"

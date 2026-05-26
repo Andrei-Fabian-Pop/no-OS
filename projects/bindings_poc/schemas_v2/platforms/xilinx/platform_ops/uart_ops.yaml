@@ -1,0 +1,10 @@
+$id: "platforms/xilinx/platform_ops/uart_ops.yaml"
+$type: platform_ops_impl
+$name: xil_uart_ops
+symbol: xil_uart_ops
+$description: "Xilinx UART platform ops"
+$sources:
+  headers:
+    - "drivers/platform/xilinx/xilinx_uart.h"
+  sources:
+    - "drivers/platform/xilinx/xilinx_uart.c"
