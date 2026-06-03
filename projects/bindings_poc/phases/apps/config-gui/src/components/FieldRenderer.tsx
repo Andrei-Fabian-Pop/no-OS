@@ -1,5 +1,75 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ConfigField } from '../types/configuration';
+
+// Type constraints for C numeric types
+const TYPE_CONSTRAINTS: Record<string, { min: number; max: number; signed: boolean }> = {
+  uint8_t: { min: 0, max: 255, signed: false },
+  uint16_t: { min: 0, max: 65535, signed: false },
+  uint32_t: { min: 0, max: 4294967295, signed: false },
+  uint64_t: { min: 0, max: Number.MAX_SAFE_INTEGER, signed: false },
+  int8_t: { min: -128, max: 127, signed: true },
+  int16_t: { min: -32768, max: 32767, signed: true },
+  int32_t: { min: -2147483648, max: 2147483647, signed: true },
+  int64_t: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER, signed: true },
+  size_t: { min: 0, max: Number.MAX_SAFE_INTEGER, signed: false },
+};
+
+// Parse a numeric string (supports decimal and hex like 0x1F)
+function parseNumericInput(input: string): number | null {
+  const trimmed = input.trim();
+  if (trimmed === '') return null;
+
+  // Check for hex format (0x or 0X prefix)
+  if (/^-?0[xX][0-9a-fA-F]+$/.test(trimmed)) {
+    return parseInt(trimmed, 16);
+  }
+
+  // Check for valid decimal (with optional negative sign)
+  if (/^-?\d+$/.test(trimmed)) {
+    return parseInt(trimmed, 10);
+  }
+
+  return NaN;
+}
+
+// Validate a numeric value against type constraints
+function validateNumericValue(
+  value: number,
+  typeName: string,
+  fieldMin?: number,
+  fieldMax?: number
+): string | null {
+  const typeConstraint = TYPE_CONSTRAINTS[typeName];
+  if (!typeConstraint) return null;
+
+  // Use field-specific constraints if provided, otherwise type defaults
+  const min = fieldMin ?? typeConstraint.min;
+  const max = fieldMax ?? typeConstraint.max;
+
+  if (value < min) {
+    return `Value must be >= ${min}`;
+  }
+  if (value > max) {
+    return `Value must be <= ${max}`;
+  }
+
+  return null;
+}
+
+// Format constraint info for display
+function getTypeConstraintInfo(
+  typeName: string,
+  fieldMin?: number,
+  fieldMax?: number
+): string {
+  const typeConstraint = TYPE_CONSTRAINTS[typeName];
+  if (!typeConstraint) return '';
+
+  const min = fieldMin ?? typeConstraint.min;
+  const max = fieldMax ?? typeConstraint.max;
+
+  return `Range: ${min} to ${max}`;
+}
 
 interface FieldRendererProps {
   name: string;
@@ -107,7 +177,135 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
   },
+  validationError: {
+    color: '#dc3545',
+    fontSize: '12px',
+    marginTop: '4px',
+  },
+  rangeHint: {
+    color: '#666',
+    fontSize: '11px',
+    marginTop: '2px',
+  },
+  inputError: {
+    borderColor: '#dc3545',
+  },
 };
+
+// Numeric input component with validation
+function NumericInput({
+  name,
+  type,
+  field,
+  path,
+  updateValue,
+}: {
+  name: string;
+  type: string;
+  field: ConfigField;
+  path: string[];
+  updateValue: (path: string[], value: unknown) => void;
+}) {
+  const [inputValue, setInputValue] = useState<string>(
+    field.value !== null && field.value !== undefined ? String(field.value) : ''
+  );
+  const [error, setError] = useState<string | null>(null);
+
+  // Sync local input value when field value changes from outside (e.g., server evaluation)
+  useEffect(() => {
+    const newValue = field.value !== null && field.value !== undefined ? String(field.value) : '';
+    if (newValue !== inputValue && !error) {
+      setInputValue(newValue);
+    }
+  }, [field.value]);
+
+  const hasValue = field.value !== null && field.value !== undefined;
+  const isRequired = field.$required;
+  const description = field.$description;
+
+  // Get constraints (field-specific override type defaults)
+  const fieldMin = field.$minimum;
+  const fieldMax = field.$maximum;
+  const rangeInfo = getTypeConstraintInfo(type, fieldMin, fieldMax);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    setInputValue(rawValue);
+
+    if (rawValue === '') {
+      setError(null);
+      updateValue(path, null);
+      return;
+    }
+
+    const parsed = parseNumericInput(rawValue);
+
+    if (parsed === null) {
+      setError(null);
+      updateValue(path, null);
+      return;
+    }
+
+    if (Number.isNaN(parsed)) {
+      setError('Invalid number format. Use decimal (123) or hex (0x7B)');
+      return;
+    }
+
+    const validationError = validateNumericValue(parsed, type, fieldMin, fieldMax);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setError(null);
+    updateValue(path, parsed);
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    setError(null);
+    updateValue(path, null);
+  };
+
+  return (
+    <div style={styles.field}>
+      <div style={styles.fieldRow}>
+        <label style={{ ...styles.label, marginBottom: 0 }}>
+          {name}
+          <span style={{ color: '#666', fontSize: '11px', marginLeft: '4px' }}>({type})</span>
+          {isRequired && <span style={styles.required}>*required</span>}
+          {!hasValue && field.$default !== undefined && (
+            <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
+              {' '}(default: {String(field.$default)})
+            </span>
+          )}
+        </label>
+        {hasValue && (
+          <button
+            style={styles.unconfigureBtn}
+            onClick={handleClear}
+            title="Reset to unconfigured"
+          >
+            ✕ clear
+          </button>
+        )}
+      </div>
+      {description && <div style={styles.description}>{description}</div>}
+      <input
+        type="text"
+        style={{
+          ...styles.input,
+          ...(error ? styles.inputError : {}),
+        }}
+        value={inputValue}
+        placeholder="Not set (decimal or 0x hex)"
+        onChange={handleChange}
+      />
+      {rangeInfo && <div style={styles.rangeHint}>{rangeInfo}</div>}
+      {error && <div style={styles.validationError}>{error}</div>}
+    </div>
+  );
+}
 
 // Check if a field or any of its children have a value set
 function hasAnyValue(field: ConfigField): boolean {
@@ -157,12 +355,16 @@ export function FieldRenderer({
   const isRequired = field.$required;
   const description = field.$description;
 
-  if (disabled) {
+  // Check for disabled state from either prop or field.$disabled (set by override evaluator)
+  const isDisabled = disabled || field.$disabled;
+  const disabledMsg = disabledReason || field.$disabledReason || 'disabled';
+
+  if (isDisabled) {
     return (
       <div style={{ ...styles.field, ...styles.fieldDisabled }}>
         <label style={styles.label}>
           {name}
-          <span style={styles.disabledBadge}>✕ {disabledReason || 'disabled'}</span>
+          <span style={styles.disabledBadge}>✕ {disabledMsg}</span>
         </label>
         {description && <div style={styles.description}>{description}</div>}
       </div>
@@ -171,7 +373,8 @@ export function FieldRenderer({
 
   switch (type) {
     case 'enum': {
-      const values = field.$values || [];
+      // Use $activeValues if available (filtered by overrides), otherwise $values
+      const values = (field.$activeValues || field.$values || []) as string[];
       const currentValue = value as string | null;
       const hasValue = currentValue !== null && currentValue !== undefined;
       return (
@@ -220,41 +423,14 @@ export function FieldRenderer({
     case 'int32_t':
     case 'int64_t':
     case 'size_t': {
-      const hasValue = value !== null && value !== undefined;
       return (
-        <div style={styles.field}>
-          <div style={styles.fieldRow}>
-            <label style={{ ...styles.label, marginBottom: 0 }}>
-              {name}
-              {isRequired && <span style={styles.required}>*required</span>}
-              {!hasValue && field.$default !== undefined && (
-                <span style={{ color: '#888', fontSize: '11px', fontStyle: 'italic' }}>
-                  (default: {String(field.$default)})
-                </span>
-              )}
-            </label>
-            {hasValue && (
-              <button
-                style={styles.unconfigureBtn}
-                onClick={() => updateValue(path, null)}
-                title="Reset to unconfigured"
-              >
-                ✕ clear
-              </button>
-            )}
-          </div>
-          {description && <div style={styles.description}>{description}</div>}
-          <input
-            type="number"
-            style={styles.input}
-            value={hasValue ? String(value) : ''}
-            placeholder="Not set"
-            onChange={(e) => {
-              const numVal = e.target.value === '' ? null : parseInt(e.target.value, 10);
-              updateValue(path, numVal);
-            }}
-          />
-        </div>
+        <NumericInput
+          name={name}
+          type={type}
+          field={field}
+          path={path}
+          updateValue={updateValue}
+        />
       );
     }
 
@@ -425,22 +601,58 @@ export function FieldRenderer({
     }
 
     case 'platform_ops': {
-      const resolved = field.$resolved;
+      const options = (field.$options || []) as Array<{ id: string; symbol: string; include: string }>;
+      const activeOptionIds = (field.$activeOptions || options.map(o => o.id)) as string[];
+      const availableOptions = options.filter(o => activeOptionIds.includes(o.id));
+      const resolved = field.$resolved as { symbol?: string } | undefined;
+      const currentValue = (value as string) || resolved?.symbol || '';
+      const hasValue = value !== null && value !== undefined;
+
+      // If only one option available, show it as resolved
+      if (availableOptions.length <= 1) {
+        return (
+          <div style={styles.field}>
+            <label style={styles.label}>
+              {name}
+              <span style={{ color: '#666', fontSize: '12px' }}>(platform ops)</span>
+            </label>
+            {description && <div style={styles.description}>{description}</div>}
+            <div style={styles.platformOps}>
+              {availableOptions[0]?.symbol || resolved?.symbol || 'Not resolved'}
+            </div>
+          </div>
+        );
+      }
+
+      // Multiple options - show dropdown
       return (
         <div style={styles.field}>
-          <label style={styles.label}>
-            {name}
-            <span style={{ color: '#666', fontSize: '12px' }}>(platform ops)</span>
-          </label>
-          {description && <div style={styles.description}>{description}</div>}
-          <div style={styles.platformOps}>
-            {resolved?.symbol || 'Not resolved'}
+          <div style={styles.fieldRow}>
+            <label style={{ ...styles.label, marginBottom: 0 }}>
+              {name}
+              <span style={{ color: '#666', fontSize: '12px' }}>(platform ops)</span>
+            </label>
+            {hasValue && (
+              <button
+                style={styles.unconfigureBtn}
+                onClick={() => updateValue(path, null)}
+                title="Reset to unconfigured"
+              >
+                ✕ clear
+              </button>
+            )}
           </div>
-          <input
-            type="hidden"
-            value={resolved?.symbol || ''}
-            onChange={(e) => updateValue(path, e.target.value)}
-          />
+          {description && <div style={styles.description}>{description}</div>}
+          <select
+            style={styles.select}
+            value={currentValue}
+            onChange={(e) => updateValue(path, e.target.value || null)}
+          >
+            <option value="">-- Select --</option>
+            {availableOptions.map(opt => (
+              <option key={opt.id} value={opt.symbol}>{opt.symbol}</option>
+            ))}
+          </select>
         </div>
       );
     }

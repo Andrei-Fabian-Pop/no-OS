@@ -1,7 +1,6 @@
 $id: "platforms/xilinx/platform_ops/spi_engine_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: spi_eng_platform_ops
-symbol: spi_eng_platform_ops
 $description: "ADI SPI Engine platform ops (for SPI Engine IP core in FPGA)"
 $sources:
   headers:

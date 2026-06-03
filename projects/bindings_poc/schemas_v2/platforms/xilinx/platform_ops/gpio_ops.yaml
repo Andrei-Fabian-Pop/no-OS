@@ -1,7 +1,6 @@
 $id: "platforms/xilinx/platform_ops/gpio_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: xil_gpio_ops
-symbol: xil_gpio_ops
 $description: "Xilinx GPIO platform ops"
 $sources:
   headers:

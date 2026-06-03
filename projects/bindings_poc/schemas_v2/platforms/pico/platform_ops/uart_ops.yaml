@@ -1,7 +1,6 @@
 $id: "platforms/pico/platform_ops/uart_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: pico_uart_ops
-symbol: pico_uart_ops
 $description: "Pico UART platform ops"
 $sources:
   headers:

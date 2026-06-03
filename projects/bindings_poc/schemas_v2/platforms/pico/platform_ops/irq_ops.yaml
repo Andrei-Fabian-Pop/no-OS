@@ -1,7 +1,6 @@
 $id: "platforms/pico/platform_ops/irq_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: pico_irq_ops
-symbol: pico_irq_ops
 $description: "Pico IRQ platform ops"
 $sources:
   headers:

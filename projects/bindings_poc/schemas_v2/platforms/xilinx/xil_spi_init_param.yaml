@@ -8,7 +8,6 @@ $sources:
 
 type:
   include: "platforms/xilinx/enums/xil_spi_type.yaml"
-  default: SPI_PS
   description: "Xilinx architecture (PL, PS, or SPI Engine)"
 
 flags:

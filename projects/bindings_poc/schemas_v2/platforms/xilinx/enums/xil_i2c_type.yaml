@@ -9,3 +9,5 @@ $sources:
 values:
   - IIC_PL
   - IIC_PS
+
+default: IIC_PL

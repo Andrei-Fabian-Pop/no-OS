@@ -1,7 +1,6 @@
 $id: "platforms/xilinx/platform_ops/timer_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: xil_timer_ops
-symbol: xil_timer_ops
 $description: "Xilinx Timer platform ops"
 $sources:
   headers:

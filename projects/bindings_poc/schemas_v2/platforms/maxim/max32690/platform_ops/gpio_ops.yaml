@@ -1,7 +1,6 @@
 $id: "platforms/maxim/max32690/platform_ops/gpio_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: max_gpio_ops
-symbol: max_gpio_ops
 $sources:
   headers:
     - "maxim_gpio.h"

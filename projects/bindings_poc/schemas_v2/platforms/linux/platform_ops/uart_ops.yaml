@@ -1,7 +1,6 @@
 $id: "platforms/linux/platform_ops/uart_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: linux_uart_ops
-symbol: linux_uart_ops
 $description: "Linux UART platform ops"
 $sources:
   headers:

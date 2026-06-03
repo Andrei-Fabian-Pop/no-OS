@@ -1,6 +1,18 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Configuration, DEVICES, PLATFORMS, DeviceInfo, PlatformInfo } from './types/configuration';
 import { ConfigForm } from './components/ConfigForm';
+
+// Simple debounce helper
+function debounce<T extends (...args: any[]) => any>(
+  fn: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
 
 const styles = {
   container: {
@@ -259,12 +271,39 @@ function App() {
     }
   }, [projectPath, projectName]);
 
+  // Debounced function to call /api/edit-config
+  const debouncedEditConfig = useMemo(
+    () =>
+      debounce(async (path: string, configuration: Configuration) => {
+        try {
+          const response = await fetch('/api/edit-config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ configPath: path, configuration }),
+          });
+          const data = await response.json();
+          if (data.configuration) {
+            // Update with evaluated config (contains $activeOptions, $activeValues, etc.)
+            setConfig(data.configuration);
+            configRef.current = data.configuration;
+          }
+        } catch (err) {
+          console.error('Error calling /api/edit-config:', err);
+        }
+      }, 300),
+    []
+  );
+
   const handleConfigChange = useCallback((newConfig: Configuration) => {
-    console.log('handleConfigChange called - newConfig snippet:',
-      JSON.stringify(newConfig.configuration?.['adi,ad7124']?.['power_mode'] || 'no power_mode', null, 2));
-    configRef.current = newConfig;  // Update ref immediately
+    // Update immediately for responsive UI
+    configRef.current = newConfig;
     setConfig(newConfig);
-  }, []);
+
+    // Debounced call to server to evaluate overrides
+    if (configPath) {
+      debouncedEditConfig(configPath, newConfig);
+    }
+  }, [configPath, debouncedEditConfig]);
 
   return (
     <div style={styles.container}>

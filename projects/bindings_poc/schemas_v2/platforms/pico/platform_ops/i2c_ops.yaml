@@ -1,7 +1,6 @@
 $id: "platforms/pico/platform_ops/i2c_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: pico_i2c_ops
-symbol: pico_i2c_ops
 $description: "Pico I2C platform ops"
 $sources:
   headers:

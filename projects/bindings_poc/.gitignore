@@ -1,0 +1,43 @@
+# Node.js
+node_modules/
+dist/
+
+# Build artifacts
+compile_commands.json
+build/
+*.o
+*.d
+
+# Test/generated project directories
+adx/
+adxl-demo/
+adxl355-i2c/
+adxl355-spi/
+apard32690-adxl355-demo/
+dddd/
+max-ad5592r-i2c/
+max-ad7124-spi/
+max-adxl-i2c/
+max-adxl-spi/
+sdpk1-ad5592r-demo/
+test-adt7420/
+test-projects/
+
+# Test configs and scripts
+phases/apps/test-configs/
+phases/apps/test-codegen.sh
+
+# Local/temporary files
+confluence.html
+statistics.txt
+*.log
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

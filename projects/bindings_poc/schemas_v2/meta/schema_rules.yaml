@@ -119,45 +119,6 @@ schema_types:
         type: string
         description: Default enum value (must be one of the values keys)
 
-  platform_ops_impl:
-    description: Defines a platform-specific implementation of operations struct
-    top_level_fields:
-      - $id
-      - $type
-      - $name
-      - symbol
-      - $sources
-    fields:
-      symbol:
-        required: true
-        type: string
-        description: The C symbol name (e.g., max_spi_ops)
-      $sources:
-        required: true
-        type: object
-        description: Platform-specific headers and sources
-        properties:
-          headers:
-            type: array
-            items: string
-            description: Header files for this platform (no-OS platform drivers)
-          sources:
-            type: array
-            items: string
-            description: Source files for this platform (no-OS platform drivers)
-          sdk:
-            type: object
-            description: SDK dependencies (vendor SDK headers/sources)
-            properties:
-              headers:
-                type: array
-                items: string
-                description: SDK header files required by this platform
-              sources:
-                type: array
-                items: string
-                description: SDK source files required by this platform
-
 # =============================================================================
 # Property definitions (for struct properties)
 # =============================================================================
@@ -286,7 +247,7 @@ special_types:
         items:
           include:
             type: string
-            description: Path to platform_ops_impl schema file
+            description: Path to platform_ops schema file
 
 # =============================================================================
 # Override definitions (for constraint overrides and mutual exclusion)

@@ -1,7 +1,6 @@
 $id: "platforms/xilinx/platform_ops/spi_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: xil_spi_ops
-symbol: xil_spi_ops
 $description: "Xilinx SPI platform ops (PS and general use)"
 $sources:
   headers:

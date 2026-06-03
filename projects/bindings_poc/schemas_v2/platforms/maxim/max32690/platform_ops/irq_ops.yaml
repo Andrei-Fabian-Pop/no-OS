@@ -1,7 +1,6 @@
 $id: "platforms/maxim/max32690/platform_ops/irq_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: max_irq_ops
-symbol: max_irq_ops
 $sources:
   headers:
     - "maxim_irq.h"

@@ -1,7 +1,6 @@
 $id: "platforms/stm32/platform_ops/uart_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: stm32_uart_ops
-symbol: stm32_uart_ops
 $sources:
   headers:
     - "stm32_uart.h"

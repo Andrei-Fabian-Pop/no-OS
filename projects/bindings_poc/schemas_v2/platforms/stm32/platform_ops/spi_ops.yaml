@@ -1,7 +1,6 @@
 $id: "platforms/stm32/platform_ops/spi_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: stm32_spi_ops
-symbol: stm32_spi_ops
 $sources:
   headers:
     - "stm32_spi.h"

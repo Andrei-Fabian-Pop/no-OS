@@ -50,7 +50,7 @@ interface OverrideDefinition {
 
 interface YamlSchema {
   $id: string;
-  $type: "struct" | "enum" | "platform_ops_impl";
+  $type: "struct" | "enum" | "platform_ops";
   $name: string;
   $description?: string;
   $sources?: { headers?: string[]; sources?: string[] };
@@ -392,7 +392,7 @@ class SchemaExpander {
 
       if (includedSchema.$type === "enum") {
         return this.expandEnum(includedSchema, prop.description as string | undefined);
-      } else if (includedSchema.$type === "platform_ops_impl") {
+      } else if (includedSchema.$type === "platform_ops") {
         return this.expandPlatformOpsImpl(includedSchema, prop.description as string | undefined);
       } else if (includedSchema.$type === "struct") {
         const expanded = this.expandStructSchema(includedSchema);
@@ -507,35 +507,147 @@ class SchemaExpander {
         $target: target,
         $description: prop.description,
         $note: "No platform implementations defined",
+        $options: [],
+        $activeOptions: [],
         $resolved: null,
         value: null,
       };
     }
 
-    // Find the platform that matches our target platform
-    const matchingPlatform = platforms.find((p) =>
+    // Find ALL platforms that match our target platform
+    const matchingPlatforms = platforms.filter((p) =>
       p.include.includes(`platforms/${this.platform}/`)
     );
 
-    if (!matchingPlatform) {
+    if (matchingPlatforms.length === 0) {
       return {
         $type: "platform_ops",
         $target: target,
         $description: prop.description,
         $note: `No platform implementation for ${this.platform}`,
+        $options: [],
+        $activeOptions: [],
         $resolved: null,
         value: null,
       };
     }
 
-    const platformInclude = matchingPlatform.include;
-    const platformSchema = this.loadSchema(platformInclude);
-
     // API source is embedded in $sources for collection based on configured values
     const apiSource = target.replace("_platform_ops", "") + ".c";
     const apiHeader = target.replace("_platform_ops", "") + ".h";
 
-    return this.expandPlatformOpsImpl(platformSchema, prop.description as string | undefined, target, apiSource, apiHeader);
+    // Build $options array with ALL matching platforms
+    const options: Array<{
+      id: string;
+      include: string;
+      symbol: string;
+      $sources: unknown;
+    }> = [];
+
+    for (const platform of matchingPlatforms) {
+      const platformSchema = this.loadSchema(platform.include);
+      const optionSources = this.buildPlatformOpsSources(platformSchema, apiSource, apiHeader);
+
+      // Extract ID from include path (e.g., "spi_ops" from "platforms/xilinx/platform_ops/spi_ops.yaml")
+      const id = path.basename(platform.include, ".yaml");
+
+      options.push({
+        id,
+        include: platform.include,
+        symbol: platformSchema.$name,
+        $sources: optionSources,
+      });
+    }
+
+    // All options are active initially
+    const activeOptions = options.map(o => o.id);
+
+    // $resolved points to first option for backward compatibility
+    const firstOption = options[0];
+
+    return {
+      $type: "platform_ops",
+      $target: target,
+      $description: prop.description,
+      $options: options,
+      $activeOptions: activeOptions,
+      $resolved: firstOption ? {
+        platform: this.platform,
+        symbol: firstOption.symbol,
+      } : null,
+      value: null,
+    };
+  }
+
+  private buildPlatformOpsSources(
+    schema: YamlSchema,
+    apiSource?: string,
+    apiHeader?: string
+  ): {
+    headers: string[];
+    sources: string[];
+    api?: { headers: string[]; sources: string[] };
+    platform?: { headers: string[]; sources: string[] };
+    sdk?: { headers?: string[]; sources?: string[] };
+  } {
+    const sources = schema.$sources as {
+      headers?: string[];
+      sources?: string[];
+      api?: { headers?: string[]; sources?: string[] };
+      platform?: { headers?: string[]; sources?: string[] };
+      sdk?: { headers?: string[]; sources?: string[] };
+    } | undefined;
+
+    const embeddedSources: {
+      headers: string[];
+      sources: string[];
+      api?: { headers: string[]; sources: string[] };
+      platform?: { headers: string[]; sources: string[] };
+      sdk?: { headers?: string[]; sources?: string[] };
+    } = {
+      headers: [],
+      sources: [],
+    };
+
+    // Add default API sources (no_os_xxx.c/h) based on target name
+    const apiHeaders: string[] = apiHeader ? [apiHeader] : [];
+    const apiSources: string[] = apiSource ? [apiSource] : [];
+
+    // Merge with explicit API sources from schema if present
+    if (sources?.api) {
+      apiHeaders.push(...(sources.api.headers || []));
+      apiSources.push(...(sources.api.sources || []));
+    }
+
+    if (apiHeaders.length > 0 || apiSources.length > 0) {
+      embeddedSources.api = {
+        headers: apiHeaders,
+        sources: apiSources,
+      };
+    }
+
+    // Add platform driver sources
+    if (sources) {
+      const platformHeaders = [...(sources.headers || [])];
+      const platformSources = [...(sources.sources || [])];
+
+      // Merge with explicit platform sources from schema if present
+      if (sources.platform) {
+        platformHeaders.push(...(sources.platform.headers || []));
+        platformSources.push(...(sources.platform.sources || []));
+      }
+
+      embeddedSources.platform = {
+        headers: platformHeaders,
+        sources: platformSources,
+      };
+
+      if (sources.sdk) {
+        embeddedSources.sdk = sources.sdk;
+      }
+    }
+
+    return embeddedSources;
   }
 
   private expandPlatformOpsImpl(
@@ -604,14 +716,23 @@ class SchemaExpander {
       }
     }
 
+    // Single option when directly including a platform_ops schema
+    const option = {
+      id: schema.$name,
+      include: schema.$id,
+      symbol: schema.$name,
+      $sources: embeddedSources,
+    };
+
     return {
       $type: "platform_ops",
       $target: target || schema.$name,
       $description: description || `Platform operations: ${schema.$name}`,
-      $sources: embeddedSources,
+      $options: [option],
+      $activeOptions: [option.id],
       $resolved: {
         platform: this.platform,
-        symbol: schema.symbol as string,
+        symbol: schema.$name,
       },
       value: null,
     };

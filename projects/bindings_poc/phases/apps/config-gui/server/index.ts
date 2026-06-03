@@ -12,6 +12,7 @@ import {
   generateUserAppH,
   generateMakefile,
 } from './codegen';
+import { OverrideEvaluator } from './override-evaluator';
 
 const execAsync = promisify(exec);
 
@@ -109,7 +110,37 @@ app.post('/api/generate-config', async (req, res) => {
   }
 });
 
-// POST /api/update-config - Save configuration changes
+// POST /api/edit-config - Save configuration and re-evaluate overrides
+app.post('/api/edit-config', async (req, res) => {
+  try {
+    const { configPath, configuration } = req.body;
+
+    // Use provided configPath or fall back to currentConfigPath
+    const targetPath = configPath || currentConfigPath;
+
+    if (!targetPath) {
+      return res.status(400).json({ error: 'No configuration path provided. Generate configuration first.' });
+    }
+
+    if (!configuration) {
+      return res.status(400).json({ error: 'No configuration provided.' });
+    }
+
+    // Re-evaluate all $override rules
+    const evaluator = new OverrideEvaluator();
+    const updatedConfig = evaluator.evaluate(configuration);
+
+    // Save the evaluated configuration to file
+    fs.writeFileSync(targetPath, JSON.stringify(updatedConfig, null, 2));
+
+    res.json({ configuration: updatedConfig, path: targetPath });
+  } catch (error) {
+    console.error('Error editing config:', error);
+    res.status(500).json({ error: String(error) });
+  }
+});
+
+// POST /api/update-config - Save configuration changes (legacy, kept for compatibility)
 app.post('/api/update-config', async (req, res) => {
   try {
     const { configuration } = req.body;

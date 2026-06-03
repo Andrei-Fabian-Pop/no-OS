@@ -1,7 +1,6 @@
 $id: "platforms/xilinx/platform_ops/gpio_irq_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: xil_gpio_irq_ops
-symbol: xil_gpio_irq_ops
 $description: "Xilinx GPIO IRQ platform ops"
 $sources:
   headers:

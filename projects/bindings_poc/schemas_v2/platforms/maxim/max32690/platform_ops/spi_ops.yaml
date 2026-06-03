@@ -1,7 +1,6 @@
 $id: "platforms/maxim/max32690/platform_ops/spi_ops.yaml"
-$type: platform_ops_impl
+$type: platform_ops
 $name: max_spi_ops
-symbol: max_spi_ops
 $sources:
   headers:
     - "maxim_spi.h"

@@ -4,17 +4,27 @@ export interface ConfigField {
   $required?: boolean;
   $default?: unknown;
   $values?: string[];
+  $activeValues?: string[];  // Filtered enum values based on $override rules
   $enum_type?: string;
   $struct_type?: string;
   $selector?: string;
   $members?: Record<string, Record<string, ConfigField>>;
   $resolved?: {
     symbol: string;
+    platform?: string;
   };
   $sources?: {
     headers?: string[];
     sources?: string[];
   };
+  // Platform ops support
+  $options?: Array<{ id: string; symbol: string; include: string; $sources?: unknown }>;
+  $activeOptions?: string[];  // Filtered platform options based on $override rules
+  // Override-applied constraints
+  $disabled?: boolean;
+  $disabledReason?: string;
+  $minimum?: number;
+  $maximum?: number;
   // Array support
   $size?: number;
   $element_type?: string;
@@ -63,4 +73,7 @@ export const DEVICES: DeviceInfo[] = [
 export const PLATFORMS: PlatformInfo[] = [
   { id: 'maxim', name: 'Maxim', target: 'max32690' },
   { id: 'stm32', name: 'STM32', target: 'stm32' },
+  { id: 'xilinx', name: 'Xilinx', target: 'xilinx' },
+  { id: 'pico', name: 'Raspberry Pi Pico', target: 'pico' },
+  { id: 'linux', name: 'Linux', target: 'linux' },
 ];
