@@ -1,0 +1,18 @@
+$id: "platforms/xilinx/xil_gpio_irq_init_param.yaml"
+$type: struct
+$symbol: xil_gpio_irq_init_param
+$capability: gpio_irq
+$description: "Xilinx platform specific GPIO IRQ initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "xilinx_gpio_irq.h"
+    - "xilinx_gpio_irq.c"
+
+parent_desc:
+  include_descriptor: "no-os/no_os_irq_init_param"
+  description: "Pointer to parent IRQ controller descriptor"
+
+gpio_device_id:
+  type: int32_t
+  description: "GPIO device ID from xparameters.h"

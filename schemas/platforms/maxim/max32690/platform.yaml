@@ -1,0 +1,23 @@
+vendor: maxim
+description: >-
+  Analog Devices MAX32690 (Maxim) platform. An Arm Cortex-M4F microcontroller
+  with integrated Bluetooth LE, targeted at low-power industrial and IoT
+  designs. Bare-metal target built with the MaximSDK; provides SPI, I2C, UART,
+  GPIO, PWM, timers, interrupts and DMA. Choose this for firmware running
+  directly on a MAX32690-based board.
+
+ops:
+  - platform_ops/spi_ops.yaml
+  - platform_ops/i2c_ops.yaml
+  - platform_ops/gpio_ops.yaml
+  - platform_ops/uart_ops.yaml
+  - platform_ops/pwm_ops.yaml
+  - platform_ops/irq_ops.yaml
+  - platform_ops/dma_ops.yaml
+
+structs:
+  - max_spi_init_param.yaml
+  - max_i2c_init_param.yaml
+  - max_gpio_init_param.yaml
+  - max_uart_init_param.yaml
+  - max_pwm_init_param.yaml

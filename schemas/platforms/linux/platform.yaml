@@ -1,0 +1,18 @@
+vendor: linux
+description: >-
+  Linux userspace platform. Runs no-OS drivers on top of a running Linux
+  kernel (e.g. Raspberry Pi or an embedded SBC) using standard device
+  interfaces such as spidev, i2c-dev and the sysfs/character GPIO API,
+  instead of accessing hardware registers directly. Choose this to talk to
+  a device from a Linux host rather than from bare-metal firmware.
+
+ops:
+  - platform_ops/spi_ops.yaml
+  - platform_ops/i2c_ops.yaml
+  - platform_ops/gpio_ops.yaml
+  - platform_ops/uart_ops.yaml
+  - platform_ops/timer_ops.yaml
+
+structs:
+  - linux_i2c_init_param.yaml
+  - linux_uart_init_param.yaml

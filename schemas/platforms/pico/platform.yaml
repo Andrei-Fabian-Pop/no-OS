@@ -1,0 +1,20 @@
+vendor: pico
+description: >-
+  Raspberry Pi Pico (RP2040) platform. A low-cost dual-core Arm Cortex-M0+
+  microcontroller board programmed bare-metal with the Pico SDK. Notably, its
+  peripheral pins are assigned to GPIOs by the user, so SPI/I2C/UART pin
+  selection is configurable. Provides SPI, I2C, UART, GPIO, interrupts and
+  timers. Choose this for firmware running on an RP2040-based board.
+
+ops:
+  - platform_ops/spi_ops.yaml
+  - platform_ops/i2c_ops.yaml
+  - platform_ops/gpio_ops.yaml
+  - platform_ops/uart_ops.yaml
+  - platform_ops/irq_ops.yaml
+  - platform_ops/timer_ops.yaml
+
+structs:
+  - pico_spi_init_param.yaml
+  - pico_i2c_init_param.yaml
+  - pico_uart_init_param.yaml
