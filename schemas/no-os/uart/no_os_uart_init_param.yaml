@@ -1,4 +1,4 @@
-$id: "no-os/no_os_uart_init_param.yaml"
+$id: "no-os/uart/no_os_uart_init_param.yaml"
 $type: struct
 $symbol: no_os_uart_init_param
 $descriptor: no_os_uart_desc

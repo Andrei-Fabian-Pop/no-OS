@@ -21,7 +21,7 @@ vssel:
   description: "GPIO voltage select"
 
 dma_param:
-  include: "no-os/no_os_dma_init_param.yaml"
+  include: "no-os/dma/no_os_dma_init_param.yaml"
   pointer: true
   description: "DMA initialization parameters (pointer to DMA init struct, NULL if not used)"
 

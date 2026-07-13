@@ -54,7 +54,7 @@ dma_enable:
   description: "Enable DMA for PWM"
 
 dma:
-  include: "no-os/no_os_dma_init_param.yaml"
+  include: "no-os/dma/no_os_dma_init_param.yaml"
   description: "DMA initialization parameters"
 
 dma_ch:

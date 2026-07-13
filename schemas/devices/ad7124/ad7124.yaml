@@ -11,7 +11,7 @@ $sources:
 
 # SPI interface
 spi_init:
-  include: "no-os/no_os_spi_init_param.yaml"
+  include: "no-os/spi/no_os_spi_init_param.yaml"
   pointer: true
   required: true
   description: "SPI initialization parameters"

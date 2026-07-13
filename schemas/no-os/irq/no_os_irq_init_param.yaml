@@ -1,4 +1,4 @@
-$id: "no-os/no_os_irq_init_param.yaml"
+$id: "no-os/irq/no_os_irq_init_param.yaml"
 $type: struct
 $symbol: no_os_irq_init_param
 $capability: irq

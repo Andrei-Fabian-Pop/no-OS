@@ -1,4 +1,4 @@
-$id: "no-os/no_os_pwm_init_param.yaml"
+$id: "no-os/pwm/no_os_pwm_init_param.yaml"
 $type: struct
 $symbol: no_os_pwm_init_param
 $descriptor: no_os_pwm_desc
@@ -30,7 +30,7 @@ polarity:
   description: "PWM generator polarity"
 
 pwm_gpio:
-  include: "no-os/no_os_gpio_init_param.yaml"
+  include: "no-os/gpio/no_os_gpio_init_param.yaml"
   description: "PWM GPIO pin init param"
 
 irq_id:

@@ -26,7 +26,7 @@ irq_num:
   description: "IRQ number"
 
 dma_init:
-  include: "no-os/no_os_dma_init_param.yaml"
+  include: "no-os/dma/no_os_dma_init_param.yaml"
   description: "DMA initialization parameters"
 
 rxdma_ch:
@@ -38,9 +38,9 @@ txdma_ch:
   description: "TX DMA channel descriptor"
 
 pwm_init:
-  include: "no-os/no_os_pwm_init_param.yaml"
+  include: "no-os/pwm/no_os_pwm_init_param.yaml"
   description: "CS PWM initialization parameters (optional, requires HAL_TIM_MODULE_ENABLED)"
 
 tx_pwm_init:
-  include: "no-os/no_os_pwm_init_param.yaml"
+  include: "no-os/pwm/no_os_pwm_init_param.yaml"
   description: "TX PWM initialization parameters (optional, requires HAL_TIM_MODULE_ENABLED)"
