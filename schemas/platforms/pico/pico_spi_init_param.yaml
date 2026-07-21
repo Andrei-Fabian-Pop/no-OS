@@ -33,13 +33,13 @@ $override:
     $then:
       $this:
         spi_tx_pin:
-          value: [SPI0_TX_GP3, SPI0_TX_GP7, SPI0_TX_GP19]
+          values: [SPI0_TX_GP3, SPI0_TX_GP7, SPI0_TX_GP19]
         spi_rx_pin:
-          value: [SPI0_RX_GP0, SPI0_RX_GP4, SPI0_RX_GP16]
+          values: [SPI0_RX_GP0, SPI0_RX_GP4, SPI0_RX_GP16]
         spi_sck_pin:
-          value: [SPI0_SCK_GP2, SPI0_SCK_GP6, SPI0_SCK_GP18]
+          values: [SPI0_SCK_GP2, SPI0_SCK_GP6, SPI0_SCK_GP18]
         spi_cs_pin:
-          value: [SPI0_CS_GP1, SPI0_CS_GP5, SPI0_CS_GP17]
+          values: [SPI0_CS_GP1, SPI0_CS_GP5, SPI0_CS_GP17]
 
   # SPI1 (device_id = 1) can only use SPI1_* pins
   - $if:
@@ -49,10 +49,10 @@ $override:
     $then:
       $this:
         spi_tx_pin:
-          value: [SPI1_TX_GP11, SPI1_TX_GP15]
+          values: [SPI1_TX_GP11, SPI1_TX_GP15]
         spi_rx_pin:
-          value: [SPI1_RX_GP8, SPI1_RX_GP12]
+          values: [SPI1_RX_GP8, SPI1_RX_GP12]
         spi_sck_pin:
-          value: [SPI1_SCK_GP10, SPI1_SCK_GP14]
+          values: [SPI1_SCK_GP10, SPI1_SCK_GP14]
         spi_cs_pin:
-          value: [SPI1_CS_GP9, SPI1_CS_GP13]
+          values: [SPI1_CS_GP9, SPI1_CS_GP13]

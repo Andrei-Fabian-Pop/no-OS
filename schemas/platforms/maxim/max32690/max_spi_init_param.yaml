@@ -41,7 +41,7 @@ $override:
     - max_speed_hz:
         default: 1000000
         minimum: 0
-        maximum: 1_000_000
+        maximum: 1000000
 
     - chip_select:
         default: 0

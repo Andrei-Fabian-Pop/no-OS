@@ -35,7 +35,6 @@ bit_order:
 platform_ops:
   type: platform_ops
   capability: spi
-  target: no_os_spi_platform_ops
   required: true
   description: "Platform-specific SPI operations"
 

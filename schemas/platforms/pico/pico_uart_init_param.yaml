@@ -25,9 +25,9 @@ $override:
     $then:
       $this:
         uart_tx_pin:
-          value: [UART0_TX_GP0, UART0_TX_GP12, UART0_TX_GP16]
+          values: [UART0_TX_GP0, UART0_TX_GP12, UART0_TX_GP16]
         uart_rx_pin:
-          value: [UART0_RX_GP1, UART0_RX_GP13, UART0_RX_GP17]
+          values: [UART0_RX_GP1, UART0_RX_GP13, UART0_RX_GP17]
 
   # UART1 (device_id = 1) can only use UART1_* pins
   - $if:
@@ -37,6 +37,6 @@ $override:
     $then:
       $this:
         uart_tx_pin:
-          value: [UART1_TX_GP4, UART1_TX_GP8]
+          values: [UART1_TX_GP4, UART1_TX_GP8]
         uart_rx_pin:
-          value: [UART1_RX_GP5, UART1_RX_GP9]
+          values: [UART1_RX_GP5, UART1_RX_GP9]
