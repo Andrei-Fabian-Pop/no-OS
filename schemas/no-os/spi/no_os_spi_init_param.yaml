@@ -1,7 +1,6 @@
 $id: "no-os/spi/no_os_spi_init_param.yaml"
 $type: struct
 $symbol: no_os_spi_init_param
-$descriptor: no_os_spi_desc
 $capability: spi
 $description: "Structure holding the parameters for SPI initialization"
 $ranking: 4
@@ -45,6 +44,6 @@ extra:
   description: "Platform-specific initialization parameters"
 
 parent:
-  include_descriptor: "no-os/spi/no_os_spi_init_param.yaml"
+  include: "no-os/spi/no_os_spi.yaml"
   pointer: true
   description: "Parent SPI descriptor for devices behind expanders"

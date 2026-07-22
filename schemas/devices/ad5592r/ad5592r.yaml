@@ -1,92 +1,11 @@
 $id: "devices/ad5592r/ad5592r.yaml"
-$type: struct
-$symbol: ad5592r_init_param
-$descriptor: ad5592r_dev
-$description: "AD5592R 8-channel, 12-bit configurable ADC/DAC with GPIO"
+$type: descriptor
+$symbol: ad5592r_dev
+$description: "AD5592R 8-channel, 12-bit configurable ADC/DAC device descriptor"
 $ranking: 4
-$header: "drivers/adc-dac/ad5592r/ad5592r.h"
-$sources:
-  noos:
-    - "drivers/adc-dac/ad5592r/ad5592r-base.h"
-    - "drivers/adc-dac/ad5592r/ad5592r-base.c"
-    - "drivers/adc-dac/ad5592r/ad5592r.c"
-
-int_ref:
-  type: bool
-  default: true
-  description: "Use internal reference"
-
-external_vref:
-  type: uint32_t
-  minimum: 1000
-  maximum: 5500
-  description: "External reference voltage in mV (valid only if int_ref = false; driver rejects values outside 1000..5500)"
-
-spi_init:
-  include: "no-os/spi/no_os_spi_init_param.yaml"
+$init_template: "init.mustache"
+$remove_template: "remove.mustache"
+init_param:
+  include: "devices/ad5592r/ad5592r_init_param.yaml"
   pointer: true
   required: true
-  description: "SPI initialization parameters (for AD5592R)"
-
-i2c_init:
-  include: "no-os/i2c/no_os_i2c_init_param.yaml"
-  pointer: true
-  required: true
-  description: "I2C initialization parameters (for AD5593R variant)"
-
-ss_init:
-  include: "no-os/gpio/no_os_gpio_init_param.yaml"
-  pointer: true
-  description: "Slave select GPIO initialization parameters (software slave select; optional per driver)"
-
-channel_modes:
-  type: array
-  size: 8
-  element:
-    include: "devices/ad5592r/enums/ad5592r_channel_mode.yaml"
-  description: "Mode configuration for each of the 8 channels"
-
-channel_offstate:
-  type: array
-  size: 8
-  element:
-    include: "devices/ad5592r/enums/ad5592r_channel_offstate.yaml"
-  description: "Off-state configuration for each of the 8 channels"
-
-adc_range:
-  include: "devices/ad5592r/enums/ad559xr_range.yaml"
-  description: "ADC input voltage range"
-
-dac_range:
-  include: "devices/ad5592r/enums/ad559xr_range.yaml"
-  description: "DAC output voltage range"
-
-adc_buf:
-  type: bool
-  default: false
-  description: "Enable ADC precharge buffer for improved performance"
-
-power_down:
-  type: array
-  size: 8
-  element:
-    type: uint8_t
-  description: "Power down state for each of the 8 channels (0 = enabled, 1 = powered down)"
-
-$override:
-  # - $if:
-  #     spi_init:
-  #       value: $any
-  #   $then:
-  #     i2c_init:
-  #       disabled: true
-  #
-  # - $if:
-  #     i2c_init:
-  #       value: $any
-  #   $then:
-  #     spi_init:
-  #       disabled: true
-
-  - $mutex: [spi_init, i2c_init]
-  - $mutex: [ss_init, i2c_init]

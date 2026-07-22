@@ -1,0 +1,11 @@
+$id: "no-os/pwm/no_os_pwm.yaml"
+$type: descriptor
+$symbol: no_os_pwm_desc
+$description: "PWM descriptor"
+$ranking: 4
+$init_template: "init.mustache"
+$remove_template: "remove.mustache"
+init_param:
+  include: "no-os/pwm/no_os_pwm_init_param.yaml"
+  pointer: true
+  required: true

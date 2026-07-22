@@ -1,0 +1,11 @@
+$id: "no-os/uart/no_os_uart.yaml"
+$type: descriptor
+$symbol: no_os_uart_desc
+$description: "UART descriptor"
+$ranking: 4
+$init_template: "init.mustache"
+$remove_template: "remove.mustache"
+init_param:
+  include: "no-os/uart/no_os_uart_init_param.yaml"
+  pointer: true
+  required: true

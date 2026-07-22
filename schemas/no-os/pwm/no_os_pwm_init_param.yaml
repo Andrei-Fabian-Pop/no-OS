@@ -1,7 +1,6 @@
 $id: "no-os/pwm/no_os_pwm_init_param.yaml"
 $type: struct
 $symbol: no_os_pwm_init_param
-$descriptor: no_os_pwm_desc
 $capability: pwm
 $description: "Structure containing the init parameters needed by the PWM generator"
 $ranking: 4

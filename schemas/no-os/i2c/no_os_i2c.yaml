@@ -1,0 +1,11 @@
+$id: "no-os/i2c/no_os_i2c.yaml"
+$type: descriptor
+$symbol: no_os_i2c_desc
+$description: "I2C bus descriptor"
+$ranking: 4
+$init_template: "init.mustache"
+$remove_template: "remove.mustache"
+init_param:
+  include: "no-os/i2c/no_os_i2c_init_param.yaml"
+  pointer: true
+  required: true

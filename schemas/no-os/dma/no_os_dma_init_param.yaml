@@ -1,7 +1,6 @@
 $id: "no-os/dma/no_os_dma_init_param.yaml"
 $type: struct
 $symbol: no_os_dma_init_param
-$descriptor: no_os_dma_desc
 $capability: dma
 $description: "Initialization parameter for the DMA controller"
 $ranking: 4

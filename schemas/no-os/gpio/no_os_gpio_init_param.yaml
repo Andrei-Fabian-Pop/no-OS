@@ -1,7 +1,6 @@
 $id: "no-os/gpio/no_os_gpio_init_param.yaml"
 $type: struct
 $symbol: no_os_gpio_init_param
-$descriptor: no_os_gpio_desc
 $capability: gpio
 $init_function: no_os_gpio_get
 $description: "Structure holding the parameters for GPIO initialization"
