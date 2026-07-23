@@ -46,9 +46,11 @@ platform_ops:
   type: platform_ops
   capability: pwm
   target: no_os_pwm_platform_ops
+  required: true
   description: "PWM platform specific functions"
 
 extra:
   type: platform_extra
   capability: pwm
+  required: true
   description: "PWM extra parameters (platform specific)"

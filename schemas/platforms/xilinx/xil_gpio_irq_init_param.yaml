@@ -16,4 +16,5 @@ parent_desc:
 
 gpio_device_id:
   type: int32_t
+  required: true
   description: "GPIO device ID from xparameters.h"

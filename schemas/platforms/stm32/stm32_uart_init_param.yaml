@@ -8,10 +8,14 @@ $sources:
   platform:
     - "stm32_uart.h"
 
-# FIXME: This is not valid
+# FIXME: This is not valid ('external_ptr' type unsupported by schema tooling)
+# Evidence: stm32_uart.c:88-89 dereferences sud->huart->Init.BaudRate
+# unconditionally (no NULL check) -> huart is MANDATORY.
+# When the external_ptr type is supported, add: required: true
 # huart:
 #   type: external_ptr
 #   target: UART_HandleTypeDef
+#   required: true
 #   description: "UART instance handle (from STM32 HAL)"
 
 timeout:

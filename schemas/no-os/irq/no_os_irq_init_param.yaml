@@ -25,4 +25,5 @@ platform_ops:
 extra:
   type: platform_extra
   capability: irq
+  required: true
   description: "Platform-specific initialization parameters (IRQ controller config, not peripheral reference)"

@@ -11,6 +11,7 @@ $sources:
 device_id:
   type: uint8_t
   required: true
+  maximum: 10
   description: "UART peripheral device ID"
 
 irq_id:

@@ -11,3 +11,9 @@ $sources:
 vssel:
   include: "platforms/maxim/max32690/enums/mxc_gpio_vssel.yaml"
   description: "GPIO voltage select"
+
+$override:
+  $parent:
+    - id:
+        minimum: 0
+        maximum: 5

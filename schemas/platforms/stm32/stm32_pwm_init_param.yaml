@@ -8,10 +8,15 @@ $sources:
   platform:
     - "stm32_pwm.h"
 
-# FIXME: This is not valid
+# FIXME: This is not valid ('ptr' type unsupported by schema tooling)
+# Evidence: stm32_pwm.c:114 casts sparam->htimer to TIM_HandleTypeDef then :183-184
+# dereferences htimer->Instance/Init unconditionally (no NULL check) -> htimer is
+# MANDATORY.
+# When the ptr type is supported, add: required: true
 # htimer:
 #   type: ptr
 #   target: void
+#   required: true
 #   description: "PWM timer handle"
 
 pwm_timer:
@@ -34,7 +39,9 @@ mode:
 
 timer_chn:
   type: uint32_t
-  description: "PWM timer channel"
+  minimum: 1
+  maximum: 6
+  description: "PWM timer channel (TIM: 1..6, channels 5-6 target-dependent; LPTIM: 1..2)"
 
 complementary_channel:
   type: bool

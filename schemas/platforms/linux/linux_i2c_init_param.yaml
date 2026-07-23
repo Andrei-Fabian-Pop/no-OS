@@ -11,4 +11,5 @@ $sources:
 
 device_id:
   type: uint32_t
+  required: true
   description: "I2C bus ID (/dev/i2c-<device_id>)"

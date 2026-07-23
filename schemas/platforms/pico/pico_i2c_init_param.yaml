@@ -17,6 +17,11 @@ i2c_scl_pin:
   description: "I2C SCL pin configuration"
 
 $override:
+  - $parent:
+      device_id:
+        minimum: 0
+        maximum: 1
+
   # I2C0 (device_id = 0) can only use I2C0_* pins
   - $if:
       $parent:

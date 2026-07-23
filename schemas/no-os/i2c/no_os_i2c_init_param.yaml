@@ -10,6 +10,7 @@ $sources:
 
 device_id:
   type: uint32_t
+  maximum: 4
   description: "I2C peripheral device ID"
 
 max_speed_hz:
@@ -24,9 +25,11 @@ platform_ops:
   type: platform_ops
   capability: i2c
   target: no_os_i2c_platform_ops
+  required: true
   description: "Platform-specific I2C operations"
 
 extra:
   type: platform_extra
   capability: i2c
+  required: true
   description: "Platform-specific initialization parameters"

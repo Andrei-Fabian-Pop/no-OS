@@ -22,11 +22,13 @@ platform_ops:
   type: platform_ops
   capability: dma
   target: no_os_dma_platform_ops
+  required: true
   description: "Platform specific DMA functions"
 
 extra:
   type: platform_extra
   capability: dma
+  required: true
   description: "Platform specific data"
 
 sg_handler:

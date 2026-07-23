@@ -11,4 +11,7 @@ $sources:
 
 port_nb:
   type: uint8_t
-  description: "GPIO port number for EXTI line"
+  required: true
+  minimum: 0
+  maximum: 10
+  description: "GPIO port number for EXTI line (EXTI_GPIOA=0 .. EXTI_GPIOK=10)"

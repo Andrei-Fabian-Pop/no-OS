@@ -11,4 +11,5 @@ $sources:
 
 device_id:
   type: string
+  required: true
   description: "UART device path (/dev/<device_id>)"

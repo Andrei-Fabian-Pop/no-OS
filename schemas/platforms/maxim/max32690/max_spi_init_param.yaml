@@ -36,41 +36,33 @@ dma_tx_priority:
 $override:
   $parent:
     - device_id:
-        default: 4
-
-    - max_speed_hz:
-        default: 1000000
-        minimum: 0
-        maximum: 1000000
-
-    - chip_select:
         default: 0
         maximum: 4
 
-    - $if:
-        device_id:
-          value: 1
-      $then:
-        chip_select:
-          maximum: 3
-
-    ########### OR #########
-
-    # - $switch:
-    #     $on: device_id
-    #     $cases:
-    #       0:
-    #         chip_select:
-    #           maximum: 3
-    #       1:
-    #         chip_select:
-    #           maximum: 4
-    #       2:
-    #         chip_select:
-    #           maximum: 4
-    #       3:
-    #         chip_select:
-    #           maximum: 4
-    #       _:
-    #         chip_select:
-    #           maximum: 4
+    - $switch:
+        $on: device_id
+        $cases:
+          0:
+            chip_select:
+              default: 0
+              maximum: 1
+          1:
+            chip_select:
+              default: 0
+              maximum: 2
+          2:
+            chip_select:
+              default: 0
+              maximum: 2
+          3:
+            chip_select:
+              default: 0
+              maximum: 2
+          4:
+            chip_select:
+              default: 0
+              maximum: 2
+          _:
+            chip_select:
+              default: 0
+              maximum: 2

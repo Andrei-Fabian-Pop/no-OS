@@ -25,6 +25,14 @@ spi_cs_pin:
   description: "SPI CS (chip select) pin configuration"
 
 $override:
+  - $parent:
+      device_id:
+        minimum: 0
+        maximum: 1
+
+      bit_order:
+        values: [NO_OS_SPI_BIT_ORDER_MSB_FIRST]
+
   # SPI0 (device_id = 0) can only use SPI0_* pins
   - $if:
       $parent:

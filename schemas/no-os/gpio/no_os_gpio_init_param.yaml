@@ -27,9 +27,11 @@ platform_ops:
   type: platform_ops
   capability: gpio
   target: no_os_gpio_platform_ops
+  required: true
   description: "Platform-specific GPIO operations"
 
 extra:
   type: platform_extra
   capability: gpio
+  required: true
   description: "Platform-specific initialization parameters"

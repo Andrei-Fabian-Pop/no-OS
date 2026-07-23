@@ -10,7 +10,9 @@ $sources:
 
 chip_select_port:
   type: uint32_t
-  description: "Chip select port"
+  minimum: 0
+  maximum: 10
+  description: "Chip select port (GPIOA=0 .. GPIOK=10)"
 
 # FIXME: This is not valid
 # get_input_clock:

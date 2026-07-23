@@ -17,6 +17,18 @@ uart_rx_pin:
   description: "UART RX pin configuration"
 
 $override:
+  - $parent:
+      device_id:
+        minimum: 0
+        maximum: 1
+
+      size:
+        values:
+          [NO_OS_UART_CS_5, NO_OS_UART_CS_6, NO_OS_UART_CS_7, NO_OS_UART_CS_8]
+
+      parity:
+        values: [NO_OS_UART_PAR_NO, NO_OS_UART_PAR_ODD, NO_OS_UART_PAR_EVEN]
+
   # UART0 (device_id = 0) can only use UART0_* pins
   - $if:
       $parent:
