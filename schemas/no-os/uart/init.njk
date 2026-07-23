@@ -1,0 +1,4 @@
+ret = no_os_uart_init(&desc.{{descriptor_name}}, &{{symbol_name}});
+if (ret)
+	return ret;
+no_os_uart_stdio(desc.{{descriptor_name}});

@@ -3,8 +3,8 @@ $type: descriptor
 $symbol: no_os_timer_desc
 $description: "Timer descriptor"
 $ranking: 4
-$init_template: "init.mustache"
-$remove_template: "remove.mustache"
+$init_template: "init.njk"
+$remove_template: "remove.njk"
 init_param:
   include: "no-os/timer/no_os_timer_init_param.yaml"
   pointer: true

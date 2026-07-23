@@ -3,8 +3,8 @@ $type: descriptor
 $symbol: no_os_spi_desc
 $description: "SPI bus descriptor"
 $ranking: 4
-$init_template: "init.mustache"
-$remove_template: "remove.mustache"
+$init_template: "init.njk"
+$remove_template: "remove.njk"
 init_param:
   include: "no-os/spi/no_os_spi_init_param.yaml"
   pointer: true
