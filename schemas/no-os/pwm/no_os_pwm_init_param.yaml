@@ -37,10 +37,9 @@ irq_id:
   description: "IRQ ID"
 
 pwm_callback:
-  type: callback_func
-  signature: "void (*)(void *)"
+  type: raw
   default: "NULL"
-  description: "PWM callback function"
+  description: "PWM callback function, signature void (*)(void *). Written verbatim to codegen."
 
 platform_ops:
   type: platform_ops

@@ -32,12 +32,11 @@ extra:
   description: "Platform specific data"
 
 sg_handler:
-  type: callback_func
-  signature: "void (*)(void *)"
+  type: raw
   default: "NULL"
-  description: "Optional custom scatter gather callback"
+  description: "Optional custom scatter gather callback, signature void (*)(void *). Written verbatim to codegen."
 
 ctx:
-  type: callback_ctx
+  type: raw
   default: "NULL"
-  description: "Optional custom parameter for the scatter gather callback"
+  description: "Optional custom parameter for the scatter gather callback. Written verbatim to codegen."

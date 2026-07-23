@@ -8,16 +8,14 @@ $sources:
   platform:
     - "stm32_pwm.h"
 
-# FIXME: This is not valid ('ptr' type unsupported by schema tooling)
-# Evidence: stm32_pwm.c:114 casts sparam->htimer to TIM_HandleTypeDef then :183-184
-# dereferences htimer->Instance/Init unconditionally (no NULL check) -> htimer is
-# MANDATORY.
-# When the ptr type is supported, add: required: true
-# htimer:
-#   type: ptr
-#   target: void
-#   required: true
-#   description: "PWM timer handle"
+# Opaque external HAL handle (declared void* in the driver). stm32_pwm.c:114 casts
+# htimer to TIM_HandleTypeDef then :183-184 dereferences htimer->Instance/Init
+# unconditionally (no NULL check) -> mandatory. Emitted verbatim; the user provides
+# the address of a TIM_HandleTypeDef, e.g. "&htim1".
+htimer:
+  type: raw
+  required: true
+  description: "PWM timer handle (void *, a TIM_HandleTypeDef * from STM32CubeMX). Written verbatim, e.g. &htim1."
 
 pwm_timer:
   type: enum
@@ -47,10 +45,11 @@ complementary_channel:
   type: bool
   description: "Use complementary channel"
 
-# FIXME: This is not valid
-# get_timer_clock:
-#   type: func_ptr
-#   description: "Get timer source clock function"
+# Opaque function pointer, signature uint32_t (*)(void). Optional. Emitted verbatim;
+# the user provides the function name, e.g. "HAL_RCC_GetPCLK1Freq".
+get_timer_clock:
+  type: raw
+  description: "Get timer source clock function, signature uint32_t (*)(void). Written verbatim, e.g. HAL_RCC_GetPCLK1Freq."
 
 clock_divider:
   type: uint32_t

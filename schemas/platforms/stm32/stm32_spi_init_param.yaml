@@ -14,10 +14,11 @@ chip_select_port:
   maximum: 10
   description: "Chip select port (GPIOA=0 .. GPIOK=10)"
 
-# FIXME: This is not valid
-# get_input_clock:
-#   type: func_ptr
-#   description: "Get peripheral source clock function"
+# Opaque function pointer, signature uint32_t (*)(void). Optional. Emitted verbatim;
+# the user provides the function name, e.g. "HAL_RCC_GetPCLK2Freq".
+get_input_clock:
+  type: raw
+  description: "Get peripheral source clock function, signature uint32_t (*)(void). Written verbatim, e.g. HAL_RCC_GetPCLK2Freq."
 
 alternate:
   type: uint32_t

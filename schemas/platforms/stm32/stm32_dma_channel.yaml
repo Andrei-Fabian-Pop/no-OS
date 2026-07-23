@@ -7,16 +7,14 @@ $sources:
   platform:
     - "stm32_dma.h"
 
-# FIXME: This is not valid ('external_ptr' type unsupported by schema tooling)
-# Evidence: stm32_dma.c:64/66 dereferences sdma_ch->hdma->Init/Instance and :130
-# HAL_DMA_Init(sdma_ch->hdma) unconditionally (no NULL check on hdma) -> hdma is
-# MANDATORY when a DMA channel is used.
-# When the external_ptr type is supported, add: required: true
-# hdma:
-#   type: external_ptr
-#   target: DMA_HandleTypeDef
-#   required: true
-#   description: "DMA handle (HAL type, managed by STM32CubeMX)"
+# Opaque external HAL handle. stm32_dma.c:64/66 dereferences hdma->Init/Instance
+# and :130 HAL_DMA_Init(hdma) unconditionally (no NULL check) -> mandatory when a
+# DMA channel is used. Emitted verbatim; the user provides the address of a
+# DMA_HandleTypeDef, e.g. "&hdma_spi1_rx".
+hdma:
+  type: raw
+  required: true
+  description: "DMA handle (DMA_HandleTypeDef *, managed by STM32CubeMX). Written verbatim, e.g. &hdma_spi1_rx."
 
 ch_num:
   type: uint32_t

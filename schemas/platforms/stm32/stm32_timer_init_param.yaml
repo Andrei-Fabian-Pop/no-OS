@@ -9,12 +9,10 @@ $sources:
     - "stm32_timer.h"
     - "stm32_timer.c"
 
-# FIXME: This is not valid ('external_ptr' type unsupported by schema tooling)
-# Evidence: stm32_timer.c:155 dereferences stm_desc->htimer->Instance
-# unconditionally (no NULL check) -> htimer is MANDATORY.
-# When the external_ptr type is supported, add: required: true
-# htimer:
-#   type: external_ptr
-#   target: TIM_HandleTypeDef
-#   required: true
-#   description: "Pointer to HAL timer handle (from STM32CubeMX)"
+# Opaque external HAL handle. stm32_timer.c:155 dereferences htimer->Instance
+# unconditionally (no NULL check) -> mandatory. Emitted verbatim; the user provides
+# the address of a TIM_HandleTypeDef, e.g. "&htim2".
+htimer:
+  type: raw
+  required: true
+  description: "HAL timer handle (TIM_HandleTypeDef *, from STM32CubeMX). Written verbatim, e.g. &htim2."
