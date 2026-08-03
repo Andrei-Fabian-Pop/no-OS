@@ -1,0 +1,19 @@
+$id: "no-os/ain/no_os_ain_init_param.yaml"
+$type: struct
+$symbol: no_os_ain_init_param
+$capability: ain
+$description: "Structure holding the parameters for analog input initialization"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_ain.h"
+
+vref:
+  type: float
+  description: "Analog input reference voltage"
+
+extra:
+  type: platform_extra
+  capability: ain
+  required: true
+  description: "Analog extra parameters (platform/device specific)"

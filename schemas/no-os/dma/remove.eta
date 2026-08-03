@@ -1,0 +1,1 @@
+no_os_dma_remove(desc.<%= it.descriptor_name %>);

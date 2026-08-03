@@ -1,0 +1,1 @@
+no_os_timer_remove(desc.<%= it.descriptor_name %>);

@@ -1,0 +1,4 @@
+ret = no_os_uart_init(&desc.<%= it.descriptor_name %>, &<%= it.symbol_name %>);
+if (ret)
+	return ret;
+no_os_uart_stdio(desc.<%= it.descriptor_name %>);

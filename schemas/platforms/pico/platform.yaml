@@ -12,6 +12,7 @@ ops:
   - platform_ops/gpio_ops.yaml
   - platform_ops/uart_ops.yaml
   - platform_ops/irq_ops.yaml
+  - platform_ops/gpio_irq_ops.yaml
   - platform_ops/timer_ops.yaml
 
 structs:

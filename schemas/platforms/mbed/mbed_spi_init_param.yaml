@@ -1,0 +1,26 @@
+$id: "platforms/mbed/mbed_spi_init_param.yaml"
+$type: struct
+$symbol: mbed_spi_init_param
+$capability: spi
+$description: "Mbed platform specific SPI initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_spi.h"
+
+spi_miso_pin:
+  type: uint16_t
+  description: "SPI MISO pin (mbed PinName)"
+
+spi_mosi_pin:
+  type: uint16_t
+  description: "SPI MOSI pin (mbed PinName)"
+
+spi_clk_pin:
+  type: uint16_t
+  description: "SPI CLK pin (mbed PinName)"
+
+use_sw_csb:
+  type: bool
+  default: false
+  description: "Software (true) or hardware (false) control of the CSB pin"

@@ -1,0 +1,12 @@
+$id: "platforms/mbed/platform_ops/timer_ops.yaml"
+$type: platform_ops
+$symbol: mbed_timer_ops
+$capability: timer
+$description: "Mbed timer platform ops"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_timer.h"
+  platform:
+    - "mbed_timer.h"
+    - "mbed_timer.cpp"

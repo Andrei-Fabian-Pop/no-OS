@@ -1,0 +1,13 @@
+$id: "platforms/mbed/mbed_ain_init_param.yaml"
+$type: struct
+$symbol: mbed_ain_init_param
+$capability: ain
+$description: "Mbed platform specific analog input initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_ain_aout.h"
+
+number:
+  type: int32_t
+  description: "Analog input pin number (mbed PinName)"

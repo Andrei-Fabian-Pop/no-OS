@@ -1,0 +1,79 @@
+$id: "no-os/tdm/no_os_tdm_init_param.yaml"
+$type: struct
+$symbol: no_os_tdm_init_param
+$capability: tdm
+$description: "Structure holding the parameters for TDM initialization"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_tdm.h"
+    - "drivers/api/no_os_tdm.c"
+
+mode:
+  include: "no-os/enums/no_os_tdm_mode.yaml"
+  description: "TDM operating mode: master/slave, tx/rx"
+
+data_size:
+  type: uint8_t
+  description: "Useful data size in a slot, specified in number of bits"
+
+data_offset:
+  type: uint8_t
+  description: "Data offset in a slot, specified in number of bits as offset from MSbit"
+
+data_lsb_first:
+  type: bool
+  default: false
+  description: "Data ordering (default: msb first)"
+
+slots_per_frame:
+  type: uint8_t
+  description: "Number of slots in a frame"
+
+active_slots:
+  type: uint32_t
+  description: "Active slots"
+
+fs_active_low:
+  type: bool
+  default: false
+  description: "Frame sync polarity specifier (default: FS active high)"
+
+fs_active_length:
+  type: uint8_t
+  description: "Frame sync active length specified in number of bits"
+
+fs_lastbit:
+  type: bool
+  default: false
+  description: "Frame sync is normally asserted on first bit of slot 0 of a frame, this specifier allows assertion on last bit of the previous frame"
+
+rising_edge_sampling:
+  type: bool
+  default: false
+  description: "Specify whether data sampling occurs on SCK rising edge (default: on SCK falling edge)"
+
+irq_id:
+  type: uint32_t
+  description: "IRQ ID"
+
+rx_complete_callback:
+  type: raw
+  description: "DMA receive complete callback, signature void (*)(void *rx_arg). Written verbatim."
+
+rx_half_complete_callback:
+  type: raw
+  description: "DMA receive half complete callback, signature void (*)(void *rx_arg). Written verbatim."
+
+platform_ops:
+  type: platform_ops
+  capability: tdm
+  target: no_os_tdm_platform_ops
+  required: true
+  description: "Platform operation function pointers"
+
+extra:
+  type: platform_extra
+  capability: tdm
+  required: true
+  description: "TDM extra parameters (platform specific)"

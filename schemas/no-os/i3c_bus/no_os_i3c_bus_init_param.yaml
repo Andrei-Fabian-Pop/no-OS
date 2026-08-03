@@ -1,0 +1,39 @@
+$id: "no-os/i3c_bus/no_os_i3c_bus_init_param.yaml"
+$type: struct
+$symbol: no_os_i3c_bus_init_param
+$capability: i3c
+$description: "Structure holding the parameters for I3C bus initialization"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_i3c.h"
+    - "drivers/api/no_os_i3c.c"
+
+device_id:
+  type: uint32_t
+  description: "Device ID (bus number)"
+
+platform_ops:
+  type: platform_ops
+  capability: i3c
+  target: no_os_i3c_platform_ops
+  required: true
+  description: "Platform operation function pointers"
+
+num_devs:
+  type: uint8_t
+  description: "Expected number of devices on bus"
+
+devs:
+  type: array
+  size: 15
+  element:
+    include: "no-os/i3c/no_os_i3c_init_param.yaml"
+    pointer: true
+  description: "Expected devices on bus (pointers to per-device init params, up to NO_OS_I3C_MAX_DEV_NUMBER=15)"
+
+extra:
+  type: platform_extra
+  capability: i3c
+  required: true
+  description: "I3C extra parameters (platform specific)"

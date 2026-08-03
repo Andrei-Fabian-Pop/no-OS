@@ -1,0 +1,12 @@
+$id: "platforms/pico/platform_ops/gpio_irq_ops.yaml"
+$type: platform_ops
+$ranking: 4
+$symbol: pico_gpio_irq_ops
+$capability: gpio_irq
+$description: "Pico GPIO IRQ platform ops"
+$sources:
+  noos:
+    - "include/no_os_irq.h"
+  platform:
+    - "pico_gpio_irq.h"
+    - "pico_gpio_irq.c"

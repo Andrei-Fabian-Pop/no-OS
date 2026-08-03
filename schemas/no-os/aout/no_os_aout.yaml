@@ -1,0 +1,11 @@
+$id: "no-os/aout/no_os_aout.yaml"
+$type: descriptor
+$symbol: no_os_aout_desc
+$description: "Analog output (DAC) descriptor"
+$ranking: 4
+$init_template: "init.eta"
+$remove_template: "remove.eta"
+init_param:
+  include: "no-os/aout/no_os_aout_init_param.yaml"
+  pointer: true
+  required: true

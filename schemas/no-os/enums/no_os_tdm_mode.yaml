@@ -1,0 +1,20 @@
+$id: "no-os/enums/no_os_tdm_mode.yaml"
+$type: enum
+$symbol: no_os_tdm_mode
+$description: "TDM operating mode: master/slave, tx/rx"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_tdm.h"
+
+values:
+  NO_OS_TDM_MASTER_TX:
+    description: "Master, transmit"
+  NO_OS_TDM_MASTER_RX:
+    description: "Master, receive"
+  NO_OS_TDM_SLAVE_TX:
+    description: "Slave, transmit"
+  NO_OS_TDM_SLAVE_RX:
+    description: "Slave, receive"
+
+default: NO_OS_TDM_MASTER_TX

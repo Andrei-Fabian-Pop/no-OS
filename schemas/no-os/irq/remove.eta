@@ -1,0 +1,1 @@
+no_os_irq_ctrl_remove(desc.<%= it.descriptor_name %>);

@@ -1,0 +1,3 @@
+ret = no_os_dma_init(&desc.<%= it.descriptor_name %>, &<%= it.symbol_name %>);
+if (ret)
+	return ret;

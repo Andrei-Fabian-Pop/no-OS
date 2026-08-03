@@ -1,0 +1,7 @@
+<%# NOTE: upstream include/no_os_aout.h declares the init function as "no_so_aout_init"
+(a typo for no_os_aout_init) and the mbed impl exports "no_os_mbed_aout_init". We emit
+the canonical no_os_aout_init; the no-OS header/impl symbol mismatch must be fixed
+upstream for this to link. %>
+ret = no_os_aout_init(&desc.<%= it.descriptor_name %>, &<%= it.symbol_name %>);
+if (ret)
+	return ret;

@@ -1,0 +1,27 @@
+$id: "no-os/aout/no_os_aout_init_param.yaml"
+$type: struct
+$symbol: no_os_aout_init_param
+$capability: aout
+$description: "Structure holding the parameters for analog output initialization"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_aout.h"
+
+aout_min_v:
+  type: float
+  description: "Min output range of DAC in volts"
+
+aout_max_v:
+  type: float
+  description: "Max output range of DAC in volts"
+
+vref:
+  type: float
+  description: "Analog output reference voltage"
+
+extra:
+  type: platform_extra
+  capability: aout
+  required: true
+  description: "Analog extra parameters (platform/device specific)"

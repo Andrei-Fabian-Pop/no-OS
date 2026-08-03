@@ -1,0 +1,34 @@
+$id: "no-os/i3c/no_os_i3c_init_param.yaml"
+$type: struct
+$symbol: no_os_i3c_init_param
+$capability: i3c
+$description: "Structure holding the parameters for a single I3C device initialization"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_i3c.h"
+    - "drivers/api/no_os_i3c.c"
+
+bus:
+  include: "no-os/i3c_bus/no_os_i3c_bus_init_param.yaml"
+  pointer: true
+  required: true
+  description: "Pointer to the bus init param this device belongs to"
+
+pid:
+  type: uint64_t
+  description: "Provisioned ID"
+
+addr:
+  type: uint8_t
+  description: "Dynamic or static address"
+
+is_static:
+  type: bool
+  default: false
+  description: "Is the address static"
+
+is_i3c:
+  type: bool
+  default: false
+  description: "Is I3C (true) or I2C (false)"

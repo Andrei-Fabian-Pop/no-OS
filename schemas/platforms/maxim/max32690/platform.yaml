@@ -13,6 +13,8 @@ ops:
   - platform_ops/uart_ops.yaml
   - platform_ops/pwm_ops.yaml
   - platform_ops/irq_ops.yaml
+  - platform_ops/gpio_irq_ops.yaml
+  - platform_ops/timer_ops.yaml
   - platform_ops/dma_ops.yaml
 
 structs:

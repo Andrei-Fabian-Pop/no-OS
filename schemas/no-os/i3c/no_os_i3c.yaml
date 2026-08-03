@@ -1,0 +1,11 @@
+$id: "no-os/i3c/no_os_i3c.yaml"
+$type: descriptor
+$symbol: no_os_i3c_desc
+$description: "I3C device descriptor (a single device attached to an I3C bus)"
+$ranking: 4
+$init_template: "init.eta"
+$remove_template: "remove.eta"
+init_param:
+  include: "no-os/i3c/no_os_i3c_init_param.yaml"
+  pointer: true
+  required: true

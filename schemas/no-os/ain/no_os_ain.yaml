@@ -1,0 +1,11 @@
+$id: "no-os/ain/no_os_ain.yaml"
+$type: descriptor
+$symbol: no_os_ain_desc
+$description: "Analog input (ADC) descriptor"
+$ranking: 4
+$init_template: "init.eta"
+$remove_template: "remove.eta"
+init_param:
+  include: "no-os/ain/no_os_ain_init_param.yaml"
+  pointer: true
+  required: true

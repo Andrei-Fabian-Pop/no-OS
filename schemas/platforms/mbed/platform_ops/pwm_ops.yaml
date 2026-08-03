@@ -1,0 +1,10 @@
+$id: "platforms/mbed/platform_ops/pwm_ops.yaml"
+$type: platform_ops
+$symbol: mbed_pwm_ops
+$capability: pwm
+$description: "Mbed PWM platform ops"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_pwm.h"
+    - "mbed_pwm.cpp"

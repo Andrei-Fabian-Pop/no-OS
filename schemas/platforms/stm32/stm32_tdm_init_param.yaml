@@ -1,0 +1,18 @@
+$id: "platforms/stm32/stm32_tdm_init_param.yaml"
+$type: struct
+$symbol: stm32_tdm_init_param
+$capability: tdm
+$description: "STM32 platform specific TDM initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "stm32_tdm.h"
+
+base:
+  type: raw
+  required: true
+  description: "SAI block instance (SAI_Block_TypeDef *, from STM32 HAL). Written verbatim, e.g. SAI1_Block_A."
+
+synchronous:
+  include: "platforms/stm32/enums/stm32_tdm_synchonous.yaml"
+  description: "Synchronization mode"

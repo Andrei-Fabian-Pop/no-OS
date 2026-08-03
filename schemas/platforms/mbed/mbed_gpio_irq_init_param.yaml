@@ -1,0 +1,13 @@
+$id: "platforms/mbed/mbed_gpio_irq_init_param.yaml"
+$type: struct
+$symbol: mbed_gpio_irq_init_param
+$capability: gpio_irq
+$description: "Mbed platform specific GPIO IRQ initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_gpio_irq.h"
+
+gpio_irq_pin:
+  type: uint32_t
+  description: "External interrupt / GPIO pin (mbed PinName)"

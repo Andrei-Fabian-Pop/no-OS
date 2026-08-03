@@ -3,8 +3,8 @@ $type: descriptor
 $symbol: adxl355_dev
 $description: "ADXL355 3-axis accelerometer device descriptor"
 $ranking: 4
-$init_template: "init.njk"
-$remove_template: "remove.njk"
+$init_template: "init.eta"
+$remove_template: "remove.eta"
 init_param:
   include: "devices/adxl355/adxl355_init_param.yaml"
   pointer: false

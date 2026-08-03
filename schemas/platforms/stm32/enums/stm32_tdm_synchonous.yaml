@@ -1,0 +1,18 @@
+$id: "platforms/stm32/enums/stm32_tdm_synchonous.yaml"
+$type: enum
+$symbol: stm32_tdm_synchonous
+$description: "TDM synchronization mode"
+$ranking: 4
+$sources:
+  platform:
+    - "stm32_tdm.h"
+
+values:
+  ASYNCHRONOUS:
+    description: "Asynchronous"
+  INTERNAL_SYNC:
+    description: "Internal synchronization"
+  EXTERNAL_SYNC:
+    description: "External synchronization"
+
+default: ASYNCHRONOUS

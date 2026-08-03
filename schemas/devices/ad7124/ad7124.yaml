@@ -3,8 +3,8 @@ $type: descriptor
 $symbol: ad7124_dev
 $description: "AD7124 24-bit Sigma-Delta ADC device descriptor"
 $ranking: 4
-$init_template: "init.njk"
-$remove_template: "remove.njk"
+$init_template: "init.eta"
+$remove_template: "remove.eta"
 init_param:
   include: "devices/ad7124/ad7124_init_param.yaml"
   pointer: true

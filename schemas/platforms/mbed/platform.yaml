@@ -1,0 +1,30 @@
+vendor: mbed
+description: >-
+  Arm Mbed OS platform. Runs no-OS drivers on top of Mbed OS using its C++
+  HAL (SPI, I2C, Serial/UART, DigitalOut, InterruptIn, PwmOut, Timer,
+  AnalogIn, AnalogOut), so peripheral pins are selected by mbed PinName. In
+  addition to the usual interfaces it can expose a USB virtual COM port as an
+  alternative UART, and provides analog input (ADC) and analog output (DAC).
+  Choose this for firmware running on any Mbed-enabled board.
+
+ops:
+  - platform_ops/spi_ops.yaml
+  - platform_ops/i2c_ops.yaml
+  - platform_ops/uart_ops.yaml
+  - platform_ops/virtual_com_ops.yaml
+  - platform_ops/gpio_ops.yaml
+  - platform_ops/gpio_irq_ops.yaml
+  - platform_ops/irq_ops.yaml
+  - platform_ops/pwm_ops.yaml
+  - platform_ops/timer_ops.yaml
+
+structs:
+  - mbed_spi_init_param.yaml
+  - mbed_i2c_init_param.yaml
+  - mbed_uart_init_param.yaml
+  - mbed_gpio_init_param.yaml
+  - mbed_gpio_irq_init_param.yaml
+  - mbed_irq_init_param.yaml
+  - mbed_pwm_init_param.yaml
+  - mbed_ain_init_param.yaml
+  - mbed_aout_init_param.yaml

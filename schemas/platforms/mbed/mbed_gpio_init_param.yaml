@@ -1,0 +1,13 @@
+$id: "platforms/mbed/mbed_gpio_init_param.yaml"
+$type: struct
+$symbol: mbed_gpio_init_param
+$capability: gpio
+$description: "Mbed platform specific GPIO initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_gpio.h"
+
+pin_mode:
+  type: uint8_t
+  description: "GPIO pin mode (mbed PinMode)"

@@ -1,0 +1,13 @@
+$id: "platforms/mbed/mbed_pwm_init_param.yaml"
+$type: struct
+$symbol: mbed_pwm_init_param
+$capability: pwm
+$description: "Mbed platform specific PWM initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_pwm.h"
+
+pwm_pin:
+  type: uint16_t
+  description: "PWM pin (mbed PinName)"

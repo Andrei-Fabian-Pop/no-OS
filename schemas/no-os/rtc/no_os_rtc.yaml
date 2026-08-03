@@ -3,8 +3,8 @@ $type: descriptor
 $symbol: no_os_rtc_desc
 $description: "RTC descriptor"
 $ranking: 4
-$init_template: "init.njk"
-$remove_template: "remove.njk"
+$init_template: "init.eta"
+$remove_template: "remove.eta"
 init_param:
   include: "no-os/rtc/no_os_rtc_init_param.yaml"
   pointer: true

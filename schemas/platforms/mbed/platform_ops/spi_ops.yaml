@@ -1,0 +1,10 @@
+$id: "platforms/mbed/platform_ops/spi_ops.yaml"
+$type: platform_ops
+$symbol: mbed_spi_ops
+$capability: spi
+$description: "Mbed SPI platform ops"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_spi.h"
+    - "mbed_spi.cpp"

@@ -1,0 +1,1 @@
+adt7420_remove(desc.<%= it.descriptor_name %>);

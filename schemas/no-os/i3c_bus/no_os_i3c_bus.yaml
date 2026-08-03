@@ -1,0 +1,11 @@
+$id: "no-os/i3c_bus/no_os_i3c_bus.yaml"
+$type: descriptor
+$symbol: no_os_i3c_bus_desc
+$description: "I3C bus descriptor (initializes the bus controller and its attached devices)"
+$ranking: 4
+$init_template: "init.eta"
+$remove_template: "remove.eta"
+init_param:
+  include: "no-os/i3c_bus/no_os_i3c_bus_init_param.yaml"
+  pointer: true
+  required: true

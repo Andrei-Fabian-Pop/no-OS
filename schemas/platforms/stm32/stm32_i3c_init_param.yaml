@@ -1,0 +1,48 @@
+$id: "platforms/stm32/stm32_i3c_init_param.yaml"
+$type: struct
+$symbol: stm32_i3c_init_param
+$capability: i3c
+$description: "STM32 platform specific I3C initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "stm32_i3c.h"
+
+hi3c:
+  type: raw
+  required: true
+  description: "I3C instance handle (I3C_HandleTypeDef *, from STM32 HAL). Written verbatim."
+
+irq_id:
+  type: uint32_t
+  description: "I3C interrupt ID"
+
+# Kept as `raw` (not a declared struct type) on purpose. `struct stm32_i3c_dma_desc`
+# is assembled imperatively at runtime, not written as static init data, and two of
+# its parts are outside what the declarative ruleset can express:
+#   - `dma_desc` points at a no_os_dma_desc that only exists AFTER no_os_dma_init runs;
+#   - `crdma_ch`/`txdma_ch`/`rxdma_ch`/`srdma_ch` are `&<dma_desc>->channels[N]`, the
+#     address of element N of that descriptor's runtime channel array — the ruleset has
+#     no "address-of-element-N-of-a-referenced-descriptor-array" primitive yet.
+# The driver also owns `stm32_i3c_dma_desc.priv` itself (transfer-in-progress marker),
+# so it must not be authored. Because the whole thing is an optional, advanced DMA path
+# (the driver NULL-checks it and falls back to non-DMA), we emit the pointer verbatim
+# and let the user hand-write the setup, as projects/ad405x does.
+i3c_dma_desc:
+  type: raw
+  default: "NULL"
+  description: >-
+    Optional pointer to a user-built struct stm32_i3c_dma_desc * that enables DMA I3C
+    transfers; leave NULL for non-DMA (interrupt/polled) operation. The driver only
+    copies and reads this pointer — it never allocates it. When set, the user prepares a
+    no_os_dma_desc and points the descriptor's channel fields at that controller's
+    channels, e.g.:
+      no_os_dma_init(&my_dma, &my_dma_ip);
+      struct stm32_i3c_dma_desc i3c_dma = {
+          .dma_desc = my_dma,
+          .crdma_ch = &my_dma->channels[0],
+          .rxdma_ch = &my_dma->channels[1],
+          .txdma_ch = &my_dma->channels[2],
+          .srdma_ch = NULL,
+      };
+    then set i3c_dma_desc = &i3c_dma. Written verbatim to codegen.

@@ -1,0 +1,12 @@
+$id: "platforms/mbed/platform_ops/gpio_irq_ops.yaml"
+$type: platform_ops
+$symbol: mbed_gpio_irq_ops
+$capability: gpio_irq
+$description: "Mbed GPIO IRQ platform ops"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_irq.h"
+  platform:
+    - "mbed_gpio_irq.h"
+    - "mbed_gpio_irq.cpp"

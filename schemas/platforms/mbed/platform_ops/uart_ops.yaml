@@ -1,0 +1,10 @@
+$id: "platforms/mbed/platform_ops/uart_ops.yaml"
+$type: platform_ops
+$symbol: mbed_uart_ops
+$capability: uart
+$description: "Mbed hardware UART platform ops"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_uart.h"
+    - "mbed_uart.cpp"

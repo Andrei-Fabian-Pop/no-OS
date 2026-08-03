@@ -1,0 +1,18 @@
+$id: "platforms/mbed/mbed_irq_init_param.yaml"
+$type: struct
+$symbol: mbed_irq_init_param
+$capability: irq
+$description: "Mbed platform specific IRQ initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_irq.h"
+
+ticker_period_usec:
+  type: uint32_t
+  description: "Time period in usec for the ticker event"
+
+int_obj_type:
+  type: raw
+  default: "NULL"
+  description: "Optional pointer to an app-created mbed driver instance (void *, e.g. an UnbufferedSerial). Written verbatim."

@@ -1,0 +1,34 @@
+$id: "platforms/mbed/mbed_uart_init_param.yaml"
+$type: struct
+$symbol: mbed_uart_init_param
+$capability: uart
+$description: "Mbed platform specific UART initialization parameters. Shared by mbed_uart_ops (hardware UART: uses uart_tx_pin/uart_rx_pin) and mbed_virtual_com_ops (USB VCOM: uses vendor_id/product_id/serial_number)."
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_uart.h"
+
+uart_tx_pin:
+  type: uint16_t
+  description: "UART transmit pin (mbed PinName; hardware UART only)"
+
+uart_rx_pin:
+  type: uint16_t
+  description: "UART receive pin (mbed PinName; hardware UART only)"
+
+vendor_id:
+  type: uint16_t
+  description: "USB VCOM vendor ID (USB virtual COM only)"
+
+product_id:
+  type: uint16_t
+  description: "USB VCOM product ID (USB virtual COM only)"
+
+serial_number:
+  type: string
+  description: "USB VCOM serial number (USB virtual COM only)"
+
+is_console_stdio_port:
+  type: bool
+  default: false
+  description: "Set this UART/USB port as the console stdio port"

@@ -1,0 +1,17 @@
+$id: "platforms/mbed/mbed_i2c_init_param.yaml"
+$type: struct
+$symbol: mbed_i2c_init_param
+$capability: i2c
+$description: "Mbed platform specific I2C initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_i2c.h"
+
+i2c_sda_pin:
+  type: uint16_t
+  description: "I2C SDA pin (mbed PinName)"
+
+i2c_scl_pin:
+  type: uint16_t
+  description: "I2C SCL pin (mbed PinName)"

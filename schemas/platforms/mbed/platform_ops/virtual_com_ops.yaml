@@ -1,0 +1,10 @@
+$id: "platforms/mbed/platform_ops/virtual_com_ops.yaml"
+$type: platform_ops
+$symbol: mbed_virtual_com_ops
+$capability: uart
+$description: "Mbed USB virtual COM (CDC) platform ops. Alternative UART provider; shares mbed_uart_init_param (uses vendor_id/product_id/serial_number)."
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_uart.h"
+    - "mbed_uart.cpp"

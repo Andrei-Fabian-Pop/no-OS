@@ -1,0 +1,10 @@
+$id: "platforms/mbed/platform_ops/irq_ops.yaml"
+$type: platform_ops
+$symbol: mbed_irq_ops
+$capability: irq
+$description: "Mbed IRQ platform ops"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_irq.h"
+    - "mbed_irq.cpp"

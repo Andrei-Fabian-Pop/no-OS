@@ -1,0 +1,1 @@
+no_os_tdm_remove(desc.<%= it.descriptor_name %>);

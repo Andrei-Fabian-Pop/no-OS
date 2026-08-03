@@ -3,8 +3,8 @@ $type: descriptor
 $symbol: no_os_eeprom_desc
 $description: "24AA32A/24LC32A I2C EEPROM device descriptor"
 $ranking: 4
-$init_template: "init.njk"
-$remove_template: "remove.njk"
+$init_template: "init.eta"
+$remove_template: "remove.eta"
 init_param:
   include: "devices/24xx32a/24xx32a_init_param.yaml"
   pointer: true

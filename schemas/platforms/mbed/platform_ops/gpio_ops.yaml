@@ -1,0 +1,10 @@
+$id: "platforms/mbed/platform_ops/gpio_ops.yaml"
+$type: platform_ops
+$symbol: mbed_gpio_ops
+$capability: gpio
+$description: "Mbed GPIO platform ops"
+$ranking: 4
+$sources:
+  platform:
+    - "mbed_gpio.h"
+    - "mbed_gpio.cpp"

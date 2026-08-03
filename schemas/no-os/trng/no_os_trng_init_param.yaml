@@ -1,0 +1,27 @@
+$id: "no-os/trng/no_os_trng_init_param.yaml"
+$type: struct
+$symbol: no_os_trng_init_param
+$capability: trng
+$description: "Init parameter for TRNG"
+$ranking: 4
+$sources:
+  noos:
+    - "include/no_os_trng.h"
+    - "drivers/api/no_os_trng.c"
+
+dev_id:
+  type: uint32_t
+  description: "Device id"
+
+extra:
+  type: platform_extra
+  capability: trng
+  required: true
+  description: "Platform specific parameter"
+
+platform_ops:
+  type: platform_ops
+  capability: trng
+  target: no_os_trng_platform_ops
+  required: true
+  description: "Platform ops"
