@@ -1,0 +1,18 @@
+$id: "platforms/maxim/max32662/enums/max_uart_map.yaml"
+$type: enum
+$symbol: max_uart_map
+$description: "Maxim MAX32662 UART pin mapping select"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_uart.h"
+
+values:
+  UART_MAP_A:
+    description: "UART pin map A"
+  UART_MAP_B:
+    description: "UART pin map B"
+  UART_MAP_C:
+    description: "UART pin map C"
+
+default: UART_MAP_A

@@ -1,0 +1,26 @@
+$id: "platforms/maxim/max32650/max_gpio_init_param.yaml"
+$type: struct
+$symbol: max_gpio_init_param
+$capability: gpio
+$description: "Maxim MAX32650 platform specific GPIO initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_gpio.h"
+    - "include/no_os_irq.h"
+    - "maxim_gpio.c"
+    - "drivers/api/no_os_gpio.c"
+
+vssel:
+  include: "platforms/maxim/max32650/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+$override:
+  $parent:
+    - port:
+        minimum: 0
+        maximum: 3
+
+    - number:
+        minimum: 0
+        maximum: 31

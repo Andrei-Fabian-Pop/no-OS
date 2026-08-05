@@ -1,0 +1,19 @@
+$id: "platforms/maxim/max32655/max_pwm_init_param.yaml"
+$type: struct
+$symbol: max_pwm_init_param
+$capability: pwm
+$description: "Maxim MAX32655 platform specific PWM initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_pwm.h"
+
+vssel:
+  include: "platforms/maxim/max32655/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+$override:
+  $parent:
+    - id:
+        minimum: 0
+        maximum: 3

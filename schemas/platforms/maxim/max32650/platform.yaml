@@ -1,0 +1,27 @@
+vendor: maxim
+description: >-
+  Analog Devices MAX32650 (Maxim) platform. An ultra-low-power Arm Cortex-M4F
+  microcontroller with a large integrated flash and SRAM, targeted at
+  battery-powered industrial and IoT designs. Bare-metal target built with the
+  MaximSDK; provides SPI, I2C, UART, GPIO, PWM, timers, interrupts, DMA and a
+  true random number generator. Choose this for firmware running directly on a
+  MAX32650-based board.
+
+ops:
+  - platform_ops/spi_ops.yaml
+  - platform_ops/i2c_ops.yaml
+  - platform_ops/gpio_ops.yaml
+  - platform_ops/uart_ops.yaml
+  - platform_ops/pwm_ops.yaml
+  - platform_ops/irq_ops.yaml
+  - platform_ops/gpio_irq_ops.yaml
+  - platform_ops/timer_ops.yaml
+  - platform_ops/dma_ops.yaml
+  - platform_ops/trng_ops.yaml
+
+structs:
+  - max_spi_init_param.yaml
+  - max_i2c_init_param.yaml
+  - max_gpio_init_param.yaml
+  - max_uart_init_param.yaml
+  - max_pwm_init_param.yaml

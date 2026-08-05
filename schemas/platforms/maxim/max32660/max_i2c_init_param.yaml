@@ -1,0 +1,25 @@
+$id: "platforms/maxim/max32660/max_i2c_init_param.yaml"
+$type: struct
+$symbol: max_i2c_init_param
+$capability: i2c
+$description: "Maxim MAX32660 platform specific I2C initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_i2c.h"
+
+vssel:
+  include: "platforms/maxim/max32660/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+$override:
+  $parent:
+    # device_id <= MXC_I2C_INSTANCES-1. MXC_I2C_INSTANCES=2 (max32660.h); maxim_i2c.c
+    # checks device_id >= MXC_I2C_INSTANCES and _max_i2c_pins_config handles 0,1.
+    - device_id:
+        minimum: 0
+        maximum: 1
+
+    # max_speed_hz clamps to MAX_I2C_HS_MODE=3400000 (maxim_i2c.c); above that is -EINVAL.
+    - max_speed_hz:
+        maximum: 3400000

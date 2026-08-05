@@ -1,0 +1,48 @@
+$id: "platforms/maxim/max32662/max_spi_init_param.yaml"
+$type: struct
+$symbol: max_spi_init_param
+$capability: spi
+$description: "Maxim MAX32662 platform specific SPI initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_spi.h"
+
+num_slaves:
+  type: uint32_t
+  description: "Number of slaves"
+
+polarity:
+  include: "platforms/maxim/max32662/enums/spi_ss_polarity.yaml"
+  description: "Slave select polarity"
+
+vssel:
+  include: "platforms/maxim/max32662/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+dma_param:
+  include: "no-os/dma/no_os_dma_init_param.yaml"
+  pointer: true
+  description: "DMA initialization parameters (pointer to DMA init struct, NULL if not used)"
+
+dma_rx_priority:
+  type: uint32_t
+  description: "DMA RX priority"
+
+dma_tx_priority:
+  type: uint32_t
+  description: "DMA TX priority"
+
+$override:
+  $parent:
+    # device_id <= MXC_SPI_INSTANCES-1. MXC_SPI_INSTANCES=2 (max32662.h); maxim_spi.c
+    # checks device_id >= MXC_SPI_INSTANCES.
+    - device_id:
+        default: 0
+        maximum: 1
+    # chip_select handled 0..3 by the _max_spi_config() switch (maxim_spi.c), with a
+    # default -EINVAL. Note all four cases map to ss0 in the driver, but 0..3 are the
+    # only values that pass the bound check.
+    - chip_select:
+        default: 0
+        maximum: 3

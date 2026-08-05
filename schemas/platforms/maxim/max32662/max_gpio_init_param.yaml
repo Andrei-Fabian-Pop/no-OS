@@ -1,0 +1,30 @@
+$id: "platforms/maxim/max32662/max_gpio_init_param.yaml"
+$type: struct
+$symbol: max_gpio_init_param
+$capability: gpio
+$description: "Maxim MAX32662 platform specific GPIO initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_gpio.h"
+    - "include/no_os_irq.h"
+    - "maxim_gpio.c"
+    - "drivers/api/no_os_gpio.c"
+
+vssel:
+  include: "platforms/maxim/max32662/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+$override:
+  $parent:
+    # port < N_PORTS (= MXC_CFG_GPIO_INSTANCES = 1, max32662.h). maxim_gpio.c checks
+    # param->port >= N_PORTS, so the only valid port is 0.
+    - port:
+        minimum: 0
+        maximum: 0
+
+    # number < N_PINS (= MXC_CFG_GPIO_PINS_PORT = 32, max32662.h). maxim_gpio.c checks
+    # param->number >= N_PINS, so valid pins are 0..31.
+    - number:
+        minimum: 0
+        maximum: 31

@@ -1,0 +1,30 @@
+$id: "platforms/maxim/max32662/max_uart_init_param.yaml"
+$type: struct
+$symbol: max_uart_init_param
+$capability: uart
+$description: "Maxim MAX32662 platform specific UART initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_uart.h"
+
+flow:
+  include: "platforms/maxim/max32662/enums/max_uart_flow_ctrl.yaml"
+  description: "UART flow control setting"
+
+map:
+  include: "platforms/maxim/max32662/enums/max_uart_map.yaml"
+  description: "UART pin mapping select"
+
+vssel:
+  include: "platforms/maxim/max32662/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+$override:
+  $parent:
+    # device_id <= MXC_UART_INSTANCES-1. MXC_UART_INSTANCES=2 (max32662.h);
+    # _max_uart_pins_config (maxim_uart.c) handles device_id 0,1 and returns
+    # -EINVAL otherwise.
+    - device_id:
+        minimum: 0
+        maximum: 1

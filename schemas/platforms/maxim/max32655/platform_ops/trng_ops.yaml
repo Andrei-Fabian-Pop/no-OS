@@ -1,0 +1,15 @@
+$id: "platforms/maxim/max32655/platform_ops/trng_ops.yaml"
+$type: platform_ops
+$ranking: 4
+$symbol: max_trng_ops
+$capability: trng
+$description: "Maxim MAX32655 TRNG platform ops"
+$sources:
+  noos:
+    - "include/no_os_trng.h"
+    - "drivers/api/no_os_trng.c"
+  platform:
+    - "maxim_trng.h"
+    - "maxim_trng.c"
+  sdk:
+    - "trng.h"

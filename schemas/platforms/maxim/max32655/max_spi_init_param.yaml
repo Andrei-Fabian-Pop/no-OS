@@ -1,0 +1,46 @@
+$id: "platforms/maxim/max32655/max_spi_init_param.yaml"
+$type: struct
+$symbol: max_spi_init_param
+$capability: spi
+$description: "Maxim MAX32655 platform specific SPI initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_spi.h"
+
+num_slaves:
+  type: uint32_t
+  description: "Number of slaves"
+
+polarity:
+  include: "platforms/maxim/max32655/enums/spi_ss_polarity.yaml"
+  description: "Slave select polarity"
+
+vssel:
+  include: "platforms/maxim/max32655/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+dma_param:
+  include: "no-os/dma/no_os_dma_init_param.yaml"
+  pointer: true
+  description: "DMA initialization parameters (pointer to DMA init struct, NULL if not used)"
+
+dma_rx_priority:
+  type: uint32_t
+  description: "DMA RX priority"
+
+dma_tx_priority:
+  type: uint32_t
+  description: "DMA TX priority"
+
+$override:
+  $parent:
+    # device_id <= MXC_SPI_INSTANCES-1. ARM Cortex-M4F core: MXC_SPI_INSTANCES=2
+    # (max32655.h). no-OS builds target the ARM core (no __riscv define). On the
+    # RISC-V core (__riscv) MXC_SPI_INSTANCES=1, so the maximum would be 0.
+    - device_id:
+        default: 0
+        maximum: 1
+    # No chip_select constraint: the driver selects the SS line via ss0/ss1/ss2
+    # booleans (maxim_spi.c _max_spi_config) with no -EINVAL bound check, so no
+    # reliable maximum can be asserted.

@@ -1,0 +1,21 @@
+$id: "platforms/maxim/max32662/max_pwm_init_param.yaml"
+$type: struct
+$symbol: max_pwm_init_param
+$capability: pwm
+$description: "Maxim MAX32662 platform specific PWM initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_pwm.h"
+
+vssel:
+  include: "platforms/maxim/max32662/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+$override:
+  $parent:
+    # _max_pwm_pins_vddio (maxim_pwm.c) only handles id 0 (timer 0) and returns
+    # -EINVAL otherwise, so on the MAX32662 only PWM/timer 0 can be configured.
+    - id:
+        minimum: 0
+        maximum: 0

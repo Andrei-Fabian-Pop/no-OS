@@ -1,0 +1,14 @@
+$id: "platforms/maxim/max32650/platform_ops/timer_ops.yaml"
+$type: platform_ops
+$ranking: 4
+$symbol: max_timer_ops
+$capability: timer
+$description: "Maxim MAX32650 timer platform ops"
+$sources:
+  noos:
+    - "include/no_os_timer.h"
+  platform:
+    - "maxim_timer.h"
+    - "maxim_timer.c"
+  sdk:
+    - "tmr.h"

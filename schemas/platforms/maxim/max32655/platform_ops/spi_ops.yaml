@@ -1,0 +1,20 @@
+$id: "platforms/maxim/max32655/platform_ops/spi_ops.yaml"
+$type: platform_ops
+$ranking: 4
+$symbol: max_spi_ops
+$capability: spi
+$sources:
+  noos:
+    - "include/no_os_dma.h"
+    - "drivers/api/no_os_dma.c"
+  platform:
+    - "maxim_spi.h"
+    - "maxim_spi.c"
+    - "../common/maxim_dma.h"
+    - "../common/maxim_dma.c"
+    - "maxim_delay.c"
+  sdk:
+    - "spi.h"
+    - "mxc_pins.h"
+    - "dma.h"
+  $note: "Maxim SPI driver uses DMA internally"

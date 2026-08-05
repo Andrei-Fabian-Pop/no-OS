@@ -1,0 +1,64 @@
+$id: "platforms/maxim/max32650/max_spi_init_param.yaml"
+$type: struct
+$symbol: max_spi_init_param
+$capability: spi
+$description: "Maxim MAX32650 platform specific SPI initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_spi.h"
+
+num_slaves:
+  type: uint32_t
+  description: "Number of slaves"
+
+polarity:
+  include: "platforms/maxim/max32650/enums/spi_ss_polarity.yaml"
+  description: "Slave select polarity"
+
+vssel:
+  include: "platforms/maxim/max32650/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+dma_param:
+  include: "no-os/dma/no_os_dma_init_param.yaml"
+  pointer: true
+  description: "DMA initialization parameters (pointer to DMA init struct, NULL if not used)"
+
+dma_rx_priority:
+  type: uint32_t
+  description: "DMA RX priority"
+
+dma_tx_priority:
+  type: uint32_t
+  description: "DMA TX priority"
+
+$override:
+  $parent:
+    - device_id:
+        default: 0
+        maximum: 3
+
+    - $switch:
+        $on: device_id
+        $cases:
+          0:
+            chip_select:
+              default: 0
+              maximum: 0
+          1:
+            chip_select:
+              default: 0
+              maximum: 3
+          2:
+            chip_select:
+              default: 0
+              maximum: 3
+          3:
+            chip_select:
+              default: 0
+              maximum: 3
+          _:
+            chip_select:
+              default: 0
+              maximum: 3

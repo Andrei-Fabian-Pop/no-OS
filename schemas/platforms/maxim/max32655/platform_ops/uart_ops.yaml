@@ -1,0 +1,17 @@
+$id: "platforms/maxim/max32655/platform_ops/uart_ops.yaml"
+$type: platform_ops
+$ranking: 4
+$symbol: max_uart_ops
+$capability: uart
+$sources:
+  noos:
+    - "include/no_os_irq.h"
+    - "drivers/api/no_os_irq.c"
+  platform:
+    - "maxim_uart.h"
+    - "maxim_uart.c"
+    - "maxim_irq.h"
+    - "maxim_irq.c"
+  sdk:
+    - "uart.h"
+    - "mxc_sys.h"

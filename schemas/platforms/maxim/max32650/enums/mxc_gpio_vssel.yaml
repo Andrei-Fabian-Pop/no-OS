@@ -1,0 +1,16 @@
+$id: "platforms/maxim/max32650/enums/mxc_gpio_vssel.yaml"
+$type: enum
+$symbol: mxc_gpio_vssel_t
+$description: "Maxim MAX32650 GPIO voltage select options"
+$ranking: 4
+$sources:
+  sdk:
+    - "gpio.h"
+
+values:
+  MXC_GPIO_VSSEL_VDDIO:
+    description: "Standard voltage (VDDIO)"
+  MXC_GPIO_VSSEL_VDDIOH:
+    description: "High voltage (VDDIOH)"
+
+default: MXC_GPIO_VSSEL_VDDIO

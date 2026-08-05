@@ -1,0 +1,13 @@
+$id: "platforms/maxim/max32655/platform_ops/dma_ops.yaml"
+$type: platform_ops
+$ranking: 4
+$symbol: max_dma_ops
+$capability: dma
+$sources:
+  platform:
+    - "../common/maxim_dma.h"
+    - "../common/maxim_dma.c"
+    - "maxim_irq.h"
+    - "maxim_irq.c"
+  sdk:
+    - "dma.h"

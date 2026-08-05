@@ -1,0 +1,16 @@
+$id: "platforms/maxim/max32662/enums/max_uart_flow_ctrl.yaml"
+$type: enum
+$symbol: max_uart_flow_ctrl
+$description: "Maxim MAX32662 UART flow control options"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_uart.h"
+
+values:
+  MAX_UART_FLOW_DIS:
+    description: "Flow control disabled"
+  UART_FLOW_EN:
+    description: "Flow control enabled"
+
+default: MAX_UART_FLOW_DIS

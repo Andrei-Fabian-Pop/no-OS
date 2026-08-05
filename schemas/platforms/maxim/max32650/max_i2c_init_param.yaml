@@ -1,0 +1,22 @@
+$id: "platforms/maxim/max32650/max_i2c_init_param.yaml"
+$type: struct
+$symbol: max_i2c_init_param
+$capability: i2c
+$description: "Maxim MAX32650 platform specific I2C initialization parameters"
+$ranking: 4
+$sources:
+  platform:
+    - "maxim_i2c.h"
+
+vssel:
+  include: "platforms/maxim/max32650/enums/mxc_gpio_vssel.yaml"
+  description: "GPIO voltage select"
+
+$override:
+  $parent:
+    - device_id:
+        minimum: 0
+        maximum: 1
+
+    - max_speed_hz:
+        maximum: 3400000

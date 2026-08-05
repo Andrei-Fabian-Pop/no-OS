@@ -1,0 +1,14 @@
+$id: "platforms/maxim/max32662/platform_ops/i2c_ops.yaml"
+$type: platform_ops
+$ranking: 4
+$symbol: max_i2c_ops
+$capability: i2c
+$sources:
+  noos:
+    - "include/no_os_i2c.h"
+  platform:
+    - "maxim_i2c.h"
+    - "maxim_i2c.c"
+  sdk:
+    - "i2c.h"
+    - "gpio.h"
