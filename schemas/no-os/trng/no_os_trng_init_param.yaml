@@ -4,6 +4,8 @@ $symbol: no_os_trng_init_param
 $capability: trng
 $description: "Init parameter for TRNG"
 $ranking: 4
+$config:
+  - "TRNG"
 $sources:
   noos:
     - "include/no_os_trng.h"

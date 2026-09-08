@@ -4,6 +4,8 @@ $symbol: no_os_i2c_init_param
 $capability: i2c
 $description: "Structure holding the parameters for I2C initialization"
 $ranking: 4
+$config:
+  - "I2C"
 $sources:
   noos:
     - "include/no_os_i2c.h"

@@ -4,6 +4,8 @@ $symbol: pico_gpio_ops
 $capability: gpio
 $description: "Pico GPIO platform ops"
 $ranking: 4
+$config:
+  - "GPIO"
 $sources:
   platform:
     - "pico_gpio.h"

@@ -1,0 +1,50 @@
+$id: "no-os/iio/iio_app_device.yaml"
+$type: struct
+$symbol: iio_app_device
+$description: "One entry in an iio_app's device list"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio_app/iio_app.h"
+$sources:
+  noos:
+    - "iio/iio_app/iio_app.h"
+
+name:
+  type: string
+  required: true
+  description: "Name the IIO client sees, e.g. adxl355"
+
+# NOTE: `void *` in C because it takes whichever driver the user picked, so no single type
+# describes it. `include_type` is exactly this case: any descriptor is accepted.
+dev:
+  include_type: descriptor
+  pointer: true
+  required: true
+  description: "The driver descriptor this entry exposes"
+
+dev_descriptor:
+  include: "no-os/iio/iio_device.yaml"
+  pointer: true
+  required: true
+  description: "The driver's IIO vtable, usually a member of its iio wrapper"
+
+read_buff:
+  include: "no-os/iio/iio_data_buffer.yaml"
+  pointer: true
+  required: false
+  description: "Buffer for sample reads. Leave empty for a device with no input channels."
+
+write_buff:
+  include: "no-os/iio/iio_data_buffer.yaml"
+  pointer: true
+  required: false
+  description: "Buffer for sample writes. Leave empty for a device with no output channels."
+
+default_trigger_id:
+  type: string
+  required: false
+  description: "Name of the trigger to attach at startup, matching an entry in the trigger list"
+
+# NOTE: `dev` and `dev_descriptor` must describe the same device, and nothing checks that.
+# `include_type` narrows `dev` to descriptors and no further; the pairing is on the user.

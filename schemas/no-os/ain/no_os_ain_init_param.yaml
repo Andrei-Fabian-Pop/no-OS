@@ -4,6 +4,7 @@ $symbol: no_os_ain_init_param
 $capability: ain
 $description: "Structure holding the parameters for analog input initialization"
 $ranking: 4
+$config: []
 $sources:
   noos:
     - "include/no_os_ain.h"

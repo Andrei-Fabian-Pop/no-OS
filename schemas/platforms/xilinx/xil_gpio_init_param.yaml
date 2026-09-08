@@ -4,6 +4,7 @@ $symbol: xil_gpio_init_param
 $capability: gpio
 $description: "Xilinx platform specific GPIO initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_gpio.h"

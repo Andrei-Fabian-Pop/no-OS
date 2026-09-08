@@ -1,0 +1,22 @@
+$id: "devices/adxl355/iio_adxl355_trig_desc.yaml"
+$type: extern
+$symbol: adxl355_iio_trig_desc
+$description: "The ADXL355's IIO trigger vtable, defined by the driver"
+$ranking: 4
+$provides: "no-os/iio/iio_trigger.yaml"
+$header: "drivers/accel/adxl355/iio_adxl355.h"
+$config:
+  - "IIO"
+  - "ACCEL"
+  - "ACCEL_IIO_ADXL355"
+
+# NOTE: `extern struct iio_trigger adxl355_iio_trig_desc;` (iio_adxl355.h:39), defined in a
+# separate file, iio_adxl355_trig.c:38. Both that file and iio_adxl355.c are compiled by
+# CONFIG_ACCEL_IIO_ADXL355 (drivers/accel/CMakeLists.txt:6-7), so no $sources are needed.
+#
+# NOTE: By value, and iio_trigger_init.descriptor is `pointer: true`, so this emits
+# `&adxl355_iio_trig_desc` - matching IIO_APP_TRIGGER's third argument in
+# projects/eval-adxl355-pmdz/src/examples/iio_trigger_example/iio_trigger_example.c:135.
+#
+# NOTE: ACCEL_IIO_ADXL355 `depends on SPI` and the block is inside `if ACCEL`, so ACCEL is
+# named here; SPI comes from the spi node the wrapper's configuration needs.

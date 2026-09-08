@@ -4,6 +4,7 @@ $symbol: max_uart_init_param
 $capability: uart
 $description: "Maxim MAX32650 platform specific UART initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "maxim_uart.h"

@@ -4,6 +4,7 @@ $symbol: xil_irq_init_param
 $capability: irq
 $description: "Xilinx platform specific IRQ initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_irq.h"

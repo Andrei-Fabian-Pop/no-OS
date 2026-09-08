@@ -3,6 +3,8 @@ $type: enum
 $symbol: no_os_uart_size
 $description: "UART character size (number of data bits)"
 $ranking: 4
+$config:
+  - "UART"
 $sources:
   noos:
     - "include/no_os_uart.h"

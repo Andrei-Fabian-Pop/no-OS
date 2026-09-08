@@ -4,6 +4,7 @@ $symbol: mbed_aout_init_param
 $capability: aout
 $description: "Mbed platform specific analog output initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_ain_aout.h"

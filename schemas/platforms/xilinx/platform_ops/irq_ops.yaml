@@ -4,6 +4,8 @@ $symbol: xil_irq_ops
 $capability: irq
 $description: "Xilinx IRQ platform ops"
 $ranking: 4
+$config:
+  - "IRQ"
 $sources:
   platform:
     - "xilinx_irq.h"

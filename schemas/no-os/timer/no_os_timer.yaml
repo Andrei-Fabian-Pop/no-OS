@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: no_os_timer_desc
 $description: "Timer descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "no-os/timer/no_os_timer_init_param.yaml"
   pointer: true
   required: true

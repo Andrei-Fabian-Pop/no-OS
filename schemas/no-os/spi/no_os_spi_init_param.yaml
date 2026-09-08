@@ -4,6 +4,8 @@ $symbol: no_os_spi_init_param
 $capability: spi
 $description: "Structure holding the parameters for SPI initialization"
 $ranking: 4
+$config:
+  - "SPI"
 $sources:
   noos:
     - "include/no_os_spi.h"
@@ -12,8 +14,6 @@ $sources:
 device_id:
   type: uint32_t
   required: true
-  # Evidence: drivers/api/no_os_spi.c:62 `if (param->device_id > SPI_MAX_BUS_NUMBER) return -EINVAL;`
-  # with include/no_os_spi.h:41 `#define SPI_MAX_BUS_NUMBER 8` (strict >, so 8 is valid)
   maximum: 8
   description: "SPI peripheral device ID"
 

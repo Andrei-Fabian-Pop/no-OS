@@ -4,6 +4,7 @@ $symbol: mbed_gpio_irq_init_param
 $capability: gpio_irq
 $description: "Mbed platform specific GPIO IRQ initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_gpio_irq.h"

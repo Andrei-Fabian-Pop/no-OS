@@ -1,0 +1,35 @@
+$id: "no-os/enums/no_os_irq_peripheral.yaml"
+$type: enum
+$symbol: no_os_irq_peripheral
+$description: "Which peripheral the interrupt comes from"
+$ranking: 4
+$config:
+  - "IRQ"
+$sources:
+  noos:
+    - "include/no_os_irq.h"
+
+values:
+  NO_OS_GPIO_IRQ:
+    description: "A GPIO pin"
+  NO_OS_UART_IRQ:
+    description: "A UART"
+  NO_OS_RTC_IRQ:
+    description: "The real-time clock"
+  NO_OS_TIM_IRQ:
+    description: "A timer"
+  NO_OS_LPTIM_IRQ:
+    description: "A low-power timer"
+  NO_OS_TDM_DMA_IRQ:
+    description: "The DMA channel serving a TDM interface"
+  NO_OS_TIM_DMA_IRQ:
+    description: "The DMA channel serving a timer"
+  NO_OS_SPI_DMA_IRQ:
+    description: "The DMA channel serving a SPI bus"
+  NO_OS_DMA_IRQ:
+    description: "A DMA controller, not tied to one peripheral"
+  NO_OS_USB_IRQ:
+    description: "The USB peripheral"
+
+# NOTE: No default. This says which hardware block the interrupt came from, so the answer
+# is fixed by the wiring; pre-picking one would only ever be wrong.

@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: no_os_trng_desc
 $description: "TRNG (True Random Number Generator) descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "no-os/trng/no_os_trng_init_param.yaml"
   pointer: true
   required: true

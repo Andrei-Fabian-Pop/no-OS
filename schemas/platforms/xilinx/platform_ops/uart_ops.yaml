@@ -4,6 +4,8 @@ $symbol: xil_uart_ops
 $capability: uart
 $description: "Xilinx UART platform ops"
 $ranking: 4
+$config:
+  - "UART"
 $sources:
   platform:
     - "xilinx_uart.h"

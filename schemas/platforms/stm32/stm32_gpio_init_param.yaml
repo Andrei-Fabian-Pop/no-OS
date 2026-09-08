@@ -4,6 +4,7 @@ $symbol: stm32_gpio_init_param
 $capability: gpio
 $description: "STM32 platform specific GPIO initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "stm32_gpio.h"

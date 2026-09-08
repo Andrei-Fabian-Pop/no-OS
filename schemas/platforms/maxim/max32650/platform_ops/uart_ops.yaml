@@ -1,6 +1,9 @@
 $id: "platforms/maxim/max32650/platform_ops/uart_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "IRQ"
+  - "UART"
 $symbol: max_uart_ops
 $capability: uart
 $sources:

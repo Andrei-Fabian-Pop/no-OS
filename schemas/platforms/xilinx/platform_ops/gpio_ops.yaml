@@ -4,6 +4,8 @@ $symbol: xil_gpio_ops
 $capability: gpio
 $description: "Xilinx GPIO platform ops"
 $ranking: 4
+$config:
+  - "GPIO"
 $sources:
   platform:
     - "xilinx_gpio.h"

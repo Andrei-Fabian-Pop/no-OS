@@ -3,6 +3,8 @@ $type: enum
 $symbol: no_os_tdm_mode
 $description: "TDM operating mode: master/slave, tx/rx"
 $ranking: 4
+$config:
+  - "TDM"
 $sources:
   noos:
     - "include/no_os_tdm.h"

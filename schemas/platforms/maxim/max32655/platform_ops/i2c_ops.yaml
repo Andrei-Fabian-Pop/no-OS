@@ -1,6 +1,8 @@
 $id: "platforms/maxim/max32655/platform_ops/i2c_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "I2C"
 $symbol: max_i2c_ops
 $capability: i2c
 $sources:

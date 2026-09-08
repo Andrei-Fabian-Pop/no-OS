@@ -4,6 +4,8 @@ $symbol: linux_timer_ops
 $capability: timer
 $description: "Linux Timer platform ops"
 $ranking: 4
+$config:
+  - "TIMER"
 $sources:
   platform:
     - "linux_timer.h"

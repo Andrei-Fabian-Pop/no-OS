@@ -4,6 +4,8 @@ $symbol: no_os_tdm_init_param
 $capability: tdm
 $description: "Structure holding the parameters for TDM initialization"
 $ranking: 4
+$config:
+  - "TDM"
 $sources:
   noos:
     - "include/no_os_tdm.h"

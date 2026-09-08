@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: ltc4306_dev
 $description: "LTC4306 4-Channel I2C Mux/Switch device descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "devices/ltc4306/ltc4306_init_param.yaml"
   pointer: false
   required: true

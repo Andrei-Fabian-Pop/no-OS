@@ -3,6 +3,7 @@ $type: enum
 $symbol: xil_timer_type
 $description: "Xilinx timer type selection"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_timer.h"

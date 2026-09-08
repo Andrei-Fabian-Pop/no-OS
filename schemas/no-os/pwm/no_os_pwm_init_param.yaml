@@ -4,6 +4,8 @@ $symbol: no_os_pwm_init_param
 $capability: pwm
 $description: "Structure containing the init parameters needed by the PWM generator"
 $ranking: 4
+$config:
+  - "PWM"
 $sources:
   noos:
     - "include/no_os_pwm.h"

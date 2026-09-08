@@ -1,0 +1,15 @@
+$id: "devices/ad7124/structs/ad7124_st_reg.yaml"
+$type: struct
+$symbol: ad7124_st_reg
+$description: "AD7124 register descriptor"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/adc/ad7124/ad7124.h"
+
+# NOTE: deliberately property-less. `struct ad7124_st_reg` has `addr`, `value`, `size` and
+# `rw` (ad7124.h), but the thing a project supplies is never one register — it is the whole
+# 57-entry power-on table, whose every entry is a datasheet constant. The driver ships that
+# table as `ad7124_regs` (see ad7124_regs.yaml), so this schema exists only to give the type
+# a name for `include` matching. See no-os/iio/iio_device.yaml for the same pattern.

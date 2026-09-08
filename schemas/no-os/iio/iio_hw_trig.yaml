@@ -1,0 +1,57 @@
+$id: "no-os/iio/iio_hw_trig.yaml"
+$type: descriptor
+$symbol: iio_hw_trig
+$description: "Hardware IIO trigger descriptor, fired by an interrupt"
+$ranking: 4
+$config: []
+$init_template: "hw_trig_init.eta"
+$remove_template: "hw_trig_remove.eta"
+
+$init_param:
+  include: "no-os/iio/iio_hw_trig_init_param.yaml"
+  pointer: true
+  required: true
+  description: "Parameters describing which interrupt fires this trigger"
+
+# Every member below is copied in by iio_hw_trig_init (iio_trigger.c) from the init_param,
+# so all are readonly: they exist to be referenced, never set. A descriptor emits no
+# initializer, so none of them are printed.
+
+iio_desc:
+  include: "no-os/iio/iio_desc.yaml"
+  pointer: true
+  readonly: true
+  description: "The app's IIO descriptor. NULL after init, because iio_app_init creates it later; the app target patches it in afterwards."
+
+irq_ctrl:
+  include: "no-os/irq/no_os_irq.yaml"
+  pointer: true
+  readonly: true
+  description: "Interrupt controller that owns irq_id, copied from init_param.irq_ctrl"
+
+irq_id:
+  type: uint32_t
+  readonly: true
+  description: "Interrupt line this trigger listens on, copied from init_param.irq_id"
+
+irq_trig_lvl:
+  include: "no-os/enums/no_os_irq_trig_level.yaml"
+  readonly: true
+  description: "Signal condition that fires the interrupt, copied from init_param.irq_trig_lvl"
+
+name:
+  type: string
+  readonly: true
+  description: "Trigger name as seen by the IIO client, copied from init_param.name"
+
+# NOTE: `struct no_os_callback_desc` by value (iio_trigger.h:59), which iio_hw_trig_init
+# fills from cb_info plus its own handler. No schema for the type yet, so it is declared as
+# raw to keep this struct 1:1 with the C; nothing can reference into it either way.
+irq_cb:
+  type: raw
+  readonly: true
+  description: "IRQ callback iio_hw_trig_init registered with irq_ctrl"
+
+# NOTE: `name` is `char name[TRIG_MAX_NAME_SIZE + 1]`, an inline array rather than a pointer.
+# Only ever read as a whole, so `type: string` is the right shape for a reference; nothing
+# emits it, since it is readonly.

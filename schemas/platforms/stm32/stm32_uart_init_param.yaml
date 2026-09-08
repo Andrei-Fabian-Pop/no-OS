@@ -4,6 +4,7 @@ $symbol: stm32_uart_init_param
 $capability: uart
 $description: "STM32 platform specific UART initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "stm32_uart.h"

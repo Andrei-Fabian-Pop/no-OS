@@ -4,6 +4,7 @@ $symbol: mbed_spi_init_param
 $capability: spi
 $description: "Mbed platform specific SPI initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_spi.h"

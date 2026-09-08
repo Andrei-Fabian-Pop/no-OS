@@ -4,6 +4,8 @@ $symbol: mbed_timer_ops
 $capability: timer
 $description: "Mbed timer platform ops"
 $ranking: 4
+$config:
+  - "TIMER"
 $sources:
   noos:
     - "include/no_os_timer.h"

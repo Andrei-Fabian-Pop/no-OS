@@ -3,6 +3,8 @@ $type: enum
 $symbol: no_os_spi_bit_order
 $description: "SPI bit order configuration"
 $ranking: 4
+$config:
+  - "SPI"
 $sources:
   noos:
     - "include/no_os_spi.h"

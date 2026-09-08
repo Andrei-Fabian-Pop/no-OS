@@ -4,6 +4,7 @@ $symbol: stm32_spi_init_param
 $capability: spi
 $description: "STM32 platform specific SPI initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "stm32_spi.h"

@@ -1,6 +1,8 @@
 $id: "platforms/maxim/max32662/platform_ops/gpio_irq_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "IRQ"
 $symbol: max_gpio_irq_ops
 $capability: gpio_irq
 $description: "Maxim MAX32662 GPIO IRQ platform ops"

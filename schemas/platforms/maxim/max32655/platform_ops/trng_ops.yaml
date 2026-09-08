@@ -1,6 +1,8 @@
 $id: "platforms/maxim/max32655/platform_ops/trng_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "TRNG"
 $symbol: max_trng_ops
 $capability: trng
 $description: "Maxim MAX32655 TRNG platform ops"

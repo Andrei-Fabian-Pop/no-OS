@@ -1,0 +1,53 @@
+$id: "no-os/iio/iio_hw_trig_init_param.yaml"
+$type: struct
+$symbol: iio_hw_trig_init_param
+$description: "Parameters for a hardware IIO trigger, driven by an interrupt"
+$ranking: 4
+$config:
+  - "IIO"
+  - "IRQ"
+$header: "iio/iio_trigger.h"
+$sources:
+  noos:
+    - "iio/iio_trigger.h"
+
+iio_desc:
+  include: "no-os/iio/iio_desc.yaml"
+  pointer: true
+  required: false
+  description: "The app's IIO descriptor. Leave empty: iio_app_init creates it, so it does not exist yet when this struct is written, and every upstream example patches the trigger descriptor afterwards instead."
+
+irq_ctrl:
+  include: "no-os/irq/no_os_irq.yaml"
+  pointer: true
+  required: true
+  description: "The interrupt controller that owns irq_id"
+
+irq_id:
+  type: uint32_t
+  required: true
+  description: "Interrupt line the trigger listens on, as numbered by irq_ctrl"
+
+irq_trig_lvl:
+  include: "no-os/enums/no_os_irq_trig_level.yaml"
+  required: false
+  description: "Signal condition that fires the interrupt. Needed for a GPIO trigger; a timer trigger leaves it out."
+
+cb_info:
+  include: "no-os/iio/iio_hw_trig_cb_info.yaml"
+  required: true
+  description: "Which interrupt this trigger listens to. Embedded by value."
+
+name:
+  type: string
+  required: true
+  description: "Trigger name as seen by the IIO client, e.g. adxl355-dev0"
+
+# NOTE: `iio_desc` is declared for completeness but no upstream example sets it, because the
+# app's iio_desc does not exist until iio_app_init has run. All 15 of them patch the trigger
+# *descriptor* afterwards instead (`trig_desc->iio_desc = app->iio_desc`,
+# iio_trigger_example.c:150). That backpatch is emitted by the iio template set, not by this
+# field.
+#
+# NOTE: `no_os_irq_set_priority(irq_ctrl, irq_id, 1)` is also mandatory glue in every
+# example, but it is a call, not a field. It belongs in iio_hw_trig's init template.

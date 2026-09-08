@@ -1,0 +1,55 @@
+$id: "devices/adxl355/adxl355_iio.yaml"
+$type: descriptor
+$symbol: adxl355_iio_dev
+$description: "ADXL355 IIO wrapper descriptor"
+$ranking: 4
+$config: []
+$init_template: "iio_init.eta"
+$remove_template: "iio_remove.eta"
+
+$init_param:
+  include: "devices/adxl355/adxl355_iio_init_param.yaml"
+  pointer: true
+  required: true
+  description: "Which ADXL355 this wrapper drives"
+
+# Every member below is filled in by adxl355_iio_init, so all are readonly: they exist to be
+# referenced, never set. A descriptor emits no initializer, so none of them are printed.
+
+adxl355_dev:
+  include: "devices/adxl355/adxl355.yaml"
+  pointer: true
+  readonly: true
+  description: "The plain ADXL355 descriptor, created by adxl355_iio_init"
+
+iio_dev:
+  include: "no-os/iio/iio_device.yaml"
+  pointer: true
+  readonly: true
+  description: "This device's IIO vtable, for an iio_app_device's dev_descriptor"
+
+adxl355_hpf_3db_table:
+  type: raw
+  readonly: true
+  description: "High-pass filter corner lookup table, scaled per ODR at init"
+
+active_channels:
+  type: uint32_t
+  readonly: true
+  description: "Bitmask of channels the IIO core has enabled"
+
+no_of_active_channels:
+  type: uint8_t
+  readonly: true
+  description: "Population count of active_channels"
+
+# NOTE: All five members of struct adxl355_iio_dev (iio_adxl355.h:41-47).
+#
+# NOTE: `adxl355_dev` names the descriptor schema, matching how every other descriptor
+# reference is spelled (no_os_uart.yaml, no_os_irq.yaml). Referencing it is legal but of no
+# use: the wrapper allocates it privately, and adding an `adxl355` node for the same chip
+# would bring the part up twice.
+#
+# NOTE: `adxl355_hpf_3db_table` is `int [7][2]`. Arrays are one-dimensional in this model, so
+# it is `raw` rather than omitted. It is readonly and a descriptor prints no initializer, so
+# nothing is emitted either way; the declaration is here so the struct reads 1:1.

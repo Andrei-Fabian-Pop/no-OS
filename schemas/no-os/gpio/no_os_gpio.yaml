@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: no_os_gpio_desc
 $description: "GPIO descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "no-os/gpio/no_os_gpio_init_param.yaml"
   pointer: true
   required: true

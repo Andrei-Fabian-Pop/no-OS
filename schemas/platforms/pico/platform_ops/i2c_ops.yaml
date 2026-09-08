@@ -4,6 +4,8 @@ $symbol: pico_i2c_ops
 $capability: i2c
 $description: "Pico I2C platform ops"
 $ranking: 4
+$config:
+  - "I2C"
 $sources:
   platform:
     - "pico_i2c.h"

@@ -4,6 +4,7 @@ $symbol: pico_uart_init_param
 $capability: uart
 $description: "Pico platform specific UART initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "pico_uart.h"

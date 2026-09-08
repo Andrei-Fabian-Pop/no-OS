@@ -4,6 +4,7 @@ $symbol: linux_uart_init_param
 $capability: uart
 $description: "Linux platform specific UART initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "linux_uart.h"

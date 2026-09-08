@@ -4,6 +4,8 @@ $symbol: no_os_i3c_bus_init_param
 $capability: i3c
 $description: "Structure holding the parameters for I3C bus initialization"
 $ranking: 4
+$config:
+  - "I3C"
 $sources:
   noos:
     - "include/no_os_i3c.h"

@@ -4,6 +4,8 @@ $symbol: mbed_gpio_ops
 $capability: gpio
 $description: "Mbed GPIO platform ops"
 $ranking: 4
+$config:
+  - "GPIO"
 $sources:
   platform:
     - "mbed_gpio.h"

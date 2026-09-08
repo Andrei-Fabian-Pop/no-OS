@@ -1,6 +1,9 @@
 $id: "platforms/stm32/platform_ops/uart_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "IRQ"
+  - "UART"
 $symbol: stm32_uart_ops
 $capability: uart
 $sources:

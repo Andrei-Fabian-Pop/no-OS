@@ -3,6 +3,7 @@ $type: enum
 $symbol: spi_tx_gp
 $description: "Available GP config for SPI TX (MOSI)"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "pico_spi.h"

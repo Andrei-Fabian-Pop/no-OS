@@ -1,0 +1,44 @@
+$id: "no-os/enums/no_os_irq_event.yaml"
+$type: enum
+$symbol: no_os_irq_event
+$description: "What happened to raise the interrupt"
+$ranking: 4
+$config:
+  - "IRQ"
+$sources:
+  noos:
+    - "include/no_os_irq.h"
+
+values:
+  NO_OS_EVT_GPIO:
+    description: "A GPIO pin met its trigger condition"
+  NO_OS_EVT_UART_TX_COMPLETE:
+    description: "UART finished sending"
+  NO_OS_EVT_UART_RX_COMPLETE:
+    description: "UART finished receiving"
+  NO_OS_EVT_UART_ERROR:
+    description: "UART reported an error"
+  NO_OS_EVT_RTC:
+    description: "The real-time clock fired"
+  NO_OS_EVT_XINT:
+    description: "An external interrupt line fired"
+  NO_OS_EVT_TIM_ELAPSED:
+    description: "A timer reached its period"
+  NO_OS_EVT_TIM_PWM_PULSE_FINISHED:
+    description: "A timer finished a PWM pulse"
+  NO_OS_EVT_LPTIM_PWM_PULSE_FINISHED:
+    description: "A low-power timer finished a PWM pulse"
+  NO_OS_EVT_DMA_RX_COMPLETE:
+    description: "A DMA receive transfer finished"
+  NO_OS_EVT_DMA_RX_HALF_COMPLETE:
+    description: "A DMA receive transfer reached half its length"
+  NO_OS_EVT_DMA_TX_COMPLETE:
+    description: "A DMA transmit transfer finished"
+  NO_OS_EVT_USB:
+    description: "The USB peripheral raised an event"
+
+# NOTE: No default. Which event a callback wants is the whole point of registering it, so
+# there is nothing sensible to pre-pick.
+#
+# NOTE: `enum no_os_irq_uart_event_e` in the same header is a separate, older enum that the
+# header itself marks @todo-replace-with-this-one. Not modelled; nothing we generate uses it.

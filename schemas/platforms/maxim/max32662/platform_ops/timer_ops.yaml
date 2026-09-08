@@ -1,6 +1,8 @@
 $id: "platforms/maxim/max32662/platform_ops/timer_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "TIMER"
 $symbol: max_timer_ops
 $capability: timer
 $description: "Maxim MAX32662 timer platform ops"

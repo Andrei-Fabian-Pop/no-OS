@@ -4,6 +4,8 @@ $symbol: mbed_pwm_ops
 $capability: pwm
 $description: "Mbed PWM platform ops"
 $ranking: 4
+$config:
+  - "PWM"
 $sources:
   platform:
     - "mbed_pwm.h"

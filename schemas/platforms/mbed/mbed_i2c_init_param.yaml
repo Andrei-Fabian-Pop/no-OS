@@ -4,6 +4,7 @@ $symbol: mbed_i2c_init_param
 $capability: i2c
 $description: "Mbed platform specific I2C initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_i2c.h"

@@ -4,6 +4,8 @@ $symbol: pico_uart_ops
 $capability: uart
 $description: "Pico UART platform ops"
 $ranking: 4
+$config:
+  - "UART"
 $sources:
   platform:
     - "pico_uart.h"

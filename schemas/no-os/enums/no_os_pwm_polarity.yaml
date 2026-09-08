@@ -3,6 +3,8 @@ $type: enum
 $symbol: no_os_pwm_polarity
 $description: "Possible polarities of the PWM signal"
 $ranking: 4
+$config:
+  - "PWM"
 $sources:
   noos:
     - "include/no_os_pwm.h"

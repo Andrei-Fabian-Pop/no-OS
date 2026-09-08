@@ -4,6 +4,8 @@ $symbol: pico_irq_ops
 $capability: irq
 $description: "Pico IRQ platform ops"
 $ranking: 4
+$config:
+  - "IRQ"
 $sources:
   platform:
     - "pico_irq.h"

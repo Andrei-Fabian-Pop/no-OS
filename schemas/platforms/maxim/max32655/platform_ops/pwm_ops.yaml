@@ -1,6 +1,8 @@
 $id: "platforms/maxim/max32655/platform_ops/pwm_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "PWM"
 $symbol: max_pwm_ops
 $capability: pwm
 $sources:

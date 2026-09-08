@@ -1,3 +1,24 @@
+/*
+ * QUICKFIX for an upstream ad7124 driver bug. Remove once it is fixed.
+ *
+ * ad7124_setup ignores init_param->check_ready. It assigns it, then calls
+ * ad7124_update_dev_spi_settings(dev), which recomputes dev->check_ready from the
+ * register table's Error_En instead. The driver's own table sets Error_En = 0x0040,
+ * i.e. SPI_IGNORE_ERR_EN, so check_ready always ends up 1 no matter what is asked for.
+ *
+ * check_ready = 1 then routes every register read through ad7124_wait_for_spi_ready
+ * (ad7124.c:177), which polls by calling ad7124_read_register again (ad7124.c:301)
+ * rather than the no-check variant. Measured on an AD7124-8: with the bit set
+ * ad7124_setup fails and iio_info cannot reach the device; with it cleared the same
+ * project works. So the driver's own table does not work on hardware, which is why
+ * every in-tree project ships a private copy with Error_En = 0x0000.
+ *
+ * Clearing the bit here is the only way to reach check_ready = 0 from outside the
+ * driver. Writing through .regs is legal even though the init_param is const: the
+ * const applies to the pointer, not to the table it points at.
+ */
+<%= it.symbol_name %>.regs[AD7124_Error_En].value &= ~AD7124_ERREN_REG_SPI_IGNORE_ERR_EN;
+
 ret = ad7124_setup(&desc.<%= it.descriptor_name %>, &<%= it.symbol_name %>);
 if (ret)
 	return ret;

@@ -1,0 +1,21 @@
+$id: "no-os/iio/iio_ctx_attr.yaml"
+$type: struct
+$symbol: iio_ctx_attr
+$description: "One IIO context attribute name/value pair, reported to the IIO client"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio.h"
+$sources:
+  noos:
+    - "iio/iio.h"
+
+name:
+  type: string
+  required: true
+  description: "Attribute name as seen by the IIO client, e.g. hw_model"
+
+value:
+  type: string
+  required: true
+  description: "Attribute value as seen by the IIO client"

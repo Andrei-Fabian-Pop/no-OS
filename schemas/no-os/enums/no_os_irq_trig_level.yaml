@@ -1,0 +1,25 @@
+$id: "no-os/enums/no_os_irq_trig_level.yaml"
+$type: enum
+$symbol: no_os_irq_trig_level
+$description: "Signal condition that raises an interrupt"
+$ranking: 4
+$config:
+  - "IRQ"
+$sources:
+  noos:
+    - "include/no_os_irq.h"
+
+values:
+  NO_OS_IRQ_LEVEL_LOW:
+    description: "While the signal is low"
+  NO_OS_IRQ_LEVEL_HIGH:
+    description: "While the signal is high"
+  NO_OS_IRQ_EDGE_FALLING:
+    description: "On a high-to-low transition"
+  NO_OS_IRQ_EDGE_RISING:
+    description: "On a low-to-high transition"
+  NO_OS_IRQ_EDGE_BOTH:
+    description: "On any transition"
+
+# NOTE: No default on purpose. The right level is a property of the wiring, not of the
+# software, so guessing one would hide a decision the user has to make.

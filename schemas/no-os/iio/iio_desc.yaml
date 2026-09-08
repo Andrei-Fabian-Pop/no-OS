@@ -1,0 +1,16 @@
+$id: "no-os/iio/iio_desc.yaml"
+$type: struct
+$symbol: iio_desc
+$description: "The IIO core's own descriptor, created by iio_app_init"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio.h"
+$sources:
+  noos:
+    - "iio/iio.h"
+
+# NOTE: No properties on purpose, and none are possible: struct iio_desc is opaque, defined
+# in iio.c:196 rather than a header, so nothing outside the IIO core can read or write a
+# field. This schema exists as a type name for `include` to match. The only value that ever
+# reaches it is the app's own descriptor, which iio_app_init allocates.

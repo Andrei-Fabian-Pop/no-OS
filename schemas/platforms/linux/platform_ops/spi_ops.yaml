@@ -4,6 +4,8 @@ $symbol: linux_spi_ops
 $capability: spi
 $description: "Linux SPI platform ops"
 $ranking: 4
+$config:
+  - "SPI"
 $sources:
   platform:
     - "linux_spi.h"

@@ -3,6 +3,7 @@ $type: enum
 $symbol: stm32_tdm_synchonous
 $description: "TDM synchronization mode"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "stm32_tdm.h"

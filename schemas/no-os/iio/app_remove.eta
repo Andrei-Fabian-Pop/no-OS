@@ -1,0 +1,1 @@
+iio_app_remove(desc.<%= it.descriptor_name %>);

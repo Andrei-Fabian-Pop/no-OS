@@ -4,6 +4,7 @@ $symbol: xil_spi_init_param
 $capability: spi
 $description: "Xilinx platform specific SPI initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_spi.h"

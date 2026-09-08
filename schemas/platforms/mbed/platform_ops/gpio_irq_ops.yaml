@@ -4,6 +4,8 @@ $symbol: mbed_gpio_irq_ops
 $capability: gpio_irq
 $description: "Mbed GPIO IRQ platform ops"
 $ranking: 4
+$config:
+  - "IRQ"
 $sources:
   noos:
     - "include/no_os_irq.h"

@@ -4,6 +4,8 @@ $symbol: mbed_spi_ops
 $capability: spi
 $description: "Mbed SPI platform ops"
 $ranking: 4
+$config:
+  - "SPI"
 $sources:
   platform:
     - "mbed_spi.h"

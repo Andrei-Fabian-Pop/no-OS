@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: adt7420_dev
 $description: "ADT7420/ADT7320 Temperature Sensor device descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "devices/adt7420/adt7420_init_param.yaml"
   pointer: false
   required: true

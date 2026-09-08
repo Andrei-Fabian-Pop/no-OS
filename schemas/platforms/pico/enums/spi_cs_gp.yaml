@@ -3,6 +3,7 @@ $type: enum
 $symbol: spi_cs_gp
 $description: "Available GP config for SPI CS (chip select)"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "pico_spi.h"

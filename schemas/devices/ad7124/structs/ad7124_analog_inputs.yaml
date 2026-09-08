@@ -3,6 +3,7 @@ $type: struct
 $symbol: ad7124_analog_inputs
 $description: "AD7124 positive and negative analog input pair"
 $ranking: 4
+$config: []
 $sources:
   noos:
     - "drivers/adc/ad7124/ad7124.h"

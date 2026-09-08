@@ -4,6 +4,7 @@ $symbol: mbed_uart_init_param
 $capability: uart
 $description: "Mbed platform specific UART initialization parameters. Shared by mbed_uart_ops (hardware UART: uses uart_tx_pin/uart_rx_pin) and mbed_virtual_com_ops (USB VCOM: uses vendor_id/product_id/serial_number)."
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_uart.h"

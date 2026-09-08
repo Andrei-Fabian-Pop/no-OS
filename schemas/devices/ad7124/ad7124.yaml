@@ -3,9 +3,17 @@ $type: descriptor
 $symbol: ad7124_dev
 $description: "AD7124 24-bit Sigma-Delta ADC device descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "devices/ad7124/ad7124_init_param.yaml"
   pointer: true
   required: true
+
+# NOTE: the SPI clock is not a free choice, and slower is not safer. Measured on an AD7124-8 on
+# an AD-APARD32690-SL, same project and same register table either way: `max_speed_hz` of
+# 1000000 makes ad7124_setup return -ENODEV with a garbage ID register, while 10000000 reads
+# 0x14 and works. Reproduced across resets in both directions, so it is not flaky wiring. The
+# mechanism was not chased down; the point is that a low `max_speed_hz` on the SPI init_param
+# looks exactly like an absent or wrong part. Start at 10 MHz when bringing this device up.

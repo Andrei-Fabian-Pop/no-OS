@@ -1,0 +1,105 @@
+$id: "no-os/iio/iio_app_init_param.yaml"
+$type: struct
+$symbol: iio_app_init_param
+$description: "Parameters for an IIO application"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio_app/iio_app.h"
+$sources:
+  noos:
+    - "iio/iio_app/iio_app.h"
+
+ctx_attrs:
+  include: "no-os/iio/iio_ctx_attr.yaml"
+  pointer: true
+  count: nb_ctx_attr
+  required: false
+  description: "Context attributes the IIO client can read. Leave empty for none."
+
+nb_ctx_attr:
+  type: uint32_t
+  required: false
+  description: "How many attributes ctx_attrs holds"
+
+# NOTE: The four fields below are `readonly` - the app target fills them in, not the user.
+# `devices` and `trigs` point at arrays that can only be built after the init calls (their
+# elements name descriptors, which are not constant expressions), so the target collects every
+# iio_app_device and iio_trigger_init node in the workfile, emits the two arrays as locals in
+# main, and assigns all four fields there. It finds the two pointers by what they include and
+# their lengths through `count`, so none of these names is hardcoded anywhere.
+
+devices:
+  include: "no-os/iio/iio_app_device.yaml"
+  pointer: true
+  count: nb_devices
+  readonly: true
+  description: "The devices this app exposes. Filled in by the app target."
+
+nb_devices:
+  type: uint32_t
+  readonly: true
+  description: "How many devices `devices` holds. Filled in with NO_OS_ARRAY_SIZE."
+
+trigs:
+  include: "no-os/iio/iio_trigger_init.yaml"
+  pointer: true
+  count: nb_trigs
+  readonly: true
+  description: "The triggers this app publishes. Filled in by the app target."
+
+nb_trigs:
+  type: int32_t
+  readonly: true
+  description: "How many triggers `trigs` holds. Filled in with NO_OS_ARRAY_SIZE."
+
+uart_init_params:
+  include: "no-os/uart/no_os_uart_init_param.yaml"
+  required: true
+  description: "UART the IIO client talks over. Embedded by value."
+
+# NOTE: `void *` in C, but always an interrupt controller descriptor, so we say so. Needed
+# whenever a device uses a hardware trigger; NULL otherwise.
+irq_desc:
+  include: "no-os/irq/no_os_irq.yaml"
+  pointer: true
+  required: false
+  description: "Interrupt controller the app services. Leave empty if no device is triggered."
+
+# NOTE: A function pointer, `int (*)(void *arg)`, which nothing in the schema models. Written
+# verbatim, so the user supplies the function name and declares it themselves.
+post_step_callback:
+  type: raw
+  required: false
+  description: "Function called once per app loop iteration, e.g. iio_post_step_cb"
+
+arg:
+  type: raw
+  required: false
+  description: "Value handed to post_step_callback. Only meaningful alongside it."
+
+# NOTE: The four fields below sit behind #ifdefs — NO_OS_NETWORKING for the two wifi ones,
+# NO_OS_LWIP_NETWORKING for lwip_param, NO_OS_W5500_NETWORKING for net_dev. Setting one
+# without its macro will not compile, and the macro must be defined identically for the app
+# and for no-OS itself or this struct's layout differs between the two.
+wifi_ssid:
+  type: string
+  required: false
+  description: "WiFi network to join. Needs NO_OS_NETWORKING."
+
+wifi_pwd:
+  type: string
+  required: false
+  description: "Password for wifi_ssid. Needs NO_OS_NETWORKING."
+
+# NOTE: `struct lwip_network_param` by value, and `struct w5500_network_dev *`. Neither type
+# has a schema yet, so both are written verbatim until the networking path is modelled.
+lwip_param:
+  type: raw
+  required: false
+  description: "lwIP network parameters. Needs NO_OS_LWIP_NETWORKING."
+
+net_dev:
+  type: raw
+  required: false
+  description: "W5500 network device. Needs NO_OS_W5500_NETWORKING."

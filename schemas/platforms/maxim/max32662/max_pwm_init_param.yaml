@@ -4,6 +4,7 @@ $symbol: max_pwm_init_param
 $capability: pwm
 $description: "Maxim MAX32662 platform specific PWM initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "maxim_pwm.h"

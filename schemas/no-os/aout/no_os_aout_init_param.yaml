@@ -4,6 +4,7 @@ $symbol: no_os_aout_init_param
 $capability: aout
 $description: "Structure holding the parameters for analog output initialization"
 $ranking: 4
+$config: []
 $sources:
   noos:
     - "include/no_os_aout.h"

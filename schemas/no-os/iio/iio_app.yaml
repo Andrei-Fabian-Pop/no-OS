@@ -1,0 +1,57 @@
+$id: "no-os/iio/iio_app.yaml"
+$type: descriptor
+$symbol: iio_app_desc
+$description: "IIO application descriptor"
+$ranking: 4
+$config: []
+$init_template: "app_init.eta"
+$remove_template: "app_remove.eta"
+
+# NOTE: Taken by value, not by pointer: iio_app_init's second parameter is a plain
+# `struct iio_app_init_param`, unlike every other no-OS init function.
+$init_param:
+  include: "no-os/iio/iio_app_init_param.yaml"
+  required: true
+  description: "Devices, triggers and UART this app runs with"
+
+# Every member below is filled in by iio_app_init, so all are readonly: they exist to be
+# referenced, never set. A descriptor emits no initializer, so none of them are printed.
+
+uart_desc:
+  include: "no-os/uart/no_os_uart.yaml"
+  pointer: true
+  readonly: true
+  description: "UART the app opened from init_param.uart_init_params"
+
+irq_desc:
+  include: "no-os/irq/no_os_irq.yaml"
+  pointer: true
+  readonly: true
+  description: "Interrupt controller the app is servicing, copied from init_param.irq_desc"
+
+iio_desc:
+  include: "no-os/iio/iio_desc.yaml"
+  pointer: true
+  readonly: true
+  description: "The IIO core descriptor. Hardware triggers need this after init, which is why every example patches it into the trigger."
+
+# NOTE: A function pointer, `int (*)(void *arg)`, which nothing in the schema models.
+post_step_callback:
+  type: raw
+  readonly: true
+  description: "Copied from init_param.post_step_callback"
+
+arg:
+  type: raw
+  readonly: true
+  description: "Copied from init_param.arg"
+
+# NOTE: `struct lwip_network_desc *`, behind #ifdef NO_OS_LWIP_NETWORKING, and no schema for
+# the type yet, so it is written verbatim like the matching init_param field.
+lwip_desc:
+  type: raw
+  readonly: true
+  description: "lwIP network descriptor. Only present with NO_OS_LWIP_NETWORKING."
+
+# NOTE: iio_app_run is the app's main loop, not part of bringing the descriptor up, so it is
+# not in app_init.eta. The iio template set emits it in place of user_app.

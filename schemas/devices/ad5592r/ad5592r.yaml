@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: ad5592r_dev
 $description: "AD5592R 8-channel, 12-bit configurable ADC/DAC device descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "devices/ad5592r/ad5592r_init_param.yaml"
   pointer: true
   required: true

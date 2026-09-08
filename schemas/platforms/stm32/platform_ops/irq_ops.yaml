@@ -1,6 +1,8 @@
 $id: "platforms/stm32/platform_ops/irq_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "IRQ"
 $symbol: stm32_irq_ops
 $capability: irq
 $sources:

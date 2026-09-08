@@ -4,6 +4,8 @@ $symbol: mbed_irq_ops
 $capability: irq
 $description: "Mbed IRQ platform ops"
 $ranking: 4
+$config:
+  - "IRQ"
 $sources:
   platform:
     - "mbed_irq.h"

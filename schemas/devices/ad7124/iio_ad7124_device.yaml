@@ -1,0 +1,23 @@
+$id: "devices/ad7124/iio_ad7124_device.yaml"
+$type: extern
+$symbol: iio_ad7124_device
+$description: "The AD7124's IIO device vtable, defined by the driver"
+$ranking: 4
+$provides: "no-os/iio/iio_device.yaml"
+$header: "drivers/adc/ad7124/iio_ad7124.h"
+$config:
+  - "IIO"
+  - "ADC"
+  - "ADC_IIO_AD7124"
+
+# NOTE: `extern struct iio_device iio_ad7124_device;` (iio_ad7124.h:39). The driver defines
+# it, so there is nothing to configure and nothing to emit — this node exists to make the
+# name referenceable and to pull in the header and the Kconfig symbols.
+#
+# NOTE: ADC_IIO_AD7124 selects ADC_AD7124, but ADC_AD7124 `depends on SPI` and the whole
+# file is inside `if ADC`. A `select` closes a chain, a `depends on` never does, so ADC is
+# named here; SPI comes from the spi node the ad7124 descriptor already needs.
+#
+# NOTE: ad7124 has no iio wrapper descriptor — iio_ad7124.h:39 is its entire iio surface —
+# so an iio_app_device for it points `dev` at the plain `ad7124` descriptor and
+# `dev_descriptor` at this extern.

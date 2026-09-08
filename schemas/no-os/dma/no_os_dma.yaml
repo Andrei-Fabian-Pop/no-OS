@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: no_os_dma_desc
 $description: "DMA controller descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "no-os/dma/no_os_dma_init_param.yaml"
   pointer: true
   required: true

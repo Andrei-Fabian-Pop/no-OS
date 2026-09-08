@@ -3,6 +3,7 @@ $type: enum
 $symbol: max_uart_flow_ctrl
 $description: "Maxim MAX32650 UART flow control options"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "maxim_uart.h"

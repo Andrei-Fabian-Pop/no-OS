@@ -3,6 +3,11 @@ $type: struct
 $symbol: adt7420_init_param
 $description: "ADT7420/ADT7320 Temperature Sensor"
 $ranking: 4
+$config:
+  - "I2C"
+  - "SPI"
+  - "TEMPERATURE"
+  - "TEMPERATURE_ADT7420"
 $header: "drivers/temperature/adt7420/adt7420.h"
 $sources:
   noos:

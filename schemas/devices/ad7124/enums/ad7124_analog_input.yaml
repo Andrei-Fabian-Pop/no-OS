@@ -3,6 +3,7 @@ $type: enum
 $symbol: ad7124_analog_input
 $description: "AD7124 analog input sources"
 $ranking: 4
+$config: []
 $sources:
   noos:
     - "drivers/adc/ad7124/ad7124.h"

@@ -1,0 +1,31 @@
+$id: "no-os/iio/iio_trigger_init.yaml"
+$type: struct
+$symbol: iio_trigger_init
+$description: "One entry in an iio_app's trigger list"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio.h"
+$sources:
+  noos:
+    - "iio/iio.h"
+
+name:
+  type: string
+  required: true
+  description: "Name a device refers to this trigger by, matching its trigger_id"
+
+# NOTE: `void *` in C, because it can hold either a hardware or a software trigger. We only
+# support hardware triggers, so we say so and let the checker catch mistakes. Widen to a
+# union if software triggers are ever added.
+trig:
+  include: "no-os/iio/iio_hw_trig.yaml"
+  pointer: true
+  required: true
+  description: "The trigger descriptor this entry publishes"
+
+descriptor:
+  include: "no-os/iio/iio_trigger.yaml"
+  pointer: true
+  required: true
+  description: "The driver's trigger vtable, e.g. adis_iio_trig_desc"

@@ -4,6 +4,7 @@ $symbol: max_i2c_init_param
 $capability: i2c
 $description: "Maxim MAX32655 platform specific I2C initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "maxim_i2c.h"

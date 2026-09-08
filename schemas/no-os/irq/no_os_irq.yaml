@@ -3,9 +3,10 @@ $type: descriptor
 $symbol: no_os_irq_ctrl_desc
 $description: "Interrupt controller descriptor"
 $ranking: 4
+$config: []
 $init_template: "init.eta"
 $remove_template: "remove.eta"
-init_param:
+$init_param:
   include: "no-os/irq/no_os_irq_init_param.yaml"
   pointer: true
   required: true

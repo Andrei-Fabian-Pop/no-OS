@@ -3,6 +3,9 @@ $type: struct
 $symbol: ltc4306_init_param
 $description: "LTC4306 4-Channel I2C Mux/Switch"
 $ranking: 4
+$config:
+  - "IO_EXPANDER"
+  - "IO_EXPANDER_LTC4306"
 $header: "drivers/io-expander/ltc4306/ltc4306.h"
 $sources:
   noos:

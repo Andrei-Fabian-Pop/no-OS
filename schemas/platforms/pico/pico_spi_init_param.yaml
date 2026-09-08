@@ -4,6 +4,7 @@ $symbol: pico_spi_init_param
 $capability: spi
 $description: "Pico platform specific SPI initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "pico_spi.h"

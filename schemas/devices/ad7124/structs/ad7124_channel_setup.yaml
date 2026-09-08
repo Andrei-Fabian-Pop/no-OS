@@ -3,6 +3,7 @@ $type: struct
 $symbol: ad7124_channel_setup
 $description: "AD7124 channel setup configuration"
 $ranking: 4
+$config: []
 $sources:
   noos:
     - "drivers/adc/ad7124/ad7124.h"

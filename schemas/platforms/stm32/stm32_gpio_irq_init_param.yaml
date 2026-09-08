@@ -4,6 +4,7 @@ $symbol: stm32_gpio_irq_init_param
 $capability: gpio_irq
 $description: "STM32 platform specific GPIO IRQ initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "stm32_gpio_irq.h"

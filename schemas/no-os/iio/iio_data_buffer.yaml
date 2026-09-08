@@ -1,0 +1,24 @@
+$id: "no-os/iio/iio_data_buffer.yaml"
+$type: struct
+$symbol: iio_data_buffer
+$description: "Backing buffer an iio_app device uses for sample transfers"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio_app/iio_app.h"
+$sources:
+  noos:
+    - "iio/iio_app/iio_app.h"
+
+size:
+  type: uint32_t
+  required: true
+  description: "Buffer size in bytes"
+
+# NOTE: void *, and the storage it points at is a plain array that no ruleset can
+# describe (we have no way to emit a bare `uint8_t x[N]`). Written verbatim for now;
+# the iio template set emits the backing array from `size` and the user names it here.
+buff:
+  type: raw
+  required: true
+  description: "Storage the buffer points at. Written verbatim, e.g. adxl355_buff_storage."

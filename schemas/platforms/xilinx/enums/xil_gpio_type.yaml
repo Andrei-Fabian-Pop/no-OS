@@ -3,6 +3,7 @@ $type: enum
 $symbol: xil_gpio_type
 $description: "Xilinx platform architecture sections for GPIO"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_gpio.h"

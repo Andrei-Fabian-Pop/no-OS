@@ -3,6 +3,11 @@ $type: struct
 $symbol: adxl355_init_param
 $description: "ADXL355 3-axis accelerometer configuration"
 $ranking: 4
+$config:
+  - "ACCEL"
+  - "ACCEL_ADXL355"
+  - "I2C"
+  - "SPI"
 $header: "drivers/accel/adxl355/adxl355.h"
 $sources:
   noos:
@@ -31,8 +36,6 @@ comm_init:
   type: union
   required: true
   description: "Communication initialization parameters"
-  # unions would have value: spi_init if the spi_init is the selected value
-  # like some sort of special behaviour
   members:
     - spi_init:
         include: "no-os/spi/no_os_spi_init_param.yaml"

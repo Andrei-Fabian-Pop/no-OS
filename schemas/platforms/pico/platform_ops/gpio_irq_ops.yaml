@@ -1,6 +1,8 @@
 $id: "platforms/pico/platform_ops/gpio_irq_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "IRQ"
 $symbol: pico_gpio_irq_ops
 $capability: gpio_irq
 $description: "Pico GPIO IRQ platform ops"

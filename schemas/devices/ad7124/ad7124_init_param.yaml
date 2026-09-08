@@ -3,6 +3,9 @@ $type: struct
 $symbol: ad7124_init_param
 $description: "AD7124 24-bit Sigma-Delta ADC initialization parameters"
 $ranking: 4
+$config:
+  - "ADC"
+  - "ADC_AD7124"
 $header: "drivers/adc/ad7124/ad7124.h"
 $sources:
   noos:
@@ -14,6 +17,13 @@ spi_init:
   pointer: true
   required: true
   description: "SPI initialization parameters"
+
+# Register table
+regs:
+  include: "devices/ad7124/structs/ad7124_st_reg.yaml"
+  pointer: true
+  required: true
+  description: "Power-on register table (use the driver's ad7124_regs)"
 
 # CRC settings
 use_crc:

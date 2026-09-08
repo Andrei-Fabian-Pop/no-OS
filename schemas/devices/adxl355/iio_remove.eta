@@ -1,0 +1,1 @@
+adxl355_iio_remove(desc.<%= it.descriptor_name %>);

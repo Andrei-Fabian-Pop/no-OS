@@ -4,6 +4,7 @@ $symbol: mbed_gpio_init_param
 $capability: gpio
 $description: "Mbed platform specific GPIO initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_gpio.h"

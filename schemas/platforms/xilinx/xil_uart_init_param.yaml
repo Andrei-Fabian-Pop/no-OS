@@ -4,6 +4,7 @@ $symbol: xil_uart_init_param
 $capability: uart
 $description: "Xilinx platform specific UART initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_uart.h"

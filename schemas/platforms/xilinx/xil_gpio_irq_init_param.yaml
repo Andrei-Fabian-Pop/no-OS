@@ -4,6 +4,7 @@ $symbol: xil_gpio_irq_init_param
 $capability: gpio_irq
 $description: "Xilinx platform specific GPIO IRQ initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_gpio_irq.h"

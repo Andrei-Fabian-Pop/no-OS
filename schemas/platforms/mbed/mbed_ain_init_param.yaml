@@ -4,6 +4,7 @@ $symbol: mbed_ain_init_param
 $capability: ain
 $description: "Mbed platform specific analog input initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_ain_aout.h"

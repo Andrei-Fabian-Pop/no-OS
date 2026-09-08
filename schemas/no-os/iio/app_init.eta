@@ -1,0 +1,3 @@
+ret = iio_app_init(&desc.<%= it.descriptor_name %>, <%= it.symbol_name %>);
+if (ret)
+	return ret;

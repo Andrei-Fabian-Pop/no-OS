@@ -1,0 +1,26 @@
+$id: "devices/adxl355/adxl355_iio_init_param.yaml"
+$type: struct
+$symbol: adxl355_iio_dev_init_param
+$description: "ADXL355 IIO wrapper configuration"
+$ranking: 4
+$config:
+  - "IIO"
+  - "ACCEL"
+  - "ACCEL_IIO_ADXL355"
+$header: "drivers/accel/adxl355/iio_adxl355.h"
+$sources:
+  noos:
+    - "drivers/accel/adxl355/iio_adxl355.c"
+
+adxl355_dev_init:
+  include: "devices/adxl355/adxl355_init_param.yaml"
+  pointer: true
+  required: true
+  description: "The plain ADXL355 configuration this wrapper drives"
+
+# NOTE: The whole struct (iio_adxl355.h:49-51). The wrapper takes the *configuration*, not a
+# built descriptor: adxl355_iio_init calls adxl355_init itself, so the workfile must not also
+# carry an `adxl355` descriptor node for the same device or it would be brought up twice.
+#
+# NOTE: ACCEL_IIO_ADXL355 selects ACCEL_ADXL355 but `depends on SPI`, and the file is inside
+# `if ACCEL`, so ACCEL is named here. SPI comes from the spi node adxl355_init_param needs.

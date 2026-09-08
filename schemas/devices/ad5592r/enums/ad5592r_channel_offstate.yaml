@@ -3,6 +3,7 @@ $type: enum
 $symbol: ad5592r_channel_offstate
 $description: "Channel off-state configuration for AD5592R"
 $ranking: 4
+$config: []
 $sources:
   noos:
     - "drivers/adc-dac/ad5592r/ad5592r-base.h"

@@ -3,6 +3,7 @@ $type: enum
 $symbol: xil_i2c_type
 $description: "Xilinx platform architecture sections for I2C"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_i2c.h"

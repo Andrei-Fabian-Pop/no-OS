@@ -4,6 +4,8 @@ $symbol: stm32_tdm_platform_ops
 $capability: tdm
 $description: "STM32 TDM platform ops"
 $ranking: 4
+$config:
+  - "TDM"
 $sources:
   platform:
     - "stm32_tdm.h"

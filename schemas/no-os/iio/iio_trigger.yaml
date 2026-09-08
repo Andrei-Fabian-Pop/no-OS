@@ -1,0 +1,15 @@
+$id: "no-os/iio/iio_trigger.yaml"
+$type: struct
+$symbol: iio_trigger
+$description: "IIO trigger vtable (enable/disable hooks), always provided by a driver"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio_types.h"
+$sources:
+  noos:
+    - "iio/iio_types.h"
+
+# NOTE: No properties on purpose, same reasoning as iio_device.yaml. Drivers define these
+# as file-scope globals (e.g. adxl355_iio_trig_desc in iio_adxl355_trig.c) and the app only
+# ever needs the address.

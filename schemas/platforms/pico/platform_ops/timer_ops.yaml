@@ -4,6 +4,8 @@ $symbol: pico_timer_ops
 $capability: timer
 $description: "Pico Timer platform ops"
 $ranking: 4
+$config:
+  - "TIMER"
 $sources:
   platform:
     - "pico_timer.h"

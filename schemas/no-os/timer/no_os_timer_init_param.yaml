@@ -4,6 +4,8 @@ $symbol: no_os_timer_init_param
 $capability: timer
 $description: "Structure holding the parameters for timer initialization"
 $ranking: 4
+$config:
+  - "TIMER"
 $sources:
   noos:
     - "include/no_os_timer.h"

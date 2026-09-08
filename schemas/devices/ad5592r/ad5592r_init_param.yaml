@@ -3,6 +3,9 @@ $type: struct
 $symbol: ad5592r_init_param
 $description: "AD5592R 8-channel, 12-bit configurable ADC/DAC with GPIO"
 $ranking: 4
+$config:
+  - "ADC_DAC"
+  - "ADC_DAC_AD5592R"
 $header: "drivers/adc-dac/ad5592r/ad5592r.h"
 $sources:
   noos:

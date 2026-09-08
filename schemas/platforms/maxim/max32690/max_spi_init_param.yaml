@@ -4,6 +4,7 @@ $symbol: max_spi_init_param
 $capability: spi
 $description: "Maxim MAX32690 platform specific SPI initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "maxim_spi.h"

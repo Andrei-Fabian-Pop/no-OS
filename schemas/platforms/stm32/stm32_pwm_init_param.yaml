@@ -4,6 +4,7 @@ $symbol: stm32_pwm_init_param
 $capability: pwm
 $description: "STM32 platform specific PWM initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "stm32_pwm.h"

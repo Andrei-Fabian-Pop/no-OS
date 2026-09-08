@@ -1,0 +1,32 @@
+$id: "no-os/iio/iio_hw_trig_cb_info.yaml"
+$type: struct
+$symbol: iio_hw_trig_cb_info
+$description: "Which interrupt a hardware IIO trigger listens to"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio_trigger.h"
+$sources:
+  noos:
+    - "iio/iio_trigger.h"
+
+event:
+  include: "no-os/enums/no_os_irq_event.yaml"
+  required: true
+  description: "The event that fires the trigger, e.g. NO_OS_EVT_GPIO for a data-ready pin"
+
+peripheral:
+  include: "no-os/enums/no_os_irq_peripheral.yaml"
+  required: true
+  description: "The hardware block the event comes from, e.g. NO_OS_GPIO_IRQ"
+
+# NOTE: void *, holding a platform SDK handle, so there is nothing typed to point it at:
+# maxim timer triggers pass a register block (MXC_TMR0), stm32 passes a HAL handle
+# (&htim13), and GPIO triggers on both leave it NULL. Written verbatim.
+#
+# Not required on purpose: NULL is the correct value for every GPIO trigger upstream, and
+# an unset property emits no initializer line, which C already reads as NULL.
+handle:
+  type: raw
+  required: false
+  description: "Platform SDK handle for the interrupt source. Leave empty for a GPIO trigger; a timer trigger needs one, e.g. MXC_TMR0 on maxim."

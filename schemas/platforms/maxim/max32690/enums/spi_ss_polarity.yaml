@@ -3,6 +3,7 @@ $type: enum
 $symbol: spi_ss_polarity
 $description: "Maxim MAX32690 SPI slave select polarity options"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "maxim_spi.h"

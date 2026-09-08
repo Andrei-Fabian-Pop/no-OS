@@ -4,6 +4,8 @@ $symbol: stm32_gpio_irq_ops
 $capability: gpio_irq
 $description: "STM32 GPIO IRQ platform ops"
 $ranking: 4
+$config:
+  - "IRQ"
 $sources:
   platform:
     - "stm32_gpio_irq.h"

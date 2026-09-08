@@ -4,6 +4,7 @@ $symbol: mbed_irq_init_param
 $capability: irq
 $description: "Mbed platform specific IRQ initialization parameters"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "mbed_irq.h"

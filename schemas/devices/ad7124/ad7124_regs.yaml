@@ -1,0 +1,39 @@
+$id: "devices/ad7124/ad7124_regs.yaml"
+$type: extern
+$symbol: ad7124_regs
+$description: "The AD7124's power-on register table, defined by the driver"
+$ranking: 4
+$provides: "devices/ad7124/structs/ad7124_st_reg.yaml"
+$array: true
+$header: "drivers/adc/ad7124/ad7124_regs.h"
+$config:
+  - "ADC"
+  - "ADC_AD7124"
+$sources:
+  noos:
+    - "drivers/adc/ad7124/ad7124_regs.c"
+
+# NOTE: `extern struct ad7124_st_reg ad7124_regs[AD7124_REG_NO];` (ad7124_regs.h:42), defined
+# in ad7124_regs.c. `ad7124_init_param.regs` is mandatory: ad7124_setup does
+# `dev->regs = init_param->regs;` (ad7124.c:1491) and dereferences it 20 lines later
+# (ad7124.c:1512), so a NULL table faults rather than failing gracefully.
+#
+# NOTE: `$array: true` because the symbol is an array, not a struct. An array name already
+# decays to a pointer, so the `pointer: true` consumer must not take its address —
+# `&ad7124_regs` would be `struct ad7124_st_reg (*)[57]`. This is the one thing that differs
+# from iio_ad7124_device.yaml, which names a struct by value and does want the `&`.
+#
+# NOTE: projects/ad7124-8pmdz carries its own copy of this table as
+# `ad7124_init_regs_default`, and it is NOT equivalent: its `Error_En` is 0x0000 where the
+# driver's is 0x0040. That one bit decides `dev->check_ready`, because ad7124_setup recomputes
+# it from the table rather than honouring `init_param->check_ready`, and check_ready = 1 sends
+# every register read through ad7124_wait_for_spi_ready, which polls via ad7124_read_register
+# again (ad7124.c:177 <-> ad7124.c:301). Measured on an AD7124-8: with the bit set, setup fails
+# and iio_info cannot reach the device; with it cleared, the same project works. So the driver's
+# table alone does not work on hardware. init.eta clears the bit before ad7124_setup as a
+# quickfix; the real fix is upstream.
+#
+# NOTE: the tables also differ in `ADC_Control` (driver 0x0000, project 0x05C0) and in
+# Channel_0..8, but those were tested and do not matter here: ad7124_setup rewrites the mode and
+# power bits after the ID check, and the channel registers come from `chan_map`. Only `Error_En`
+# has to be corrected.

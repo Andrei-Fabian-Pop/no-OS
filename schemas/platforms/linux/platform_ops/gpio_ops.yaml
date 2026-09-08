@@ -4,6 +4,8 @@ $symbol: linux_gpio_ops
 $capability: gpio
 $description: "Linux GPIO platform ops"
 $ranking: 4
+$config:
+  - "GPIO"
 $sources:
   platform:
     - "linux_gpio.h"

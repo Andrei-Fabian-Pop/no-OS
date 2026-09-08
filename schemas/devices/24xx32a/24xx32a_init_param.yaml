@@ -3,6 +3,9 @@ $type: struct
 $symbol: eeprom_24xx32a_init_param
 $description: "24AA32A/24LC32A I2C EEPROM"
 $ranking: 4
+$config:
+  - "EEPROM_DRIVERS"
+  - "EEPROM_DRIVERS_24XX32A"
 $header: "drivers/eeprom/24xx32a/24xx32a.h"
 $sources:
   noos:

@@ -1,6 +1,9 @@
 $id: "platforms/maxim/max32662/platform_ops/spi_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "DMA"
+  - "SPI"
 $symbol: max_spi_ops
 $capability: spi
 $sources:

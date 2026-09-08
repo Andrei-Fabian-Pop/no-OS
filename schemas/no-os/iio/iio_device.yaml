@@ -1,0 +1,16 @@
+$id: "no-os/iio/iio_device.yaml"
+$type: struct
+$symbol: iio_device
+$description: "IIO device descriptor (channels and attributes), always provided by a driver"
+$ranking: 4
+$config:
+  - "IIO"
+$header: "iio/iio_types.h"
+$sources:
+  noos:
+    - "iio/iio_types.h"
+
+# NOTE: No properties on purpose. Every field of struct iio_device is decided by the
+# driver author, so there is nothing for a user to configure and nothing to emit. This
+# schema exists as a type name for `include` to match: drivers hand one over either as a
+# readonly member of their iio wrapper (adxl355) or as an extern global (ad7124).

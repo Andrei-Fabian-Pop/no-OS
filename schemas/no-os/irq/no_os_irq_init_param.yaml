@@ -5,6 +5,8 @@ $capability: irq
 $init_function: no_os_irq_ctrl_init
 $description: "Structure holding the initial parameters for Interrupt Request"
 $ranking: 4
+$config:
+  - "IRQ"
 $sources:
   noos:
     - "include/no_os_irq.h"

@@ -1,6 +1,8 @@
 $id: "platforms/maxim/max32662/platform_ops/dma_ops.yaml"
 $type: platform_ops
 $ranking: 4
+$config:
+  - "DMA"
 $symbol: max_dma_ops
 $capability: dma
 $sources:

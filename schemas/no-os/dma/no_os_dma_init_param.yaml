@@ -4,6 +4,9 @@ $symbol: no_os_dma_init_param
 $capability: dma
 $description: "Initialization parameter for the DMA controller"
 $ranking: 4
+$config:
+  - "DMA"
+  - "IRQ"
 $sources:
   noos:
     - "include/no_os_dma.h"

@@ -4,6 +4,8 @@ $symbol: xil_spi_ops
 $capability: spi
 $description: "Xilinx SPI platform ops (PS and general use)"
 $ranking: 4
+$config:
+  - "SPI"
 $sources:
   platform:
     - "xilinx_spi.h"

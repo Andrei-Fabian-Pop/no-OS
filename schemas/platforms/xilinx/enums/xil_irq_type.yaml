@@ -3,6 +3,7 @@ $type: enum
 $symbol: xil_irq_type
 $description: "Xilinx platform architecture sections for IRQ"
 $ranking: 4
+$config: []
 $sources:
   platform:
     - "xilinx_irq.h"

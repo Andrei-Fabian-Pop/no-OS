@@ -3,6 +3,8 @@ $type: struct
 $symbol: no_os_rtc_init_param
 $description: "Structure holding RTC initialization parameters"
 $ranking: 4
+$config:
+  - "RTC"
 $sources:
   noos:
     - "include/no_os_rtc.h"

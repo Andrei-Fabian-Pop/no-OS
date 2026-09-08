@@ -1,0 +1,1 @@
+iio_hw_trig_remove(desc.<%= it.descriptor_name %>);
