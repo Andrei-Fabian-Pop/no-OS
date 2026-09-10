@@ -1,0 +1,21 @@
+$id: "devices/ad413x/enums/ad413x_settle_time.yaml"
+$type: enum
+$symbol: ad413x_settle_time
+$description: "AD413X channel settle time, in master clock periods"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_32_MCLK: "32 MCLK periods"
+  AD413X_64_MCLK: "64 MCLK periods"
+  AD413X_128_MCLK: "128 MCLK periods"
+  AD413X_256_MCLK: "256 MCLK periods"
+  AD413X_512_MCLK: "512 MCLK periods"
+  AD413X_1024_MCLK: "1024 MCLK periods"
+  AD413X_2048_MCLK: "2048 MCLK periods"
+  AD413X_4096_MCLK: "4096 MCLK periods"
+
+default: AD413X_32_MCLK

@@ -1,0 +1,54 @@
+$id: "devices/ad413x/structs/ad413x_standby_ctrl.yaml"
+$type: struct
+$symbol: ad413x_standby_ctrl
+$description: "AD413X standby control flags: which blocks stay powered in standby mode"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+standby_int_ref_en:
+  type: bool
+  default: false
+  description: "Keep the internal reference enabled in standby"
+
+standby_ref_holder_en:
+  type: bool
+  default: false
+  description: "Keep the reference holder capacitor circuit enabled in standby"
+
+standby_iexc_en:
+  type: bool
+  default: false
+  description: "Keep the excitation current sources enabled in standby"
+
+standby_vbias_en:
+  type: bool
+  default: false
+  description: "Keep the VBIAS generator enabled in standby"
+
+standby_burnout_en:
+  type: bool
+  default: false
+  description: "Keep the burnout current sources enabled in standby"
+
+standby_pdsw_en:
+  type: bool
+  default: false
+  description: "Keep the power-down switch enabled in standby"
+
+standby_gpio_en:
+  type: bool
+  default: false
+  description: "Keep the GPIO outputs enabled in standby"
+
+standby_diagn_en:
+  type: bool
+  default: false
+  description: "Keep the diagnostics enabled in standby"
+
+standby_output_en:
+  type: bool
+  default: false
+  description: "Keep the output buffers enabled in standby"

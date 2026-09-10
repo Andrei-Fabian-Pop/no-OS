@@ -1,0 +1,103 @@
+$id: "devices/ad413x/ad413x.yaml"
+$type: descriptor
+$symbol: ad413x_dev
+$description: "AD413X 24-bit Sigma-Delta AFE device descriptor"
+$ranking: 4
+$config: []
+$init_template: "init.eta"
+$remove_template: "remove.eta"
+$init_param:
+  include: "devices/ad413x/ad413x_init_param.yaml"
+  pointer: false
+  required: true
+
+# Every member below is filled in by ad413x_init, so all are readonly: they exist to be
+# referenced, never set. A descriptor emits no initializer, so none of them are printed.
+
+spi_dev:
+  include: "no-os/spi/no_os_spi.yaml"
+  pointer: true
+  readonly: true
+  description: "The SPI descriptor, opened by ad413x_init from spi_init"
+
+rdy_pin_desc:
+  include: "no-os/gpio/no_os_gpio.yaml"
+  pointer: true
+  readonly: true
+  description: "The conversion-ready GPIO, acquired by ad413x_init from rdy_pin_init"
+
+preset:
+  type: array
+  size: 8
+  element:
+    include: "devices/ad413x/structs/ad413x_preset.yaml"
+  readonly: true
+  description: "Presets as written to the device"
+
+ch:
+  type: array
+  size: 16
+  element:
+    include: "devices/ad413x/structs/ad413x_channel.yaml"
+  readonly: true
+  description: "Channel configurations as written to the device"
+
+chip_id:
+  include: "devices/ad413x/enums/ad413x_chip_id.yaml"
+  readonly: true
+  description: "Chip ID, verified against the ID register during init"
+
+mclk:
+  include: "devices/ad413x/enums/ad413x_mclk_sel.yaml"
+  readonly: true
+  description: "Master clock source in effect"
+
+op_mode:
+  include: "devices/ad413x/enums/ad413x_adc_mode.yaml"
+  readonly: true
+  description: "Current ADC mode; init leaves it in standby, conversions change it"
+
+bipolar:
+  type: uint8_t
+  readonly: true
+  description: "Bipolar coding in effect"
+
+int_ref:
+  include: "devices/ad413x/enums/ad413x_int_ref.yaml"
+  readonly: true
+  description: "Internal reference setting in effect"
+
+v_bias:
+  type: uint16_t
+  readonly: true
+  description: "VBIAS_CTRL mask in effect"
+
+standby_ctrl:
+  include: "devices/ad413x/structs/ad413x_standby_ctrl.yaml"
+  readonly: true
+  description: "Standby control flags in effect"
+
+data_stat:
+  type: uint8_t
+  readonly: true
+  description: "Whether DATA reads carry the appended status byte"
+
+spi_crc_en:
+  type: uint8_t
+  readonly: true
+  description: "Whether SPI CRC is enabled"
+
+# NOTE: all thirteen members of `struct ad413x_dev` (ad413x.h:451-467). It carries one member
+# the init_param does not, `op_mode`, and is otherwise the same set.
+#
+# NOTE: ad413x_init takes its init_param BY VALUE (ad413x.h:511), hence `pointer: false` -
+# init.eta passes the struct itself, not its address.
+#
+# NOTE: `struct ad413x_callback_ctx` (ad413x.h:505-509) has no schema. It is not reachable from
+# any init_param or descriptor member: ad413x.c builds one on the stack inside
+# ad413x_single_conv and ad413x_continuous_conv (ad413x.c:777, 829) and nothing else ever sees
+# it, so there is nothing for a project to configure.
+#
+# NOTE: ad413x_remove only removes the SPI descriptor and frees the device (ad413x.c:1080-1091);
+# the RDY GPIO acquired at init is leaked. Nothing to do about it from a schema, but a project
+# that removes and re-initializes the device repeatedly will run out of GPIO descriptors.

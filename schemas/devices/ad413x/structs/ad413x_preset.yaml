@@ -1,0 +1,37 @@
+$id: "devices/ad413x/structs/ad413x_preset.yaml"
+$type: struct
+$symbol: ad413x_preset
+$description: "AD413X preset setting: the measurement configuration a channel points at"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+ref_buf:
+  include: "devices/ad413x/structs/ad413x_ref_buf.yaml"
+  description: "Reference buffer enables"
+
+ref_sel:
+  include: "devices/ad413x/enums/ad413x_ref_sel.yaml"
+  description: "Reference source for this preset"
+
+gain:
+  include: "devices/ad413x/enums/ad413x_gain.yaml"
+  description: "PGA gain for this preset"
+
+filter:
+  include: "devices/ad413x/enums/ad413x_filter.yaml"
+  description: "Digital filter for this preset"
+
+s_time:
+  include: "devices/ad413x/enums/ad413x_settle_time.yaml"
+  description: "Channel settle time (the driver comment notes 32 MCLK as the default)"
+
+iout0_exc_current:
+  include: "devices/ad413x/enums/ad413x_exc_current.yaml"
+  description: "Excitation current on IOUT0"
+
+iout1_exc_current:
+  include: "devices/ad413x/enums/ad413x_exc_current.yaml"
+  description: "Excitation current on IOUT1"

@@ -1,0 +1,33 @@
+$id: "devices/ad413x/enums/ad413x_adc_mode.yaml"
+$type: enum
+$symbol: ad413x_adc_mode
+$description: "AD413X ADC conversion modes"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_CONTINOUS_CONV_MODE: "Continuous conversion mode"
+  AD413X_SINGLE_CONV_MODE: "Single conversion mode"
+  AD413X_STANDBY_MODE: "Standby mode"
+  AD413X_PW_DOWN_MODE: "Power-down mode"
+  AD413X_IDLE_MODE: "Idle mode"
+  AD413X_INT_OFFSET_CAL: "Internal offset calibration"
+  AD413X_INT_GAIN_CAL: "Internal gain calibration"
+  AD413X_SYS_OFFSET_CAL: "System offset calibration"
+  AD413X_SYS_GAIN_CAL: "System gain calibration"
+  AD413X_DUTY_CYCLING_MODE: "Duty cycling mode"
+  AD413X_SINGLE_CONV_SYNC_IDLE_MODE: "Single conversion, then synchronization and idle"
+  AD413X_DUTY_CYCLING_SYNC_STBY_MODE: "Duty cycling, then synchronization and standby"
+
+default: AD413X_CONTINOUS_CONV_MODE
+
+# NOTE: the C enumerators carry explicit values 0-11 (ad413x.h:296-309), which are the
+# register field encodings. They are consecutive and start at 0, so the declaration order
+# here already matches them; the grammar has no place for an explicit value anyway.
+#
+# NOTE: this enum is not part of `ad413x_init_param`. It appears only as `ad413x_dev.op_mode`,
+# which ad413x_init sets to AD413X_STANDBY_MODE via ad413x_set_adc_mode (ad413x.c:977) - the
+# mode is chosen later by ad413x_single_conv/ad413x_continuous_conv, not configured up front.

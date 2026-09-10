@@ -1,0 +1,138 @@
+$id: "devices/ad413x/ad413x_init_param.yaml"
+$type: struct
+$symbol: ad413x_init_param
+$description: "AD413X 24-bit Sigma-Delta AFE configuration"
+$ranking: 4
+$config:
+  - "AFE"
+  - "AFE_AD413X"
+$header: "drivers/afe/ad413x/ad413x.h"
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.c"
+
+# SPI interface
+spi_init:
+  include: "no-os/spi/no_os_spi_init_param.yaml"
+  pointer: true
+  required: true
+  description: "SPI initialization parameters (the part is SPI mode 3: CPOL=1, CPHA=1)"
+
+# Conversion-ready pin
+rdy_pin_init:
+  include: "no-os/gpio/no_os_gpio_init_param.yaml"
+  pointer: true
+  required: true
+  description: "GPIO the driver polls for conversion-ready; mandatory, see the note below"
+
+# Presets (array of 8)
+preset:
+  type: array
+  size: 8
+  element:
+    include: "devices/ad413x/structs/ad413x_preset.yaml"
+  description: "Measurement presets (8 available); each channel selects one of them"
+
+# Channels (array of 16)
+ch:
+  type: array
+  size: 16
+  element:
+    include: "devices/ad413x/structs/ad413x_channel.yaml"
+  description: "Channel configurations (16 channels available)"
+
+# Device variant
+chip_id:
+  include: "devices/ad413x/enums/ad413x_chip_id.yaml"
+  required: true
+  description: "Expected chip ID; ad413x_init fails if the ID register does not match"
+
+# Master clock
+mclk:
+  include: "devices/ad413x/enums/ad413x_mclk_sel.yaml"
+  description: "Master clock source"
+
+bipolar:
+  type: uint8_t
+  default: 0
+  minimum: 0
+  maximum: 1
+  description: "Bipolar coding (1) or unipolar coding (0) for the conversion results"
+
+# Reference
+int_ref:
+  include: "devices/ad413x/enums/ad413x_int_ref.yaml"
+  description: "Internal reference: disabled, 2.5 V or 1.25 V"
+
+v_bias:
+  type: uint16_t
+  default: 0
+  description: "Bit mask written to VBIAS_CTRL: one bit per AINx pin that gets AVDD/2"
+
+# Standby behaviour
+standby_ctrl:
+  include: "devices/ad413x/structs/ad413x_standby_ctrl.yaml"
+  description: "Which blocks stay powered while the device is in standby"
+
+data_stat:
+  type: uint8_t
+  default: 0
+  minimum: 0
+  maximum: 1
+  description: "Append the status byte to every DATA read (1) or not (0)"
+
+spi_crc_en:
+  type: uint8_t
+  default: 0
+  minimum: 0
+  maximum: 1
+  description: "Enable CRC on SPI transfers (1) or leave it off (0)"
+
+# NOTE: all twelve members of `struct ad413x_init_param` (ad413x.h:474-495). `op_mode` is
+# deliberately absent - it exists on the descriptor only, see enums/ad413x_adc_mode.yaml.
+#
+# NOTE: `rdy_pin_init` is required. ad413x_init acquires it with no_os_gpio_get
+# (ad413x.c:936), not the _optional variant, so a NULL init_param makes initialization fail
+# rather than skipping the pin. It must be a plain GPIO input and not the SPI MISO line,
+# because ad413x_continuous_conv polls it between register reads.
+#
+# NOTE: `bipolar`, `data_stat` and `spi_crc_en` are `uint8_t` in the header rather than `bool`,
+# so they stay numbers here to keep the struct 1:1; only 0 and 1 are meaningful, since each
+# ends up in a one-bit register field - AD413X_ADC_BIPOLAR via ad413x_adc_bipolar,
+# AD413X_ADC_DATA_STATUS via ad413x_data_stat_en, and AD413X_SPI_CRC_ERR_EN in ad413x_init
+# (ad413x.c:981-989). All three setters take the value as `enable ? MASK : 0`, and their doc
+# comments state "Accepted values: 0 DISABLE / 1 ENABLE". Hence minimum 0 / maximum 1: that is
+# the documented contract, not an -EINVAL check - the ternaries treat any non-zero as 1.
+#
+# NOTE: `spi_init` and `chip_id` are required for the same reason as `rdy_pin_init`, and both
+# are provable from ad413x_init: `no_os_spi_init(&dev->spi_dev, init_param.spi_init)`
+# (ad413x.c:931) has no optional variant, and `switch (dev->chip_id) { case AD4130_8: ...
+# default: goto err_gpio; }` (ad413x.c:967-975) fails initialization for any other value and
+# additionally requires it to equal the ID register read back from the part.
+#
+# NOTE: everything else is deliberately left not-required, because an all-zero init_param is a
+# valid configuration: `mclk` = AD413X_INT_76_8_KHZ_OUT_OFF, `int_ref` = AD413X_INTREF_DISABLED,
+# `bipolar`/`data_stat`/`spi_crc_en` = disabled, `v_bias` = no pin biased, `standby_ctrl` = all
+# blocks off, and every `preset`/`ch` entry = preset 0 / AIN0-AIN0 / disabled.
+#
+# NOTE: `v_bias` intentionally carries no maximum. VBIAS_CTRL defines all sixteen bits
+# (AD413X_VBIAS_0 .. AD413X_VBIAS_15, ad413x.h), so `uint16_t` is already the exact range and
+# any tighter bound would be invented rather than derived.
+#
+# NOTE: no numeric bound is derivable for the remaining members, and none is needed: `mclk`,
+# `int_ref` and `chip_id` are enums whose value sets match their register fields exactly
+# (AD413X_ADC_CNTRL_MCLK is 2-bit / 4 values; int_ref is the only setter with an explicit
+# `default: return -EINVAL`, ad413x.c:150-152), and `preset`/`ch` are fixed-size arrays whose
+# bounds are the `size:` above - which is also what the four
+# `if (ch_nb >= NO_OS_ARRAY_SIZE(dev->ch)) return -EINVAL;` guards
+# (ad413x.c:403, 434, 464, 492) check. Field widths inside the preset and channel structs were
+# checked one by one against ad413x.h; every enum fits its field except the excitation inputs,
+# which are restricted in structs/ad413x_channel.yaml.
+#
+# NOTE: `spi_crc_en` is one-way at init: ad413x_init only writes ERROR_EN and stores the flag
+# when the value is non-zero (ad413x.c:981-989), having already forced `dev->spi_crc_en = 0`
+# beforehand.
+#
+# NOTE: `preset` and `ch` are fixed-size arrays, and ad413x_init walks all of them
+# (ad413x.c:992-1032) whatever is enabled - a zero-filled entry is a valid "AIN0/AIN0, preset
+# 0, disabled" channel, so a project that only wants two channels still supplies sixteen.

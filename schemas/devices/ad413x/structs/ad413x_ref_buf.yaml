@@ -1,0 +1,19 @@
+$id: "devices/ad413x/structs/ad413x_ref_buf.yaml"
+$type: struct
+$symbol: ad413x_ref_buf
+$description: "AD413X reference buffer selection"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+ref_buf_p_en:
+  type: bool
+  default: false
+  description: "Enable the buffer on the positive reference input"
+
+ref_buf_m_en:
+  type: bool
+  default: false
+  description: "Enable the buffer on the negative reference input"

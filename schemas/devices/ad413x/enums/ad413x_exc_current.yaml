@@ -1,0 +1,21 @@
+$id: "devices/ad413x/enums/ad413x_exc_current.yaml"
+$type: enum
+$symbol: ad413x_exc_current
+$description: "AD413X excitation current value"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_EXC_OFF: "Excitation current off"
+  AD413X_EXC_10UA: "10 uA"
+  AD413X_EXC_20UA: "20 uA"
+  AD413X_EXC_50UA: "50 uA"
+  AD413X_EXC_100UA: "100 uA"
+  AD413X_EXC_150UA: "150 uA"
+  AD413X_EXC_200UA: "200 uA"
+  AD413X_EXC_100NA: "100 nA"
+
+default: AD413X_EXC_OFF

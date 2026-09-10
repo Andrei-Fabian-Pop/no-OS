@@ -1,0 +1,21 @@
+$id: "devices/ad413x/enums/ad413x_preset_nb.yaml"
+$type: enum
+$symbol: ad413x_preset_nb
+$description: "AD413X preset number"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_PRESET_0: "Preset 0"
+  AD413X_PRESET_1: "Preset 1"
+  AD413X_PRESET_2: "Preset 2"
+  AD413X_PRESET_3: "Preset 3"
+  AD413X_PRESET_4: "Preset 4"
+  AD413X_PRESET_5: "Preset 5"
+  AD413X_PRESET_6: "Preset 6"
+  AD413X_PRESET_7: "Preset 7"
+
+default: AD413X_PRESET_0

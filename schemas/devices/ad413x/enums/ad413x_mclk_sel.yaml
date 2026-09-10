@@ -1,0 +1,17 @@
+$id: "devices/ad413x/enums/ad413x_mclk_sel.yaml"
+$type: enum
+$symbol: ad413x_mclk_sel
+$description: "AD413X master clock options"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_INT_76_8_KHZ_OUT_OFF: "Internal 76.8 kHz oscillator, CLK output disabled"
+  AD413X_INT_76_8_KHZ_OUT_ON: "Internal 76.8 kHz oscillator, CLK output enabled"
+  AD413X_EXT_76_8KHZ: "External 76.8 kHz clock"
+  AD413X_EXT_153_6_KHZ_DIV_2: "External 153.6 kHz clock, divided by 2"
+
+default: AD413X_INT_76_8_KHZ_OUT_OFF

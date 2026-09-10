@@ -1,0 +1,21 @@
+$id: "devices/ad413x/enums/ad413x_gain.yaml"
+$type: enum
+$symbol: ad413x_gain
+$description: "AD413X PGA gain options"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_GAIN_1: "Gain 1"
+  AD413X_GAIN_2: "Gain 2"
+  AD413X_GAIN_4: "Gain 4"
+  AD413X_GAIN_8: "Gain 8"
+  AD413X_GAIN_16: "Gain 16"
+  AD413X_GAIN_32: "Gain 32"
+  AD413X_GAIN_64: "Gain 64"
+  AD413X_GAIN_128: "Gain 128"
+
+default: AD413X_GAIN_1

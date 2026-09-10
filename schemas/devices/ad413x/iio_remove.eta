@@ -1,0 +1,1 @@
+ad413x_iio_remove(desc.<%= it.descriptor_name %>);

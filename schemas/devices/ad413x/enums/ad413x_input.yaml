@@ -1,0 +1,43 @@
+$id: "devices/ad413x/enums/ad413x_input.yaml"
+$type: enum
+$symbol: ad413x_input
+$description: "AD413X ADC input sources for each channel"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_AIN0: "Analog input AIN0"
+  AD413X_AIN1: "Analog input AIN1"
+  AD413X_AIN2: "Analog input AIN2"
+  AD413X_AIN3: "Analog input AIN3"
+  AD413X_AIN4: "Analog input AIN4"
+  AD413X_AIN5: "Analog input AIN5"
+  AD413X_AIN6: "Analog input AIN6"
+  AD413X_AIN7: "Analog input AIN7"
+  AD413X_AIN8: "Analog input AIN8"
+  AD413X_AIN9: "Analog input AIN9"
+  AD413X_AIN10: "Analog input AIN10"
+  AD413X_AIN11: "Analog input AIN11"
+  AD413X_AIN12: "Analog input AIN12"
+  AD413X_AIN13: "Analog input AIN13"
+  AD413X_AIN14: "Analog input AIN14"
+  AD413X_AIN15: "Analog input AIN15"
+  AD413X_TEMP: "Internal temperature sensor"
+  AD413X_AVSS: "AVSS"
+  AD413X_INT_REF: "Internal reference"
+  AD413X_DGND: "DGND"
+  AD413X_AVDD_AVSS_6P: "(AVDD - AVSS)/6, positive"
+  AD413X_AVDD_AVSS_6M: "(AVDD - AVSS)/6, negative"
+  AD413X_IOVDD_DGND_6P: "(IOVDD - DGND)/6, positive"
+  AD413X_IOVDD_DGND_6M: "(IOVDD - DGND)/6, negative"
+  AD413X_ALDO_AVSS_6P: "(ALDO - AVSS)/6, positive"
+  AD413X_ALDO_AVSS_6M: "(ALDO - AVSS)/6, negative"
+  AD413X_DLDO_DGND_6P: "(DLDO - DGND)/6, positive"
+  AD413X_DLDO_DGND_6M: "(DLDO - DGND)/6, negative"
+  AD413X_V_MV_P: "V_MV_P diagnostic multiplexer output, positive"
+  AD413X_V_MV_M: "V_MV_M diagnostic multiplexer output, negative"
+
+default: AD413X_AIN0

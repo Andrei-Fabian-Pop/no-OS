@@ -1,0 +1,22 @@
+$id: "devices/ad413x/enums/ad413x_filter.yaml"
+$type: enum
+$symbol: ad413x_filter
+$description: "AD413X digital filter types"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_SYNC4_STANDALONE: "sinc4 filter, standalone"
+  AD413X_SYNC4_SYNC1: "sinc4 filter followed by sinc1"
+  AD413X_SYNC3_STANDALONE: "sinc3 filter, standalone"
+  AD413X_SYNC3_REJ60: "sinc3 filter with 60 Hz rejection"
+  AD413X_SYNC3_SYNC1: "sinc3 filter followed by sinc1"
+  AD413X_SYNC3_PF1: "sinc3 filter with post filter 1"
+  AD413X_SYNC3_PF2: "sinc3 filter with post filter 2"
+  AD413X_SYNC3_PF3: "sinc3 filter with post filter 3"
+  AD413X_SYNC3_PF4: "sinc3 filter with post filter 4"
+
+default: AD413X_SYNC4_STANDALONE

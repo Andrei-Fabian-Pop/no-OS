@@ -1,0 +1,23 @@
+$id: "devices/ad413x/enums/ad413x_chip_id.yaml"
+$type: enum
+$symbol: ad413x_chip_id
+$description: "AD413X chip IDs"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD4130_8: "AD4130-8"
+
+default: AD4130_8
+
+# NOTE: one value only - `enum ad413x_chip_id { AD4130_8 = 0x04 };` (ad413x.h:369-371). It is
+# still its own file rather than an inline `type: enum`, because it is a named enum in the
+# header and the schema mirrors the header 1:1.
+#
+# NOTE: the enumerator's value is the contents of the ID register, and ad413x_init compares
+# the two directly: it reads AD413X_REG_ID and fails unless the value equals the requested
+# chip_id (ad413x.c:963-975). So this is a real check, not a label, but the 0x04 itself has
+# nowhere to live in the grammar - `values` holds names, and C supplies the number.

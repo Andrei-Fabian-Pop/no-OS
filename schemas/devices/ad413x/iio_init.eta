@@ -1,0 +1,3 @@
+ret = ad413x_iio_init(&desc.<%= it.descriptor_name %>, <%= it.symbol_name %>);
+if (ret)
+	return ret;

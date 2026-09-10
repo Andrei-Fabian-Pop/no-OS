@@ -1,0 +1,49 @@
+$id: "devices/ad413x/ad413x_iio.yaml"
+$type: descriptor
+$symbol: ad413x_iio_dev
+$description: "AD413X IIO wrapper descriptor"
+$ranking: 4
+$config: []
+$init_template: "iio_init.eta"
+$remove_template: "iio_remove.eta"
+
+$init_param:
+  include: "devices/ad413x/ad413x_iio_init_param.yaml"
+  pointer: false
+  required: true
+  description: "Which AD413X this wrapper drives"
+
+# Both members below are filled in by ad413x_iio_init, so both are readonly: they exist to be
+# referenced, never set. A descriptor emits no initializer, so neither is printed.
+
+ad413x_dev:
+  include: "devices/ad413x/ad413x.yaml"
+  pointer: true
+  readonly: true
+  description: "The plain AD413X descriptor, created by ad413x_iio_init"
+
+iio_dev:
+  include: "no-os/iio/iio_device.yaml"
+  pointer: true
+  readonly: true
+  description: "This device's IIO vtable, for an iio_app_device's dev_descriptor"
+
+# NOTE: both members of `struct ad413x_iio_dev` (iio_ad413x.h:36-39).
+#
+# NOTE: ad413x_iio_init takes its init_param BY VALUE (iio_ad413x.h:48-49), hence
+# `pointer: false` on $init_param - iio_init.eta passes the struct itself, not its address.
+# This is where the AD413X differs from the ADXL355 wrapper, whose init takes a pointer.
+#
+# NOTE: there is no extern for the vtable, unlike devices/ad7124/iio_ad7124_device.yaml:
+# `ad413x_iio_device` is `static` in iio_ad413x.c:419 and is not declared in the header. The
+# only way to reach it is `iio_dev` on this descriptor, so an iio_app_device for this part
+# points `dev` at this wrapper and `dev_descriptor` at its `iio_dev` member.
+#
+# NOTE: the wrapper advertises a fixed 16 channels (iio_ad413x.c:400-417) whatever `ch[]`
+# enables, and its channel-enable handling does not track the client's scan mask: `pre_enable`
+# only ORs the requested mask onto whatever is already enabled, and reading a per-channel `raw`
+# attribute goes through ad413x_select_channel, which enables exactly one channel and never
+# restores the previous set. A buffered capture started right after a full attribute sweep can
+# therefore convert more channels than the client asked for, which shifts samples onto the
+# wrong channels. Verified on an AD4130-8 at register level. Reset the device before a buffered
+# capture, or do the `raw` reads after it.

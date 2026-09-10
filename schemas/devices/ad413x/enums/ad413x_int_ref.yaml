@@ -1,0 +1,16 @@
+$id: "devices/ad413x/enums/ad413x_int_ref.yaml"
+$type: enum
+$symbol: ad413x_int_ref
+$description: "AD413X internal reference selection"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_INTREF_DISABLED: "Internal reference disabled"
+  AD413X_INTREF_2_5V: "Internal 2.5 V reference"
+  AD413X_INTREF_1_25V: "Internal 1.25 V reference"
+
+default: AD413X_INTREF_DISABLED

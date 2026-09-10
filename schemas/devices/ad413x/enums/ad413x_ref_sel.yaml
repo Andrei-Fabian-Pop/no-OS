@@ -1,0 +1,17 @@
+$id: "devices/ad413x/enums/ad413x_ref_sel.yaml"
+$type: enum
+$symbol: ad413x_ref_sel
+$description: "AD413X ADC reference selection"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+values:
+  AD413X_REFIN1: "External reference on REFIN1(+)/REFIN1(-)"
+  AD413X_REFIN2: "External reference on REFIN2(+)/REFIN2(-)"
+  AD413X_REFOUT_AVSS: "Internal reference (REFOUT) against AVSS"
+  AD413X_AVDD_AVSS: "AVDD against AVSS"
+
+default: AD413X_REFIN1

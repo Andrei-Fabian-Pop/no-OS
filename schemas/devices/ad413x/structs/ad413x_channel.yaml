@@ -1,0 +1,104 @@
+$id: "devices/ad413x/structs/ad413x_channel.yaml"
+$type: struct
+$symbol: ad413x_channel
+$description: "AD413X channel setting: an input pair and the preset it measures with"
+$ranking: 4
+$config: []
+$sources:
+  noos:
+    - "drivers/afe/ad413x/ad413x.h"
+
+preset:
+  include: "devices/ad413x/enums/ad413x_preset_nb.yaml"
+  description: "Which of the 8 presets this channel uses"
+
+enable:
+  type: uint8_t
+  default: 0
+  minimum: 0
+  maximum: 1
+  description: "Enable this channel (0 = disabled, 1 = enabled)"
+
+ain_p:
+  include: "devices/ad413x/enums/ad413x_input.yaml"
+  description: "Positive analog input"
+
+ain_m:
+  include: "devices/ad413x/enums/ad413x_input.yaml"
+  description: "Negative analog input"
+
+iout0_exc_input:
+  include: "devices/ad413x/enums/ad413x_input.yaml"
+  description: "Pin the IOUT0 excitation current is driven onto"
+
+iout1_exc_input:
+  include: "devices/ad413x/enums/ad413x_input.yaml"
+  description: "Pin the IOUT1 excitation current is driven onto"
+
+pdsw_en:
+  type: bool
+  default: false
+  description: "Enable the power-down switch for this channel"
+
+$override:
+  - $this:
+      iout0_exc_input:
+        values:
+          - AD413X_AIN0
+          - AD413X_AIN1
+          - AD413X_AIN2
+          - AD413X_AIN3
+          - AD413X_AIN4
+          - AD413X_AIN5
+          - AD413X_AIN6
+          - AD413X_AIN7
+          - AD413X_AIN8
+          - AD413X_AIN9
+          - AD413X_AIN10
+          - AD413X_AIN11
+          - AD413X_AIN12
+          - AD413X_AIN13
+          - AD413X_AIN14
+          - AD413X_AIN15
+      iout1_exc_input:
+        values:
+          - AD413X_AIN0
+          - AD413X_AIN1
+          - AD413X_AIN2
+          - AD413X_AIN3
+          - AD413X_AIN4
+          - AD413X_AIN5
+          - AD413X_AIN6
+          - AD413X_AIN7
+          - AD413X_AIN8
+          - AD413X_AIN9
+          - AD413X_AIN10
+          - AD413X_AIN11
+          - AD413X_AIN12
+          - AD413X_AIN13
+          - AD413X_AIN14
+          - AD413X_AIN15
+
+# NOTE: `enable` is `uint8_t` in the header, not `bool`, so it stays a number here to keep the
+# struct 1:1. Only 0 and 1 are meaningful: ad413x_init passes it to ad413x_ch_en
+# (ad413x.c:1029), which writes it through the one-bit AD413X_ENABLE_M field
+# (`enable ? AD413X_ENABLE_M : 0x0U`, ad413x.c:472-475), and its doc comment documents
+# "0 DISABLE / 1 ENABLE". Hence minimum 0 / maximum 1. At runtime the ternary accepts any
+# non-zero value as "enabled", so the bound is the documented contract, not an -EINVAL check.
+#
+# NOTE: the $override above exists because the driver silently truncates these two members.
+# `iout0_exc_input` and `iout1_exc_input` are typed `enum ad413x_input` (0..29), but
+# ad413x_ch_exc_input writes them through FOUR-bit fields (ad413x.c:437-441):
+#     #define AD413X_I_OUT1_CH_M(x)  (((x) & 0xF) << 4)
+#     #define AD413X_I_OUT0_CH_M(x)  ((x) & 0xF)
+# so only AD413X_AIN0..AD413X_AIN15 survive; anything above AIN15 is truncated without an
+# error, and the driver still caches the untruncated value in dev->ch[]. The include stays the
+# full named enum to keep the struct 1:1 with C; the override narrows only what a project may
+# pick. `ain_p`/`ain_m` need no such narrowing - AD413X_AINP_M/AD413X_AINM_M are 5-bit
+# (ad413x.h), which covers all 30 values.
+#
+# NOTE: no bound is added for `preset`: ad413x_set_ch_preset writes it through the 3-bit
+# AD413X_SETUP_M field and enum ad413x_preset_nb has exactly 8 values, so the enum is already
+# exact. The channel-index guard in that setter
+# (`if (ch_nb >= NO_OS_ARRAY_SIZE(dev->ch)) return -EINVAL;`, ad413x.c:403) is expressed as the
+# `size: 16` of the enclosing arrays, not as a bound here.

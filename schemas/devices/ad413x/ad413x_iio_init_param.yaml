@@ -1,0 +1,29 @@
+$id: "devices/ad413x/ad413x_iio_init_param.yaml"
+$type: struct
+$symbol: ad413x_iio_init_param
+$description: "AD413X IIO wrapper configuration"
+$ranking: 4
+$config:
+  - "IIO"
+  - "AFE"
+  - "AFE_IIO_AD413X"
+$header: "drivers/afe/ad413x/iio_ad413x.h"
+$sources:
+  noos:
+    - "drivers/afe/ad413x/iio_ad413x.c"
+
+ad413x_ip:
+  include: "devices/ad413x/ad413x_init_param.yaml"
+  pointer: false
+  required: true
+  description: "The plain AD413X configuration this wrapper drives"
+
+# NOTE: the whole struct (iio_ad413x.h:44-46), and the member is held BY VALUE, not by pointer.
+#
+# NOTE: the wrapper takes the *configuration*, not a built descriptor: ad413x_iio_init calls
+# ad413x_init itself (iio_ad413x.c:444), so a workfile must not also carry an `ad413x`
+# descriptor node for the same device or it would be brought up twice.
+#
+# NOTE: AFE_IIO_AD413X selects AFE_AD413X, but AFE_AD413X `depends on SPI` and the whole block
+# is inside `if AFE` (drivers/afe/Kconfig). A `select` closes a chain, a `depends on` never
+# does, so AFE is named here; SPI comes from the spi node ad413x_init_param needs.
