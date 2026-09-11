@@ -11,6 +11,7 @@ ops:
   - platform_ops/i2c_ops.yaml
   - platform_ops/gpio_ops.yaml
   - platform_ops/uart_ops.yaml
+  - platform_ops/usb_uart_ops.yaml
   - platform_ops/pwm_ops.yaml
   - platform_ops/irq_ops.yaml
   - platform_ops/gpio_irq_ops.yaml
@@ -22,4 +23,5 @@ structs:
   - max_i2c_init_param.yaml
   - max_gpio_init_param.yaml
   - max_uart_init_param.yaml
+  - max_usb_uart_init_param.yaml
   - max_pwm_init_param.yaml

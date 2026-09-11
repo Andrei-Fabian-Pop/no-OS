@@ -1,0 +1,56 @@
+$id: "platforms/maxim/max32690/max_usb_uart_init_param.yaml"
+$type: struct
+$symbol: max_usb_uart_init_param
+$capability: uart
+$description: >-
+  Maxim MAX32690 native USB CDC-ACM initialization parameters. Pairs with
+  max_usb_uart_ops, which presents the on-chip USB device controller as a
+  no_os_uart, so an IIOD link over it runs at USB speed instead of a baud rate.
+$ranking: 4
+$config: []
+$sources:
+  platform:
+    - "maxim_usb_uart.h"
+
+# NOTE: These two are the only fields the driver reads out of `extra`; it copies them
+# straight into the USB device descriptor it registers with the enumeration module
+# (maxim_usb_uart.c, max_uart_init). Everything else about the CDC-ACM function is
+# fixed in maxim_usb_uart_descriptors.h.
+
+vid:
+  type: uint16_t
+  required: true
+  description: "USB vendor ID reported in the device descriptor, e.g. 0x0B6B for ADI"
+
+pid:
+  type: uint16_t
+  required: true
+  description: "USB product ID reported in the device descriptor"
+
+# The USB device controller is not a UART peripheral, so three of the parent's fields
+# mean something different here. Pinned rather than documented-only, because getting
+# any of them wrong fails at runtime, not at build time.
+$override:
+  $parent:
+    # There is one USB device controller, and the driver never looks at device_id -
+    # it is not an index into anything. Kept at 0 so it cannot suggest otherwise.
+    - device_id:
+        minimum: 0
+        maximum: 0
+        default: 0
+        description: "Unused: the part has a single USB device controller. Leave at 0."
+    # max_uart_init rejects the init outright unless this is set: the CDC-ACM class
+    # driver only produces received bytes from its ACM_CB_READ_READY callback, which
+    # runs off the USB interrupt.
+    - asynchronous_rx:
+        required: true
+        default: true
+        description: "Must be true. The USB driver refuses to initialize without it."
+    # Unlike max_uart_ops, which derives the NVIC line from device_id, this driver
+    # registers its handler under whatever irq_id it is handed, and USB_IRQHandler
+    # looks the handler back up by USB_IRQn. Any other value and received bytes are
+    # silently dropped.
+    - irq_id:
+        required: true
+        default: "USB_IRQn"
+        description: "Must be USB_IRQn, the line USB_IRQHandler looks its callback up under."

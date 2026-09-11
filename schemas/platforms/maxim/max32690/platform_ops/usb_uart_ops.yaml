@@ -1,0 +1,23 @@
+$id: "platforms/maxim/max32690/platform_ops/usb_uart_ops.yaml"
+$type: platform_ops
+$ranking: 4
+# USB_UART_MAXIM is what pulls in maxim_usb_uart.c and the MAXUSB library (its core,
+# enumeration and cdc_acm sources) - drivers/platform/maxim/CMakeLists.txt gates all
+# of them on it. IRQ and UART are the no-OS API layers the driver calls into.
+$config:
+  - "IRQ"
+  - "UART"
+  - "USB_UART_MAXIM"
+$symbol: max_usb_uart_ops
+$capability: uart
+$sources:
+  noos:
+    - "include/no_os_irq.h"
+    - "drivers/api/no_os_irq.c"
+  platform:
+    - "maxim_usb_uart.h"
+    - "maxim_irq.h"
+    - "maxim_usb_uart.c"
+    - "maxim_irq.c"
+  sdk:
+    - "uart.h"

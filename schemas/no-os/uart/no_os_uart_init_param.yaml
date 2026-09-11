@@ -16,9 +16,14 @@ device_id:
   maximum: 10
   description: "UART peripheral device ID"
 
+# NOTE: `uint32_t` in C, but never written as a number: every platform numbers its
+# interrupts with an SDK enum, and upstream no-OS always assigns the token itself
+# (UART0_IRQn on maxim, USART2_IRQn on stm32, ADUCM_UART_INT_ID on aducm3029). Modelled
+# as raw so the platform's own name survives into the generated code, which is also what
+# makes max_usb_uart_ops expressible - it needs USB_IRQn here, not a UART line at all.
 irq_id:
-  type: uint32_t
-  description: "UART interrupt ID"
+  type: raw
+  description: "UART interrupt ID, as the platform SDK names it, e.g. UART0_IRQn"
 
 asynchronous_rx:
   type: bool
